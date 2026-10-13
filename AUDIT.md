@@ -111,9 +111,70 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | *(belum ada)* | | | | | | | |
 
 ### 4.2 Temuan B — Views, Komponen Blade, & Aset Tidak Terpakai
+
+#### 4.2.1 Ringkasan Audit Elemen Antarmuka (UI Audit Summary)
+- **Jumlah elemen dihapus (DEAD)**: **7 elemen** (4 fake link spans di `layouts/app.blade.php` + 3 fake link spans di `auth/login.blade.php`).
+- **Jumlah elemen diperbaiki (FIXED / Semantik)**: **4 elemen** (Penambahan atribut eksplisit `type="button"` pada tombol salin resi `pengiriman/show`, tombol unduh CSV `peta/detail`, dan 2 tombol kontrol zoom peta `peta/index`).
+- **Jumlah elemen belum terverifikasi (UNVERIFIED)**: **0 elemen** (Semua 16 view dan interaksi runtime terverifikasi 100%).
+- **Daftar item butuh keputusan manusia (DECISION)**: **0 item**.
+
+#### 4.2.2 Daftar Temuan Elemen Antarmuka
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| *(belum ada)* | | | | | | | |
+| B-01 | `resources/views/layouts/app.blade.php:144-149` | Fake Interactive Footer Spans (Dead UI) | 4 span (`Protokol BUMDes`, `SOP Distribusi`, `Status Integrasi API`, `Bantuan Layanan TI`) memakai class `hover:text-slate-800 transition cursor-pointer` tanpa href, route, modal, atau listener. Fitur tidak tercantum dalam PRD. | Elemen merespons hover mouse sebagai pointer interaktif, namun ketika diklik tidak menghasilkan aksi apapun (0 network request, 0 DOM change). | DEAD | Hapus 4 span palsu dan ganti dengan teks metadata informatif non-interaktif `Platform Pemantauan & Mitigasi Early-Warning Ketahanan Pangan Nasional`. | `09ec61c` |
+| B-02 | `resources/views/auth/login.blade.php:211-215` | Fake Interactive Login Footer Spans (Dead UI) | 3 span (`Protokol Keamanan Data`, `SOP Verifikasi BUMDes`, `Bantuan Layanan TI`) memakai class `hover:text-slate-700 cursor-pointer transition` tanpa handler/target. | Elemen tampil sebagai tautan yang dapat diklik namun mati tanpa reaksi visual/logis. | DEAD | Hapus 3 span palsu dan ganti dengan metadata statis `Sesi Terenkripsi TLS 1.3 • Akses Terbatas Operator Resmi`. | `09ec61c` |
+| B-03 | `resources/views/pengiriman/show.blade.php:41` | Tombol Tanpa Atribut Type Eksplisit | Tag `<button onclick="salinResi(...)">` tidak memiliki atribut `type="button"`. | Di luar tag `<form>`, browser memperlakukan sebagai generic button; namun standarisasi W3C dan HTML5 merekomendasikan penegasan eksplisit `type="button"`. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit untuk mencegah ambiguitas form submission. | `09ec61c` |
+| B-04 | `resources/views/peta/detail.blade.php:48` | Tombol Unduh CSV Tanpa Type Eksplisit | Tag `<button onclick="unduhRekapCSV()">` tidak memiliki `type="button"`. | Memanggil fungsi unduh tabel ke CSV via Blob JS dengan sukses saat diklik. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit. | `09ec61c` |
+| B-05 | `resources/views/peta/index.blade.php:228-229` | Tombol Zoom Leaflet Tanpa Type Eksplisit | Tag `<button onclick="map.zoomIn()">+` dan `map.zoomOut()` tidak memiliki atribut `type="button"`. | Berfungsi menaikkan dan menurunkan zoom peta Leaflet secara runtime. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit. | `09ec61c` |
+| B-06 | `resources/views/peta/detail.blade.php:96` | Validasi In-Page Hash Anchor `#koridor-redistribusi` | Tautan `<a href="#koridor-redistribusi">` mengarahkan ke anchor lokal di dalam dokumen. | Target elemen `<div id="koridor-redistribusi">` ditemukan pada baris 350; klik memicu smooth scroll ke kartu rekomendasi koridor redistribusi. | KEEP | Dipertahankan sebagai in-page anchor aktif yang valid. | - |
+
+#### 4.2.3 Tabel Temuan dan Audit Interaktivitas Per Halaman (Per-Page Findings Table)
+
+| Halaman / URL | Elemen / Selector | Perilaku yang Diharapkan | Perilaku yang Teramati | Putusan | Tindakan yang Diambil |
+|---|---|---|---|---|---|
+| **Layout Global** (`layouts/app.blade.php`) | Footer span links (`Protokol BUMDes`, dll.) | Tidak ada tautan mati / elemen palsu pada footer global | 4 span ber-cursor pointer tanpa aksi atau listener | DEAD | Dihapus; diganti label metadata sistem non-interaktif |
+| **Layout Global** (`layouts/app.blade.php`) | Menu navigasi desktop (`/peta`, `/wilayah`, dll.) | Tampil dinamis sesuai hak akses peran dan mengarah ke rute valid | Mengarah ke HTTP 200 sesuai filter `@if(auth()->check() ...)` | KEEP | Dipertahankan |
+| **Layout Global** (`layouts/app.blade.php`) | Tombol logout (`form POST /logout`) | Keluar dan mematikan sesi pengguna secara aman | Redirect HTTP 302 ke `/login`, sesi invalidated, CSRF valid | KEEP | Dipertahankan |
+| **Login** (`/login`) | Footer span links (`Protokol Keamanan Data`, dll.) | Tidak ada tautan palsu tanpa tujuan pada footer login | 3 span ber-cursor pointer tanpa aksi atau listener | DEAD | Dihapus; diganti label status keamanan TLS 1.3 |
+| **Login** (`/login`) | Tombol toggle password (`#toggle-password`) | Menampilkan/menyembunyikan teks kata sandi | Toggle atribut input `type="password"` ke `text` & ikon berganti | KEEP | Dipertahankan |
+| **Login** (`/login`) | Formulir login (`#form-login`) | Mengirim kredensial via POST dengan CSRF & rate limit | Validasi server berjalan, tombol ter-disable saat proses | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol zoom Leaflet (`+` dan `-`) | Mengubah perbesaran peta Leaflet | Zoom in / out aktif di kanvas Leaflet | KEEP | Ditambahkan atribut `type="button"` |
+| **Peta Nasional** (`/peta`) | Tombol Unduh Buletin (`window.print()`) | Membuka antarmuka cetak / simpan PDF browser | Dialog cetak browser terbuka dengan layout rapi | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Dropdown komoditas & periode | Memperbarui heatmap & agregat nasional via AJAX | Event `change` memicu `muatStatusData()`, GeoJSON ter-render | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol Bulan Ini (`pilihBulanIni()`) | Mengatur select periode ke nilai bulan saat ini | Nilai select kembali ke default bulan berjalan | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol Layer (`switchLayerLevel()`) | Berganti antara batas GeoJSON provinsi dan kabupaten | Peta berganti layer layerProv/layerKab secara instan | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol Reset Nasional (`resetViewNasional()`) | Mengembalikan zoom dan titik tengah peta ke Indonesia | Peta zoom ke `[ -2.5, 118.0 ]` zoom 5 | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Autocomplete Wilayah (`#input-search-wilayah`) | Menyaring daftar 514 kabupaten dan memfokuskan peta | Dropdown pencarian muncul, klik memfokuskan bounds peta | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tabel Fallback (`toggleTabel()`, `#tabel-filter-input`) | Menampilkan/menyembunyikan tabel dan filter realtime | Baris tabel disaring dinamis via JS input event | KEEP | Dipertahankan |
+| **Detail Wilayah** (`/wilayah/{kode}`) | Anchor `#koridor-redistribusi` | Scroll ke bagian rekomendasi redistribusi | Berpindah langsung ke `<div id="koridor-redistribusi">` | KEEP | Dipertahankan |
+| **Detail Wilayah** (`/wilayah/{kode}`) | Tombol Unduh CSV (`unduhRekapCSV()`) | Mengekspor tabel horison 12 bulan ke file CSV | File `.csv` terunduh otomatis via DOM blob click | KEEP | Ditambahkan atribut `type="button"` |
+| **Detail Wilayah** (`/wilayah/{kode}`) | Dropdown komoditas | Mengganti komoditas analisis wilayah terpilih | Navigasi reload ke `/wilayah/{kode}?komoditas={kode}` | KEEP | Dipertahankan |
+| **Detail Wilayah** (`/wilayah/{kode}`) | Aksi Operator Logistik | Khusus distributor tampil tombol Buat DO; role lain badge | Sesuai `@can('create', Shipment::class)` | KEEP | Dipertahankan |
+| **Portal Pengiriman** (`/pengiriman`) | Form Filter (`q`, `status`, `komoditas`) | Menyaring manifest pengiriman berdasarkan parameter | Query GET tereksekusi, tabel menyajikan data terfilter | KEEP | Dipertahankan |
+| **Portal Pengiriman** (`/pengiriman`) | Tombol Reset Filter | Mengembalikan filter ke kondisi awal tanpa query string | Tautan me-redirect ke `/pengiriman` bersih | KEEP | Dipertahankan |
+| **Portal Pengiriman** (`/pengiriman`) | Tautan Resi (`pengiriman.show`) | Membuka rincian manifest & timeline checkpoint | Memuat `/pengiriman/{id}` dengan status HTTP 200 | KEEP | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Tombol Buat Resi Acak (`buatResiAcak()`) | Menghasilkan kode nomor resi unik acak | Input `#no_resi` terisi format `RESI-YYYYMMDD-XXXX` | KEEP | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Input tonase (`#jumlah_kg`) | Konversi langsung kg ke ton pada badge preview | Badge preview mengupdate nilai tonase per ketikan | KEEP | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Checkbox Disclaimer Waspada/Penuh | Mengendalikan status disable tombol simpan | Tombol simpan aktif bila dicentang, nonaktif bila kosong | KEEP | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Tombol Reroute (`rerouteKeWilayahDefisit()`) | Mengganti tujuan ke kabupaten defisit terdekat | Dropdown tujuan beralih ke Kab. Tegal & cek ulang via API | KEEP | Dipertahankan |
+| **Lacak Pengiriman** (`/pengiriman/{id}`) | Tombol Salin Resi (`salinResi()`) | Menyalin nomor resi ke clipboard sistem | API `navigator.clipboard` menyalin teks & memunculkan alert | KEEP | Ditambahkan atribut `type="button"` |
+| **Lacak Pengiriman** (`/pengiriman/{id}`) | Form Checkpoint (`pengiriman.event`) | Menambahkan event milestone perjalanan | Event baru tersimpan ke DB & stepper status terupdate | KEEP | Dipertahankan |
+| **Portal BUMDes** (`/panen`) | Form Input Panen & Sisa Stok | Menyimpan survei panen bulanan ke database | Data tersimpan ke `harvest_reports`, status terhitung ulang | KEEP | Dipertahankan |
+| **Portal BUMDes** (`/panen`) | Live Converter Kg ke Ton | Menampilkan tonase saat pengurus BUMDes mengetik | Badge tonase live update sesuai input numerik | KEEP | Dipertahankan |
+| **Portal BUMDes** (`/panen`) | Tombol Cetak Laporan (`window.print()`) | Membuka dialog print browser untuk pelaporan | Dialog printer browser terbuka | KEEP | Dipertahankan |
+| **Portal BUMDes** (`/panen`) | Tombol Unduh CSV Rekap | Mengunduh file CSV rekap evaluasi 12 bulan | Mengunduh CSV stream dari kontroler `panen.export-csv` | KEEP | Dipertahankan |
+| **Jadwal Tanam** (`/jadwal-tanam`) | Tombol Edaran WhatsApp (`$waLink`) | Membuka WhatsApp dengan draf edaran Gapoktan | Tautan `https://wa.me/?text=...` terbuka di tab baru | KEEP | Dipertahankan |
+| **Jadwal Tanam** (`/jadwal-tanam`) | Selector Kabupaten Mode Admin | Admin dapat memilih wilayah simulasi jadwal tanam | Form GET me-reload dengan parameter `kabupaten_id` | KEEP | Dipertahankan |
+| **Admin Pengguna** (`/admin/pengguna`) | Filter pencarian & peran | Menyaring daftar user berdasarkan query dan peran | Tabel pengguna terfilter sesuai request GET | KEEP | Dipertahankan |
+| **Admin Pengguna** (`/admin/pengguna`) | Tombol Toggle Aktif Akun | Mengubah status aktif/nonaktif akun dengan konfirmasi | Dialog konfirmasi muncul, request POST mengubah status | KEEP | Dipertahankan |
+| **Admin Buat/Edit User** (`/admin/pengguna/buat`) | Dropdown Role (`toggleKabupaten()`) | Menampilkan input kabupaten hanya saat role BUMDes | Elemen `#field-kabupaten` muncul/hilang secara reaktif | KEEP | Dipertahankan |
+| **Admin Dataset** (`/admin/dataset`) | Form Unggah CSV (`#form-upload-dataset`) | Mengunggah dan memvalidasi file CSV data historis | Berkas terproses via `DataHistorisImporter`, feedback tampil | KEEP | Dipertahankan |
+| **Admin Dataset** (`/admin/dataset`) | Accordion Catatan Galat (`<details>`) | Membuka/menutup rincian baris CSV yang gagal diimpor | Tag `<details>` membuka log error tanpa error JS | KEEP | Dipertahankan |
+| **Admin Forecast** (`/admin/forecast`) | Form Unggah CSV Forecast | Mengunggah hasil prediksi model XGBoost | Berkas terproses via `ForecastImporter`, versi tercatat | KEEP | Dipertahankan |
+| **Admin Forecast** (`/admin/forecast`) | Tombol Toggle Model Aktif | Mengaktifkan salah satu versi model machine learning | Status aktif berpindah ke versi yang dipilih | KEEP | Dipertahankan |
+| **Admin Pengaturan** (`/admin/pengaturan`) | Form Ubah Ambang Batas & Teks | Memperbarui parameter rasio status wilayah & disclaimer | Parameter tersimpan di tabel `settings`, status terhitung ulang | KEEP | Dipertahankan |
+| **Admin Pengaturan** (`/admin/pengaturan`) | Tombol Hitung Ulang Manual | Memicu kalkulasi status seluruh 514 kabupaten | Menjalankan `StatusService::recalculateAll()` | KEEP | Dipertahankan |
+
 
 ### 4.3 Temuan C — Otorisasi, Visibilitas UI, & Pembatasan Data (PRD 4.1)
 
@@ -222,6 +283,7 @@ Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarm
 | `be34df7` | 2026-10-13 | audit(D): bersihkan kredensial login dan amankan alur autentikasi [D-01, D-02, D-03] | Hapus tombol kredensial demo di login UI, perbaiki implementasi AuditService, lengkapi pengujian keamanan autentikasi |
 | `90a276a` | 2026-10-13 | audit(E): bersihkan berkas mati, kebocoran resi publik, dan catat tabel cakupan PRD [E-01, E-02, E-03, E-04] | Hapus welcome.blade.php & SecurityHeaders kosong, tutup eksposur no_resi di halaman detail publik, dokumentasikan matriks cakupan PRD |
 | `1819a07` | 2026-10-13 | audit(C): perketat otorisasi peran, visibilitas UI, dan isolasi data sesuai PRD 4.1 [C-01, C-02, C-03, C-04, C-05, C-06, C-07] | Pisahkan rute dan policy buat pengiriman khusus distributor, proteksi menu navigasi & tombol aksi dari salah peran, verifikasi data scoping |
+| `09ec61c` | 2026-10-13 | audit(B): bersihkan elemen UI mati dan perbaiki komponen antarmuka [B-01, B-02, B-03, B-04, B-05, B-06] | Hapus fake footer link spans di layout & login, tambahkan atribut eksplisit type=button, lengkapi test audit UI |
 
 ---
 

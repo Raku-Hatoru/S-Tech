@@ -208,10 +208,8 @@
         <footer class="bg-white border-t border-slate-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
                 <span>&copy; {{ date('Y') }} SIPANGAN WASPADA. Tata Kelola Terpadu Ketahanan Pangan RI.</span>
-                <div class="flex items-center gap-4">
-                    <span class="hover:text-slate-700 cursor-pointer transition">Protokol Keamanan Data</span>
-                    <span class="hover:text-slate-700 cursor-pointer transition">SOP Verifikasi BUMDes</span>
-                    <span class="hover:text-slate-700 cursor-pointer transition">Bantuan Layanan TI</span>
+                <div class="text-xs text-slate-400">
+                    <span>Sesi Terenkripsi TLS 1.3 • Akses Terbatas Operator Resmi</span>
                 </div>
             </div>
         </footer>

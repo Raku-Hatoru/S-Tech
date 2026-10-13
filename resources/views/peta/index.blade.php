@@ -225,8 +225,8 @@
             Model Proyeksi: <b class="text-white">Autoregressive XGBoost v1</b> | MAE: ±3.8%
           </div>
           <div class="pointer-events-auto flex items-center gap-1.5">
-            <button onclick="map.zoomIn()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
-            <button onclick="map.zoomOut()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
+            <button type="button" onclick="map.zoomIn()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
+            <button type="button" onclick="map.zoomOut()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
           </div>
         </div>
 

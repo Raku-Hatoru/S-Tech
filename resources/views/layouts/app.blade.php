@@ -141,11 +141,8 @@
             <div class="flex items-center gap-2">
                 <span>&copy; {{ date('Y') }} SIPANGAN WASPADA. Tata Kelola Terpadu Ketahanan Pangan RI.</span>
             </div>
-            <div class="flex items-center gap-6">
-                <span class="hover:text-slate-800 transition cursor-pointer">Protokol BUMDes</span>
-                <span class="hover:text-slate-800 transition cursor-pointer">SOP Distribusi</span>
-                <span class="hover:text-slate-800 transition cursor-pointer">Status Integrasi API</span>
-                <span class="hover:text-slate-800 transition cursor-pointer">Bantuan Layanan TI</span>
+            <div class="text-xs text-slate-400">
+                <span>Platform Pemantauan & Mitigasi Early-Warning Ketahanan Pangan Nasional</span>
             </div>
         </div>
     </footer>
