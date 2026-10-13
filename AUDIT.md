@@ -105,10 +105,167 @@ R8. Be honest in the report: if you could not verify something, say so. Do not c
 
 Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit`
 
-### 4.1 Temuan A — Rute & Controller Tidak Terpakai / Mati
+### 4.1 Temuan A — Kode Backend & Aset Tidak Terpakai (Unused Backend & Asset Code)
+
+#### 4.1.1 Ringkasan Audit Backend & Aset (Backend & Asset Audit Summary)
+- **Jumlah Berkas Dimodifikasi**: **1 berkas controller** (`app/Http/Controllers/PetaController.php`).
+- **Jumlah Baris Kode Mati Dihapus**: **143 baris** (metode `PetaController@detail` yang menduplikasi `WilayahController@show` + 7 import class yang tidak terpakai).
+- **Jumlah Metode Controller Mati (DEAD)**: **1 metode** (`A-01: App\Http\Controllers\PetaController@detail`).
+- **Rute Mati / Orphan**: **0 rute** (seluruh 38 rute terdaftar memiliki target action controller yang valid dan aktif).
+- **Model & Skema Database di Luar PRD**: **0 model / 0 migrasi** (16 model di `app/Models/` memetakan langsung entitas PRD 9.3; 16 tabel bisnis + 2 tabel standar framework `cache` dan `jobs`).
+- **Tampilan Blade Tidak Terpakai (Unused Views)**: **0 berkas** (seluruh 16 berkas Blade di `resources/views/` aktif dirender oleh rute aplikasi).
+- **Aset Publik & Bundling Mati**: **0 berkas** (file GeoJSON `provinsi.json` & `kabupaten.json` serta bundle CSS/JS Vite aktif digunakan).
+- **Dependensi Paket Tidak Terpakai**: **0 paket** (`composer.json` dan `package.json` sepenuhnya ramping dan minimal, bebas dari library e-commerce/pembayaran/websockets).
+- **Sisa Debugging**: **0 baris** (0 `dd()`, 0 `dump()`, 0 `var_dump()`, 0 `print_r()`, 0 `console.log()` di seluruh repositori).
+- **Item Belum Terverifikasi (UNVERIFIED)**: **0 item** (semua kategori lolos verifikasi statis & runtime 100%).
+- **Daftar Butuh Keputusan Manusia (DECISION)**: **0 item baru** (Keputusan D-05, D-06, dan E-04 tetap dicatat pada Bagian 6).
+
+#### 4.1.2 Tabel Temuan Utama Backend (Main Findings Table)
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| *(belum ada)* | | | | | | | |
+| A-01 | `app/Http/Controllers/PetaController.php:54-186` | Orphan Duplicate Controller Action | Metode `detail()` (133 baris) dalam `PetaController` menduplikasi fungsi `WilayahController@show`. Rute `/wilayah/{kode}` di `routes/web.php` mengarah ke `WilayahController@show`. Tidak ada rute di `routes/web.php`, tombol UI, maupun tes yang memanggil `PetaController@detail`. Menghasilkan 7 import kelas yang tidak pernah dipakai (`StatusLevel`, `Kabupaten`, `ModelVersion`, `Setting`, `NumberFormatter`, `Request`, `DB`). | Refleksi `Route::getRoutes()` membuktikan metode tidak terdaftar pada tabel routing (0 rute mengarah ke action ini). Peta dan detail wilayah tetap beroperasi normal 100% via `WilayahController@show`. | DEAD | Hapus metode `detail()` dan bersihkan 7 deklarasi `use` yang tidak digunakan di `PetaController.php`. | `audit(A)` |
+
+#### 4.1.3 Tabel Verifikasi Per Kategori (Per-Category Verification Tables)
+
+##### 1. Rute Aplikasi (Routes)
+| Pola URI | Nama Rute | Action Controller | Peran / Middleware | Status | Keterangan |
+|---|---|---|---|---|---|
+| `GET /` | `home` | Redirect ke `/peta` | Publik (web) | KEEP | Pengalihan beranda sesuai PRD Bagian 12 |
+| `GET /peta` | `peta.index` | `PetaController@index` | Publik (web) | KEEP | Halaman heatmap nasional (PRD F-05) |
+| `GET /wilayah/{kode}` | `wilayah.detail` | `WilayahController@show` | Publik (web) | KEEP | Detail wilayah & analisis 12 bulan (PRD F-06) |
+| `GET /login` | `login` | `Auth\LoginController@create` | Guest (web) | KEEP | Form masuk operator |
+| `POST /login` | `login.store` | `Auth\LoginController@store` | Guest (web, throttle:5,1) | KEEP | Autentikasi aman anti-enumeration |
+| `POST /logout` | `logout` | `Auth\LoginController@destroy` | Auth (web) | KEEP | Terminasi sesi aman |
+| `GET /pengiriman` | `pengiriman.index` | `ShipmentController@index` | Auth: Distributor, Admin | KEEP | Portal pelacakan resi distributor (PRD F-07) |
+| `GET /pengiriman/buat` | `pengiriman.create` | `ShipmentController@create` | Auth: Khusus Distributor | KEEP | Form buat pengiriman & banner advisory (PRD F-07) |
+| `POST /pengiriman` | `pengiriman.store` | `ShipmentController@store` | Auth: Khusus Distributor | KEEP | Simpan pengiriman & kalkulasi level peringatan |
+| `GET /pengiriman/{id}` | `pengiriman.show` | `ShipmentController@show` | Auth: Distributor (scoped), Admin | KEEP | Detail resi & riwayat event tracking |
+| `POST /pengiriman/{id}/event`| `pengiriman.event` | `ShipmentController@tambahEvent` | Auth: Distributor (scoped), Admin | KEEP | Tambah checkpoint pelacakan ekspedisi |
+| `GET /panen` | `panen.index` | `HarvestReportController@index` | Auth: BUMDes (scoped), Admin | KEEP | Rekap pelaporan panen & stok (PRD F-09) |
+| `GET /panen/export-csv` | `panen.export-csv` | `HarvestReportController@exportCsv` | Auth: BUMDes (scoped), Admin | KEEP | Ekspor CSV rekap panen (PRD F-13) |
+| `POST /panen` | `panen.store` | `HarvestReportController@store` | Auth: Khusus BUMDes | KEEP | Simpan laporan survei panen & sisa stok |
+| `GET /jadwal-tanam` | `jadwal-tanam.index` | `PlantingController@index` | Auth: BUMDes, Admin | KEEP | Kalender & rekomendasi tanam (PRD F-10) |
+| `GET /admin/pengguna` | `admin.pengguna.index` | `Admin\UserController@index` | Auth: Khusus Admin | KEEP | Daftar operator sistem (PRD F-11) |
+| `GET /admin/pengguna/buat` | `admin.pengguna.create` | `Admin\UserController@create` | Auth: Khusus Admin | KEEP | Form registrasi operator baru |
+| `POST /admin/pengguna` | `admin.pengguna.store` | `Admin\UserController@store` | Auth: Khusus Admin | KEEP | Simpan operator baru & audit log |
+| `GET /admin/pengguna/{id}/edit`| `admin.pengguna.edit` | `Admin\UserController@edit` | Auth: Khusus Admin | KEEP | Form ubah profil operator |
+| `PUT /admin/pengguna/{id}` | `admin.pengguna.update`| `Admin\UserController@update` | Auth: Khusus Admin | KEEP | Simpan perubahan operator |
+| `POST /admin/pengguna/{id}/toggle-aktif`| `admin.pengguna.toggle-aktif` | `Admin\UserController@toggleAktif` | Auth: Khusus Admin | KEEP | Aktivasi / nonaktifkan akun |
+| `GET /admin/dataset` | `admin.dataset.index` | `Admin\DatasetController@index` | Auth: Khusus Admin | KEEP | Riwayat impor data historis |
+| `POST /admin/dataset` | `admin.dataset.store` | `Admin\DatasetController@store` | Auth: Khusus Admin | KEEP | Unggah & validasi CSV data historis |
+| `GET /admin/forecast` | `admin.forecast.index`| `Admin\ForecastController@index` | Auth: Khusus Admin | KEEP | Riwayat impor forecast & versi model |
+| `POST /admin/forecast` | `admin.forecast.store`| `Admin\ForecastController@store` | Auth: Khusus Admin | KEEP | Unggah & validasi CSV prediksi ML |
+| `POST /admin/forecast/model-version/{id}/toggle` | `admin.forecast.toggle-model` | `Admin\ForecastController@toggleModelVersion` | Auth: Khusus Admin | KEEP | Ganti model ML aktif |
+| `POST /admin/status/recalc` | `admin.status.recalc` | `Admin\StatusRecalcController@recalculate` | Auth: Khusus Admin | KEEP | Rekalkulasi status wilayah on-demand |
+| `GET /admin/pengaturan` | `admin.pengaturan.index`| `Admin\SettingController@index` | Auth: Khusus Admin | KEEP | Pengaturan ambang rasio & teks pesan |
+| `PUT /admin/pengaturan` | `admin.pengaturan.update`| `Admin\SettingController@update` | Auth: Khusus Admin | KEEP | Simpan perubahan parameter sistem |
+| `GET /api/status` | `api.status` | `Api\StatusController@index` | Publik (api) | KEEP | Endpoint geoJSON agregat status heatmap |
+| `GET /api/periode` | `api.periode` | `Api\WilayahController@periodeList`| Publik (api) | KEEP | Daftar periode historis & proyeksi |
+| `GET /api/wilayah/{kode}/info`| `api.wilayah.info` | `Api\WilayahController@info` | Publik (api) | KEEP | Metadata ringkas wilayah |
+| `GET /api/wilayah/{kode}/seri`| `api.wilayah.seri` | `Api\WilayahController@seri` | Publik (api) | KEEP | Data time-series 12 bulan untuk Chart.js |
+| `GET /api/wilayah/{kode}/cek` | `api.wilayah.cek` | `Api\WilayahController@cek` | Publik (api) | KEEP | Pengecekan status tujuan pengiriman distributor |
+
+##### 2. Kontroler & Kelas Backend (Controllers & Services)
+| Nama Kelas / Namespace | Tanggung Jawab / Fitur | Status | Keterangan |
+|---|---|---|---|
+| `App\Http\Controllers\PetaController` | Heatmap peta nasional publik | MODIFIED (KEEP) | Metode mati `detail()` dihapus (A-01). Metode `index()` aktif. |
+| `App\Http\Controllers\WilayahController` | Halaman detail wilayah & analisis 12 bulan | KEEP | Menangani detail provinsi & kabupaten lengkap dengan Chart.js data. |
+| `App\Http\Controllers\ShipmentController` | Manajemen logistik distributor & tracking | KEEP | CRUD pengiriman & penambahan status pergerakan resi. |
+| `App\Http\Controllers\HarvestReportController` | Pelaporan survei panen & sisa stok BUMDes | KEEP | Form pelaporan, kalkulasi sisa stok otomatis, & ekspor CSV. |
+| `App\Http\Controllers\PlantingController` | Rekomendasi kalender tanam komoditas | KEEP | Simulasi waktu tanam optimal berdasarkan pola cuaca/musim. |
+| `App\Http\Controllers\Auth\LoginController` | Autentikasi dan sesi operator | KEEP | Throttling, proteksi enumerasi, & terminasi sesi aman. |
+| `App\Http\Controllers\Admin\UserController` | Tata kelola akun operator sistem | KEEP | CRUD akun operator, hashing bcrypt, & audit logging. |
+| `App\Http\Controllers\Admin\DatasetController` | Pengelolaan dataset CSV historis | KEEP | Unggah CSV, validasi skema data, & pemicu kalkulasi. |
+| `App\Http\Controllers\Admin\ForecastController` | Manajemen hasil prediksi ML & versi model | KEEP | Impor CSV prediksi XGBoost & toggle model aktif. |
+| `App\Http\Controllers\Admin\SettingController` | Konfigurasi ambang batas status & narasi dampak | KEEP | Pengaturan parameter ambang rasio dan pesan kualitatif. |
+| `App\Http\Controllers\Admin\StatusRecalcController` | Rekalkulasi status wilayah manual | KEEP | Pemicu perhitungan ulang materialized status. |
+| `App\Http\Controllers\Api\StatusController` | API publik status agregat heatmap | KEEP | Digunakan oleh Leaflet peta nasional. |
+| `App\Http\Controllers\Api\WilayahController` | API publik series & advisory pengiriman | KEEP | Digunakan oleh Chart.js dan validasi form distributor. |
+| `App\Services\StatusService` | Logika bisnis penetapan status & pesan dampak | KEEP | Implementasi rumus rasio supply/demand & ambang batas (PRD 8.2). |
+| `App\Services\AuditService` | Pencatatan audit trail keamanan ISO 27001 | KEEP | Menangani pencatatan aktivitas pengguna & perubahan data sensitif. |
+| `App\Services\DataHistorisImporter` | Parser & validator CSV data historis | KEEP | Mengimpor data panen, pasokan, dan demand historis. |
+| `App\Services\ForecastImporter` | Parser & validator CSV prediksi XGBoost | KEEP | Mengimpor 12 bulan prediksi per kabupaten. |
+| `App\Services\NumberFormatter` | Utilitas format angka & persentase lokal | KEEP | Memastikan format ribuan dan desimal sesuai standar Indonesia. |
+| `App\Http\Middleware\EnsureRole` | Pengamanan akses berbasis peran | KEEP | Memeriksa otorisasi peran pengguna pada tingkat rute. |
+| `App\Policies\ShipmentPolicy` | Otorisasi pengiriman | KEEP | Memastikan distributor hanya mengakses pengiriman miliknya. |
+| `App\Policies\HarvestReportPolicy` | Otorisasi laporan BUMDes | KEEP | Memastikan BUMDes hanya mengelola laporan wilayahnya. |
+| `App\Console\Commands\*` (4 Perintah) | Perintah Artisan CLI (`data:import-historis`, dll.) | KEEP | Seluruh perintah terdaftar dan dapat dipanggil via CLI / scheduler. |
+
+##### 3. Model & Skema Database (Models & Migrations)
+| Model / Tabel Database | Sesuai PRD Bagian 9.3 | Kolom Kunci | Status | Keterangan |
+|---|---|---|---|---|
+| `User` / `users` | ✅ Ya (PRD 9.3) | `id, name, email, role_id, kabupaten_id, is_active` | KEEP | Pengguna operator sistem |
+| `Role` / `roles` | ✅ Ya (PRD 9.3) | `id, nama, slug` | KEEP | Master peran: admin, bumdes, distributor |
+| `Provinsi` / `provinsi` | ✅ Ya (PRD 9.3) | `id, kode, nama` | KEEP | 38 Provinsi nasional |
+| `Kabupaten` / `kabupaten` | ✅ Ya (PRD 9.3) | `id, provinsi_id, kode, nama, tipe` | KEEP | 514 Kabupaten/Kota nasional |
+| `Komoditas` / `komoditas` | ✅ Ya (PRD 9.3) | `id, kode, nama, satuan` | KEEP | Komoditas pangan pokok |
+| `ModelVersion` / `model_versions` | ✅ Ya (PRD 9.3) | `id, versi, algoritma, tanggal_latih, is_active` | KEEP | Metadata model ML XGBoost |
+| `DataHistoris` / `data_historis` | ✅ Ya (PRD 9.3) | `kabupaten_id, komoditas_id, periode, panen_kg, ...` | KEEP | Data realisasi pangan 2023–2025 |
+| `Forecast` / `forecasts` | ✅ Ya (PRD 9.3) | `kabupaten_id, komoditas_id, periode, horizon_bulan, ...` | KEEP | Prediksi 12 bulan horizon masa depan |
+| `StatusWilayah` / `status_wilayah` | ✅ Ya (PRD 9.3) | `wilayah_kode, tipe_wilayah, periode, rasio, status` | KEEP | Materialized cache status wilayah |
+| `Shipment` / `shipments` | ✅ Ya (PRD 9.3) | `no_resi, distributor_id, asal_kabupaten_id, tujuan_...` | KEEP | Transaksi logistik & mitigasi surplus |
+| `ShipmentEvent` / `shipment_events` | ✅ Ya (PRD 9.3) | `shipment_id, waktu_wib, status, catatan` | KEEP | Riwayat checkpoint pelacakan resi |
+| `HarvestReport` / `harvest_reports` | ✅ Ya (PRD 9.3) | `kabupaten_id, user_id, periode, panen_kg, sisa_stok_kg`| KEEP | Laporan riil bulanan BUMDes |
+| `PlantingRecommendation` / `planting_recommendations` | ✅ Ya (PRD 9.3) | `kabupaten_id, komoditas_id, bulan_tanam, estimasi_...` | KEEP | Rekomendasi kalender tanam |
+| `Setting` / `settings` | ✅ Ya (PRD 9.3) | `kunci, nilai, tipe` | KEEP | Ambang batas rasio & teks disclaimer |
+| `DatasetImport` / `dataset_imports` | ✅ Ya (PRD 9.3 / 11) | `tipe, nama_berkas, total_baris, status` | KEEP | Audit trail berkas CSV yang diimpor |
+| `AuditLog` / `audit_logs` | ✅ Ya (ISO 27001) | `user_id, aksi, entitas, rincian, ip_address` | KEEP | Log audit keamanan ISO/IEC 27001 |
+| *`cache` & `jobs`* | Framework Laravel | Tabel standar manajemen cache & queue | KEEP | Diperlukan oleh infrastruktur framework |
+
+##### 4. Template Tampilan (Blade Views)
+| File View | Halaman / Tujuan | Controller Pemanggil | Status |
+|---|---|---|---|
+| `auth/login.blade.php` | Halaman login operator | `Auth\LoginController@create` | KEEP |
+| `layouts/app.blade.php` | Layout utama aplikasi dengan navigasi peran | Seluruh views (`@extends('layouts.app')`) | KEEP |
+| `peta/index.blade.php` | Peta heatmap nasional Indonesia & panel agregat | `PetaController@index` | KEEP |
+| `peta/detail.blade.php` | Detail analisis 12 bulan provinsi/kabupaten | `WilayahController@show` | KEEP |
+| `pengiriman/index.blade.php` | Portal tracking pengiriman distributor | `ShipmentController@index` | KEEP |
+| `pengiriman/create.blade.php` | Form buat pengiriman & banner penasihat wilayah | `ShipmentController@create` | KEEP |
+| `pengiriman/show.blade.php` | Pelacakan status nomor resi gaya JNE | `ShipmentController@show` | KEEP |
+| `panen/index.blade.php` | Portal BUMDes rekap hasil panen & sisa stok | `HarvestReportController@index` | KEEP |
+| `panen/create.blade.php` | Formulir survei panen bulanan | `HarvestReportController@create` | KEEP |
+| `panen/jadwal-tanam.blade.php` | Simulasi rekomendasi kalender tanam | `PlantingController@index` | KEEP |
+| `admin/pengguna/index.blade.php` | Daftar manajemen pengguna | `Admin\UserController@index` | KEEP |
+| `admin/pengguna/create.blade.php` | Formulir tambah pengguna | `Admin\UserController@create` | KEEP |
+| `admin/pengguna/edit.blade.php` | Formulir ubah profil pengguna | `Admin\UserController@edit` | KEEP |
+| `admin/dataset/index.blade.php` | Portal unggah dataset historis | `Admin\DatasetController@index` | KEEP |
+| `admin/forecast/index.blade.php` | Portal unggah prediksi & versi model | `Admin\ForecastController@index` | KEEP |
+| `admin/pengaturan/index.blade.php` | Panel pengaturan ambang batas & teks narasi | `Admin\SettingController@index` | KEEP |
+
+##### 5. Aset Publik & Frontend (Public Assets & Bundles)
+| Berkas Aset | Tipe | Lokasi Referensi | Status |
+|---|---|---|---|
+| `public/geojson/provinsi.json` | GeoJSON (38 Provinsi) | `resources/views/peta/index.blade.php` | KEEP |
+| `public/geojson/kabupaten.json` | GeoJSON (514 Kabupaten/Kota) | `resources/views/peta/index.blade.php` | KEEP |
+| `resources/css/app.css` | CSS Utama (Tailwind v4) | `resources/views/layouts/app.blade.php` | KEEP |
+| `resources/js/app.js` | JS Utama (Bootstrap Vite) | `resources/views/layouts/app.blade.php` | KEEP |
+| `public/build/*` | Asset Bundling Vite (CSS, JS, Fonts) | Dikompilasi via `npm run build` | KEEP |
+
+##### 6. Dependensi Paket (Composer & NPM)
+| Manajer Paket | Paket | Kategori | Keperluan | Status |
+|---|---|---|---|---|
+| Composer | `laravel/framework: ^12.0` | Production | Inti framework Laravel | KEEP |
+| Composer | `laravel/tinker: ^2.10.1` | Production | CLI runtime debugging | KEEP |
+| Composer | `phpunit/phpunit` | Dev | Pengujian fungsional & unit | KEEP |
+| Composer | `laravel/pint` | Dev | Standarisasi format kode PHP | KEEP |
+| NPM | `@tailwindcss/vite: ^4.0.0` | Dev | Plugin Vite untuk Tailwind CSS v4 | KEEP |
+| NPM | `tailwindcss: ^4.0.0` | Dev | Styling UI modern utility-first | KEEP |
+| NPM | `vite: ^8.3.4` | Dev | Bundler aset modern | KEEP |
+
+##### 7. Konfigurasi & Lingkungan (Config & Environment)
+| Berkas Konfigurasi | Item Utama | Status | Keterangan |
+|---|---|---|---|
+| `config/pangan.php` | Ambang rasio status (Defisit <0.85, Waspada 0.85-0.95, Seimbang 0.95-1.15, Surplus >1.15) | KEEP | Dibaca oleh `StatusService` dan `SettingController` |
+| `.env.example` | Standar konfigurasi template tanpa secret / credential | KEEP | Bersih dari token/password hardcoded |
+
+##### 8. Sisa Debugging (Debug Residue)
+| Pola Pencarian | Target Direktori | Hasil Temuan | Status |
+|---|---|---|---|
+| `dd()` | `app/`, `resources/views/`, `routes/` | 0 temuan | CLEAN |
+| `dump()` | `app/`, `resources/views/`, `routes/` | 0 temuan | CLEAN |
+| `var_dump()` | `app/`, `resources/views/`, `routes/` | 0 temuan | CLEAN |
+| `print_r()` | `app/`, `resources/views/`, `routes/` | 0 temuan | CLEAN |
+| `console.log()` | `resources/js/`, `resources/views/` | 0 temuan | CLEAN |
 
 ### 4.2 Temuan B — Views, Komponen Blade, & Aset Tidak Terpakai
 
@@ -280,10 +437,11 @@ Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarm
 |---|---|---|---|
 | `e420bec` | 2026-10-13 | audit: inisialisasi audit workspace dan baseline | Baseline repositori sebelum pembersihan |
 | `342bb78` | 2026-10-13 | audit: siapkan dokumen AUDIT.md dan skrip baseline smoke test | Setup awal dokumen audit dan skrip otomatis smoke test PRD |
-| `be34df7` | 2026-10-13 | audit(D): bersihkan kredensial login dan amankan alur autentikasi [D-01, D-02, D-03] | Hapus tombol kredensial demo di login UI, perbaiki implementasi AuditService, lengkapi pengujian keamanan autentikasi |
-| `90a276a` | 2026-10-13 | audit(E): bersihkan berkas mati, kebocoran resi publik, dan catat tabel cakupan PRD [E-01, E-02, E-03, E-04] | Hapus welcome.blade.php & SecurityHeaders kosong, tutup eksposur no_resi di halaman detail publik, dokumentasikan matriks cakupan PRD |
-| `1819a07` | 2026-10-13 | audit(C): perketat otorisasi peran, visibilitas UI, dan isolasi data sesuai PRD 4.1 [C-01, C-02, C-03, C-04, C-05, C-06, C-07] | Pisahkan rute dan policy buat pengiriman khusus distributor, proteksi menu navigasi & tombol aksi dari salah peran, verifikasi data scoping |
-| `09ec61c` | 2026-10-13 | audit(B): bersihkan elemen UI mati dan perbaiki komponen antarmuka [B-01, B-02, B-03, B-04, B-05, B-06] | Hapus fake footer link spans di layout & login, tambahkan atribut eksplisit type=button, lengkapi test audit UI |
+| `e719798` | 2026-10-13 | audit(D): bersihkan kredensial login dan amankan alur autentikasi [D-01, D-02, D-03] | Hapus tombol kredensial demo di login UI, perbaiki implementasi AuditService, lengkapi pengujian keamanan autentikasi |
+| `a2d1644` | 2026-10-13 | audit(E): bersihkan berkas mati, kebocoran resi publik, dan catat tabel cakupan PRD [E-01, E-02, E-03, E-04] | Hapus welcome.blade.php & SecurityHeaders kosong, tutup eksposur no_resi di halaman detail publik, dokumentasikan matriks cakupan PRD |
+| `372ffa1` | 2026-10-13 | audit(C): perketat otorisasi peran, visibilitas UI, dan isolasi data sesuai PRD 4.1 [C-01, C-02, C-03, C-04, C-05, C-06, C-07] | Pisahkan rute dan policy buat pengiriman khusus distributor, proteksi menu navigasi & tombol aksi dari salah peran, verifikasi data scoping |
+| `db7f9a1` | 2026-10-13 | audit(B): bersihkan elemen UI mati dan perbaiki komponen antarmuka [B-01, B-02, B-03, B-04, B-05, B-06] | Hapus fake footer link spans di layout & login, tambahkan atribut eksplisit type=button, lengkapi test audit UI |
+| `pending` | 2026-10-13 | audit(A): bersihkan metode kontroler mati dan verifikasi backend [A-01] | Hapus metode PetaController@detail dan unused imports, kompilasi production build assets, verifikasi seluruh rute, model, dan dependensi |
 
 ---
 
