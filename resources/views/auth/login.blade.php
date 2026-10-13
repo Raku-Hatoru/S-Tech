@@ -170,17 +170,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Demo Quick Login --}}
-                            @if (config('app.env') !== 'production')
-                                <div class="mb-5 p-3 rounded-lg bg-amber-50 border border-amber-200">
-                                    <p class="text-xs font-semibold text-amber-800 mb-2 uppercase tracking-wider">Pilih Akun Cepat (Mode Demo / Evaluasi):</p>
-                                    <div class="flex flex-wrap gap-2">
-                                        <button type="button" data-email="admin@sipangan.test" data-pass="Admin1234" class="btn-demo px-3 py-1.5 text-xs font-medium bg-white border border-slate-300 rounded-md hover:bg-slate-50 text-slate-700 transition">Admin Pusat</button>
-                                        <button type="button" data-email="bumdes.banyumas@sipangan.test" data-pass="Bumdes1234" class="btn-demo px-3 py-1.5 text-xs font-medium bg-white border border-slate-300 rounded-md hover:bg-slate-50 text-slate-700 transition">BUMDes Banyumas</button>
-                                        <button type="button" data-email="distributor1@sipangan.test" data-pass="Distrib1234" class="btn-demo px-3 py-1.5 text-xs font-medium bg-white border border-slate-300 rounded-md hover:bg-slate-50 text-slate-700 transition">Distributor Pangan</button>
-                                    </div>
-                                </div>
-                            @endif
 
                             {{-- Remember Me --}}
                             <div class="flex items-center justify-between mb-6">
@@ -240,13 +229,6 @@
             iconHide.classList.toggle('hidden', !isHidden);
         });
 
-        // Tombol demo: isi email & password otomatis
-        document.querySelectorAll('.btn-demo').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                document.getElementById('email').value = btn.dataset.email;
-                document.getElementById('password').value = btn.dataset.pass;
-            });
-        });
 
         // Disable tombol saat submit
         document.getElementById('form-login').addEventListener('submit', function () {

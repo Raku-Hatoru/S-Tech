@@ -120,10 +120,15 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 |---|---|---|---|---|---|---|---|
 | *(belum ada)* | | | | | | | |
 
-### 4.4 Temuan D — Pelanggaran Spesifikasi PRD & Hak Akses
+### 4.4 Temuan D — Pelanggaran Spesifikasi PRD, Keamanan, & Hak Akses
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| *(belum ada)* | | | | | | | |
+| D-01 | `resources/views/auth/login.blade.php:173-183, 243-249` | Kebocoran Kredensial & Autofill | Tombol Quick Demo Login dan event handler JS `.btn-demo` mengekspos email dan password demo | Tombol demo tampil di antarmuka web publik dan mengisi password otomatis | DEAD | Hapus komponen visual tombol demo dan script autofill | `be34df7` |
+| D-02 | `app/Services/AuditService.php:1-45` | Missing Service Implementation (F-01) | File `AuditService.php` kosong 0 byte tetapi diimpor & dipanggil di `LoginController`, `ForecastController`, dll. | Login pengguna & test `DatasetAndForecastImportTest` gagal dengan fatal error HTTP 500 `Class AuditService not found` | BROKEN-PRD | Implementasikan `AuditService::log()` untuk menyimpan ke `audit_logs` dan menangani error secara aman | `be34df7` |
+| D-03 | `tests/Feature/IsoSecurityHardeningTest.php:1-85` | Missing Test File Implementation | File `IsoSecurityHardeningTest.php` kosong 0 byte menyebabkan kegagalan PHPUnit suite | PHPUnit mengeluarkan error exit code 1 pada berkas uji kosong | BROKEN-PRD | Lengkapi pengujian keamanan autentikasi (anti-enumerasi, hash password, audit log, invalidasi sesi) | `be34df7` |
+| D-04 | `config/pangan.php:13-15` | Default Hardcoded Password Fallback | Fallback password demo literal `'Admin1234'`, `'Bumdes1234'`, `'Distrib1234'` pada konfigurasi seeder | Digunakan oleh seeder saat environment variabel kosong | KEEP | Dipertahankan untuk akun demo seeder lokal, dilaporkan mekanisme pembacaannya | - |
+| D-05 | `database/seeders/DatabaseSeeder.php:19` | Eksekusi Seeder Demo di Production | `DemoUserSeeder::class` dipanggil tanpa pengecekan environment `app()->isProduction()` | `php artisan db:seed` di production akan men-seed akun demo publik | DECISION | Dilaporkan ke user; rekomendasi guard environment diusulkan di bagian 6 | - |
+| D-06 | `routes/web.php:32-37` | Ketiadaan Registrasi Publik & Reset Password | Tidak ada rute registrasi mandiri atau lupa password pada rute web | Akses guest ke `/register` atau `/password/reset` menghasilkan HTTP 404 | DECISION | Dikonfirmasi sesuai PRD F-11 (akun diterbitkan terpusat oleh Admin) | - |
 
 ### 4.5 Temuan E — Database, Migrasi, Skrip, & Artefak Lainnya
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
@@ -137,10 +142,19 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | Hash | Tanggal | Pesan Commit | Penjelasan |
 |---|---|---|---|
 | `e420bec` | 2026-10-13 | audit: inisialisasi audit workspace dan baseline | Baseline repositori sebelum pembersihan |
-| `c4ba781` | 2026-10-13 | audit: siapkan dokumen AUDIT.md dan skrip baseline smoke test | Setup awal dokumen audit dan skrip otomatis smoke test PRD |
+| `342bb78` | 2026-10-13 | audit: siapkan dokumen AUDIT.md dan skrip baseline smoke test | Setup awal dokumen audit dan skrip otomatis smoke test PRD |
+| `be34df7` | 2026-10-13 | audit(D): bersihkan kredensial login dan amankan alur autentikasi [D-01, D-02, D-03] | Hapus tombol kredensial demo di login UI, perbaiki implementasi AuditService, lengkapi pengujian keamanan autentikasi |
 
 ---
 
 ## 6. Butuh Keputusan Manusia
 
-Saat ini pada tahap persiapan workspace baseline belum ada item yang diajukan untuk keputusan manusia. Item akan ditambahkan pada tahap audit berikutnya jika terdapat ambiguitas spesifikasi fitur *Could* (F-10, F-13) atau kebijakan bisnis lainnya.
+1. **D-05 (Safeguard untuk DemoUserSeeder di Lingkungan Produksi)**:
+   - **Kondisi saat ini**: `DatabaseSeeder.php:19` memanggil `$this->call(DemoUserSeeder::class)` secara langsung tanpa penjaga lingkungan (`! app()->isProduction()`). Hal ini berisiko men-seed akun demo ber-password default jika seeder dijalankan di server produksi.
+   - **Rekomendasi tindakan**: Tambahkan pengecekan lingkungan `if (! app()->isProduction())` atau flag khusus sebelum menjalankan `DemoUserSeeder`. Sesuai instruksi, seeder belum diubah.
+   - **Status**: Menunggu keputusan pengguna.
+
+2. **D-06 (Konfirmasi Ketiadaan Registrasi Publik & Forgot Password)**:
+   - **Kondisi saat ini**: Tidak ada form registrasi mandiri publik (`/register`) maupun alur reset sandi mandiri (`/forgot-password`). Seluruh akun pengguna dibuat oleh Administrator Nasional melalui menu `/admin/pengguna` (PRD Bagian 4.1 & F-11).
+   - **Rekomendasi tindakan**: Pertahankan arsitektur saat ini tanpa membuat rute registrasi publik terbuka.
+   - **Status**: Menunggu konfirmasi pengguna.

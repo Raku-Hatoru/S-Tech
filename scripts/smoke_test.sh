@@ -40,7 +40,10 @@ BUMDES_PASSWORD=$(grep -A 3 "\[BUMDes\]" "${CREDENTIALS_FILE}" | grep "Password:
 ADMIN_EMAIL=$(grep -A 2 "\[Admin\]" "${CREDENTIALS_FILE}" | grep "Email:" | head -n 1 | awk '{print $2}')
 ADMIN_PASSWORD=$(grep -A 3 "\[Admin\]" "${CREDENTIALS_FILE}" | grep "Password:" | head -n 1 | awk '{print $2}')
 
-# 2. Start local web server
+# 2. Reset cache / rate limiter agar repeatable
+php artisan cache:clear > /dev/null 2>&1 || true
+
+# 3. Start local web server
 echo "[INFO] Menjalankan ephemeral PHP built-in web server pada port ${PORT}..."
 php -S "127.0.0.1:${PORT}" -t public > /dev/null 2>&1 &
 SERVER_PID=$!
