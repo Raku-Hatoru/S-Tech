@@ -76,10 +76,17 @@
                     </p>
                 </div>
             </div>
-            <a href="{{ route('pengiriman.create', ['asal_kabupaten_id' => $kabupaten->id, 'komoditas_id' => $komoditas->id]) }}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-rose-50 text-rose-800 font-bold text-xs border border-rose-300 shadow-2xs whitespace-nowrap transition">
-                <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                Minta Disposisi Logistik
-            </a>
+            @can('create', App\Models\Shipment::class)
+              <a href="{{ route('pengiriman.create', ['asal_kabupaten_id' => $kabupaten->id, 'komoditas_id' => $komoditas->id]) }}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-rose-50 text-rose-800 font-bold text-xs border border-rose-300 shadow-2xs whitespace-nowrap transition">
+                  <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                  Minta Disposisi Logistik
+              </a>
+            @else
+              <div class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-100/70 text-rose-900 text-xs font-bold border border-rose-300/80 whitespace-nowrap">
+                <svg class="w-4 h-4 text-rose-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Disposisi via Operator Terdaftar
+              </div>
+            @endcan
         </div>
     @endif
 

@@ -27,6 +27,8 @@ class ShipmentController extends Controller
      */
     public function index(Request $request): View
     {
+        Gate::authorize('viewAny', Shipment::class);
+
         $user = $request->user();
 
         // 1. Query dasar dengan scoping pemilik

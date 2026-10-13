@@ -32,11 +32,13 @@
 
       <!-- Navigation Tabs -->
       <div class="flex items-center gap-2 self-start lg:self-center">
-        <a href="{{ route('pengiriman.create') }}"
-           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200/90 shadow-xs transition">
-          <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-          <span>1. Buat Pengiriman Baru</span>
-        </a>
+        @can('create', App\Models\Shipment::class)
+          <a href="{{ route('pengiriman.create') }}"
+             class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200/90 shadow-xs transition">
+            <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            <span>1. Buat Pengiriman Baru</span>
+          </a>
+        @endcan
         <a href="{{ route('pengiriman.index') }}"
            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-[#064e3b] shadow-sm transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
@@ -235,11 +237,13 @@
                   <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
                     Klik tombol "Buat Pengiriman Baru" di atas untuk mendaftarkan manifest distribusi pangan.
                   </p>
-                  <div class="mt-4">
-                    <a href="{{ route('pengiriman.create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-800 text-white font-bold text-xs shadow-xs hover:bg-emerald-900 transition">
-                      + Buat Pengiriman Pertama
-                    </a>
-                  </div>
+                  @can('create', App\Models\Shipment::class)
+                    <div class="mt-4">
+                      <a href="{{ route('pengiriman.create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-800 text-white font-bold text-xs shadow-xs hover:bg-emerald-900 transition">
+                        + Buat Pengiriman Pertama
+                      </a>
+                    </div>
+                  @endcan
                 </td>
               </tr>
             @endforelse

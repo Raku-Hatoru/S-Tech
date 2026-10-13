@@ -50,10 +50,15 @@ use App\Http\Controllers\ShipmentController;
 | Distributor & Tracking (PRD F-07, F-08, Increment 6)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:distributor,admin'])->group(function () {
-    Route::get('/pengiriman', [ShipmentController::class, 'index'])->name('pengiriman.index');
+// Buat Pengiriman — Khusus Distributor (PRD 4.1: Buat pengiriman = Distributor ✅, Admin ❌, BUMDes ❌)
+Route::middleware(['auth', 'role:distributor'])->group(function () {
     Route::get('/pengiriman/buat', [ShipmentController::class, 'create'])->name('pengiriman.create');
     Route::post('/pengiriman', [ShipmentController::class, 'store'])->name('pengiriman.store');
+});
+
+// Daftar & Lacak Resi serta Koreksi Status — Distributor & Admin
+Route::middleware(['auth', 'role:distributor,admin'])->group(function () {
+    Route::get('/pengiriman', [ShipmentController::class, 'index'])->name('pengiriman.index');
     Route::get('/pengiriman/{id}', [ShipmentController::class, 'show'])->name('pengiriman.show');
     Route::post('/pengiriman/{id}/event', [ShipmentController::class, 'tambahEvent'])->name('pengiriman.event');
 });

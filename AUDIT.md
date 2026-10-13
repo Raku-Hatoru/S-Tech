@@ -115,10 +115,48 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 |---|---|---|---|---|---|---|---|
 | *(belum ada)* | | | | | | | |
 
-### 4.3 Temuan C — Model, Service, & Logika Bisnis
-| ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
-|---|---|---|---|---|---|---|---|
-| *(belum ada)* | | | | | | | |
+### 4.3 Temuan C — Otorisasi, Visibilitas UI, & Pembatasan Data (PRD 4.1)
+
+#### 4.3.1 Matriks Evaluasi Akses & Visibilitas UI (Expected vs Actual)
+
+| Halaman / Aksi / Elemen UI | Guest (Tanpa Login) | Distributor | BUMDes | Admin |
+|---|---|---|---|---|
+| **Beranda (`GET /`)** | Exp: 302 /peta \| Act: 302 /peta | Exp: 302 /peta \| Act: 302 /peta | Exp: 302 /peta \| Act: 302 /peta | Exp: 302 /peta \| Act: 302 /peta |
+| **Peta Heatmap (`GET /peta`)** | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK |
+| **Detail Wilayah (`GET /wilayah/{kode}`)** | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK |
+| **API Telemetri Publik (`GET /api/*`)** | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK | Exp: 200 OK \| Act: 200 OK |
+| **Portal Pengiriman (`GET /pengiriman`)** | Exp: 302 /login \| Act: 302 /login | Exp: 200 OK (milik sendiri) \| Act: 200 OK | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200 OK (semua) \| Act: 200 OK |
+| **Buat Pengiriman (`GET/POST /pengiriman/buat`)** | Exp: 302 /login \| Act: 302 /login | Exp: 200/302 OK \| Act: 200/302 OK | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 403 Forbidden \| Act: 403 Forbidden |
+| **Detail Pengiriman (`GET /pengiriman/{id}`)** | Exp: 302 /login \| Act: 302 /login | Exp: 200 OK (milik sendiri) / 403 (orang lain) \| Act: Sesuai | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200 OK (semua) \| Act: 200 OK |
+| **Update Checkpoint (`POST /pengiriman/{id}/event`)** | Exp: 302 /login \| Act: 302 /login | Exp: 302 OK (milik sendiri) / 403 (orang lain) \| Act: Sesuai | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 302 OK (koreksi) \| Act: 302 OK |
+| **Portal Panen (`GET/POST /panen`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200/302 OK (kabupaten sendiri) \| Act: Sesuai | Exp: 200/302 OK (semua) \| Act: Sesuai |
+| **Ekspor CSV Panen (`GET /panen/export-csv`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200 CSV (kabupaten sendiri) \| Act: Sesuai | Exp: 200 CSV (semua) \| Act: Sesuai |
+| **Jadwal Tanam (`GET /jadwal-tanam`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200 OK (kabupaten sendiri) \| Act: Sesuai | Exp: 200 OK (semua) \| Act: Sesuai |
+| **Kelola Pengguna (`/admin/pengguna/*`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200/302 OK \| Act: 200/302 OK |
+| **Kelola Dataset (`/admin/dataset/*`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200/302 OK \| Act: 200/302 OK |
+| **Kelola Forecast (`/admin/forecast/*`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200/302 OK \| Act: 200/302 OK |
+| **Pengaturan Ambang (`/admin/pengaturan/*`)** | Exp: 302 /login \| Act: 302 /login | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 403 Forbidden \| Act: 403 Forbidden | Exp: 200/302 OK \| Act: 200/302 OK |
+| **Navbar: Menu "Portal Pengiriman"** | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil |
+| **Navbar: Menu "Portal BUMDes"** | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil | Exp: Tampil \| Act: Tampil |
+| **Navbar: Menu "Panel Admin"** | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil |
+| **Peta Index: Tombol "Disposisi Logistik"** | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil |
+| **Peta Index: Tombol "Buat Rute Pengiriman"** | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil | Exp: Tersembunyi \| Act: Tersembunyi | Exp: Tampil \| Act: Tampil |
+| **Detail Wilayah: Tombol "▶ Buat DO"** | Exp: Badge Info \| Act: Badge Info | Exp: Tampil Tombol \| Act: Tampil Tombol | Exp: Badge Info \| Act: Badge Info | Exp: Badge Info \| Act: Badge Info |
+| **Detail Wilayah: Tombol "Panggil Operator"** | Exp: Badge Info \| Act: Badge Info | Exp: Tampil Tombol \| Act: Tampil Tombol | Exp: Badge Info \| Act: Badge Info | Exp: Badge Info \| Act: Badge Info |
+| **Portal BUMDes: Tombol "Minta Disposisi"** | Exp: N/A (Login) \| Act: N/A | Exp: N/A (403) \| Act: N/A | Exp: Badge Info \| Act: Badge Info | Exp: Badge Info \| Act: Badge Info |
+| **Portal Pengiriman: Tab "1. Buat Pengiriman"** | Exp: N/A (Login) \| Act: N/A | Exp: Tampil Tab \| Act: Tampil Tab | Exp: N/A (403) \| Act: N/A | Exp: Tersembunyi \| Act: Tersembunyi |
+
+#### 4.3.2 Daftar Temuan Otorisasi & Visibilitas UI
+
+| ID | File:baris | Jenis | Keparahan | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
+|---|---|---|---|---|---|---|---|---|
+| C-01 | `routes/web.php:50-59`, `app/Policies/ShipmentPolicy.php:21-25` | Pelanggaran Matriks PRD 4.1 (Admin Mengakses Form & Membuat Pengiriman) | **TINGGI** | Rute `/pengiriman/buat` & `POST /pengiriman` dilindungi middleware `role:distributor,admin` dan `ShipmentPolicy::create` mengizinkan Admin. Matriks PRD Bagian 4.1 secara ketat menetapkan: *Buat pengiriman = Distributor ✅, Admin ❌*. | Akun Admin dapat membuka form `/pengiriman/buat` dan mengirim request POST pengiriman tanpa ditolak 403. | NOT-ALLOWED | Pisahkan rute buat pengiriman khusus `role:distributor`, kunci `ShipmentPolicy::create` hanya untuk `$user->isDistributor()`, dan sembunyikan tab buat pengiriman dari Admin. | `1819a07` |
+| C-02 | `resources/views/layouts/app.blade.php:45-75` | Eksposur Menu Navigasi Sensitif ke Semua Peran | **SEDANG** | Menu navigasi desktop merender *Portal Pengiriman*, *Portal BUMDes*, dan *Panel Admin* secara statis tanpa proteksi `@auth` atau kondisional peran. | Tamu publik melihat semua menu lalu terlempar ke login; BUMDes melihat menu Pengiriman dan Admin yang menghasilkan HTTP 403; Distributor melihat menu BUMDes dan Admin yang menghasilkan HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Tambahkan pengecekan peran `@if(auth()->check() && ...)` pada setiap item menu navigasi. | `1819a07` |
+| C-03 | `resources/views/peta/index.blade.php:190, 358, 772` | Tombol Aksi Logistik Terbuka untuk Publik & BUMDes | **SEDANG** | Tombol *Disposisi Logistik* dan *Buat Rute Pengiriman Logistik* merender tautan `route('pengiriman.index')` pada halaman peta publik. | Tamu publik diarahkan ke login, pengguna BUMDes mendapat HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol aksi logistik dengan kondisional peran Distributor/Admin, serta amankan script JS (null-check) agar tidak error saat tombol disembunyikan. | `1819a07` |
+| C-04 | `resources/views/peta/detail.blade.php:452, 474` | Tombol Pembuatan DO Terbuka untuk Publik & BUMDes | **SEDANG** | Kartu koridor redistribusi wilayah detail merender tombol `▶ Buat DO` dan `Panggil Operator Logistik` yang mengarah ke `pengiriman.create`. | Tamu publik diarahkan ke login, BUMDes dan Admin mendapat HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol aksi dengan `@can('create', Shipment::class)` dan ganti dengan badge status informatif non-interaktif bagi peran non-distributor. | `1819a07` |
+| C-05 | `resources/views/panen/index.blade.php:79` | Tautan Mati Pembuatan Pengiriman di Banner Surplus BUMDes | **SEDANG** | Banner peringatan status Waspada/Penuh pada modul panen merender tombol `Minta Disposisi Logistik` menuju `route('pengiriman.create')`. | Pengguna BUMDes yang mengeklik tombol tersebut mengalami error HTTP 403 Forbidden (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol dengan `@can('create', Shipment::class)` dan tampilkan badge informasi disposisi bagi pengguna BUMDes. | `1819a07` |
+| C-06 | `app/Http/Controllers/ShipmentController.php:36, 62`, `app/Policies/ShipmentPolicy.php:13-33` | Data Scoping: Isolasi Akses & Resi Antar Distributor | **INFO** | Query pengiriman difilter per `user_id` untuk non-admin, Policy `view` dan `update` mewajibkan kepemilikan data. | Distributor 1 dilarang (403) membuka `/pengiriman/{id_dist2}` dan dilarang (403) POST event; pencarian resi Distributor 2 tidak mengembalikan hasil. Admin dapat melihat dan mengoreksi (sesuai PRD 4.1). | KEEP | Dipertahankan dan diverifikasi penuh oleh test suite `AuthorizationAndVisibilityAuditTest`. | - |
+| C-07 | `app/Http/Controllers/HarvestReportController.php:33, 224, 306`, `app/Http/Controllers/PlantingController.php:20` | Data Scoping: Pengikatan Akun BUMDes ke 1 Kabupaten | **INFO** | Seluruh pemrosesan `index`, `store`, dan `exportCsv` mengabaikan parameter `kabupaten_id` kiriman request jika peran adalah BUMDes, memaksakan nilai `$user->kabupaten_id`. | Upaya manipulasi `kabupaten_id` lewat form POST atau query URL diabaikan oleh server; data tetap tersimpan dan terekspor pada kabupaten asal akun BUMDes. | KEEP | Dipertahankan dan diverifikasi penuh oleh test suite `AuthorizationAndVisibilityAuditTest`. | - |
 
 ### 4.4 Temuan D — Pelanggaran Spesifikasi PRD, Keamanan, & Hak Akses
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
@@ -183,6 +221,7 @@ Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarm
 | `342bb78` | 2026-10-13 | audit: siapkan dokumen AUDIT.md dan skrip baseline smoke test | Setup awal dokumen audit dan skrip otomatis smoke test PRD |
 | `be34df7` | 2026-10-13 | audit(D): bersihkan kredensial login dan amankan alur autentikasi [D-01, D-02, D-03] | Hapus tombol kredensial demo di login UI, perbaiki implementasi AuditService, lengkapi pengujian keamanan autentikasi |
 | `90a276a` | 2026-10-13 | audit(E): bersihkan berkas mati, kebocoran resi publik, dan catat tabel cakupan PRD [E-01, E-02, E-03, E-04] | Hapus welcome.blade.php & SecurityHeaders kosong, tutup eksposur no_resi di halaman detail publik, dokumentasikan matriks cakupan PRD |
+| `1819a07` | 2026-10-13 | audit(C): perketat otorisasi peran, visibilitas UI, dan isolasi data sesuai PRD 4.1 [C-01, C-02, C-03, C-04, C-05, C-06, C-07] | Pisahkan rute dan policy buat pengiriman khusus distributor, proteksi menu navigasi & tombol aksi dari salah peran, verifikasi data scoping |
 
 ---
 

@@ -449,10 +449,16 @@
                   </div>
                 </div>
                 <div class="mt-3 pt-2">
-                  <a href="{{ route('pengiriman.create') }}?tujuan={{ $dest['kode'] }}&komoditas={{ $komoditas->kode }}"
-                     class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-white bg-emerald-800 hover:bg-emerald-900 shadow-xs transition">
-                    <span>▶ Buat DO {{ str_replace('Kab. ', '', $dest['nama']) }}</span>
-                  </a>
+                  @can('create', App\Models\Shipment::class)
+                    <a href="{{ route('pengiriman.create') }}?tujuan={{ $dest['kode'] }}&komoditas={{ $komoditas->kode }}"
+                       class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-white bg-emerald-800 hover:bg-emerald-900 shadow-xs transition">
+                      <span>▶ Buat DO {{ str_replace('Kab. ', '', $dest['nama']) }}</span>
+                    </a>
+                  @else
+                    <div class="w-full text-center py-1.5 px-2 rounded-lg bg-slate-100 text-[11px] font-semibold text-slate-500">
+                      Disposisi Mandat Distributor
+                    </div>
+                  @endcan
                 </div>
               </div>
             @empty
@@ -471,9 +477,15 @@
                 <div class="text-[11px] text-slate-500">12 Unit Truk Tronton Siap Muat (Kapasitas Gabungan: 360 ton/hari).</div>
               </div>
             </div>
-            <a href="{{ route('pengiriman.create') }}" class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white transition">
-              Panggil Operator Logistik
-            </a>
+            @can('create', App\Models\Shipment::class)
+              <a href="{{ route('pengiriman.create') }}" class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white transition">
+                Panggil Operator Logistik
+              </a>
+            @else
+              <span class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-500">
+                Khusus Operator Logistik
+              </span>
+            @endcan
           </div>
         </div>
 

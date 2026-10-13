@@ -186,12 +186,14 @@
           </p>
         </div>
       </div>
-      <div class="shrink-0">
-        <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-          Disposisi Logistik
-        </a>
-      </div>
+      @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
+        <div class="shrink-0">
+          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+            Disposisi Logistik
+          </a>
+        </div>
+      @endif
     </div>
 
     <!-- Main Content: Peta Heatmap (Kiri 65%) + Panel Wilayah Terpilih (Kanan 35%) -->
@@ -355,11 +357,13 @@
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
             Lihat Analisis Detail 12 Bulan
           </a>
-          <a id="btn-buat-pengiriman" href="{{ route('pengiriman.index') }}"
-             class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            Buat Rute Pengiriman Logistik
-          </a>
+          @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
+            <a id="btn-buat-pengiriman" href="{{ route('pengiriman.index') }}"
+               class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              Buat Rute Pengiriman Logistik
+            </a>
+          @endif
         </div>
 
         <div class="text-[10px] text-center text-slate-400 pt-1">
@@ -768,8 +772,14 @@ async function updatePanelWilayah(kode) {
     }
 
     // Link tombol ke detail
-    document.getElementById('btn-lihat-analisis').href = `/wilayah/${kode}?komoditas=${state.komoditas}`;
-    document.getElementById('btn-buat-pengiriman').href = `/pengiriman?tujuan=${kode}`;
+    const btnAnalisis = document.getElementById('btn-lihat-analisis');
+    if (btnAnalisis) {
+      btnAnalisis.href = `/wilayah/${kode}?komoditas=${state.komoditas}`;
+    }
+    const btnKirim = document.getElementById('btn-buat-pengiriman');
+    if (btnKirim) {
+      btnKirim.href = `/pengiriman?tujuan=${kode}`;
+    }
 
   } catch (err) {
     console.error(err);

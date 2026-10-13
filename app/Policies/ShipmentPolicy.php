@@ -8,7 +8,15 @@ use App\Models\User;
 class ShipmentPolicy
 {
     /**
-     * Tentukan apakah pengguna dapat melihat daftar atau detail pengiriman.
+     * Tentukan apakah pengguna dapat melihat daftar pengiriman.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->isAdmin() || $user->isDistributor();
+    }
+
+    /**
+     * Tentukan apakah pengguna dapat melihat detail pengiriman.
      */
     public function view(User $user, Shipment $shipment): bool
     {
@@ -16,11 +24,11 @@ class ShipmentPolicy
     }
 
     /**
-     * Tentukan apakah pengguna dapat membuat pengiriman baru.
+     * Tentukan apakah pengguna dapat membuat pengiriman baru (PRD 4.1: Distributor only).
      */
     public function create(User $user): bool
     {
-        return $user->isDistributor() || $user->isAdmin();
+        return $user->isDistributor();
     }
 
     /**

@@ -41,37 +41,43 @@
                     </a>
                 </div>
 
-                <!-- Nav Menu Desktop — Sesuai Design Mockup -->
+                <!-- Nav Menu Desktop — Sesuai Design Mockup & Matriks PRD 4.1 -->
                 <nav class="hidden md:flex items-center space-x-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80">
-                    {{-- 1. Peta Heatmap Nasional --}}
+                    {{-- 1. Peta Heatmap Nasional (Semua Role & Guest) --}}
                     <a href="{{ route('peta.index') }}"
                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('peta*') || request()->is('/') ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
                         Peta Heatmap Nasional
                     </a>
 
-                    {{-- 2. Detail Wilayah --}}
+                    {{-- 2. Detail Wilayah (Semua Role & Guest) --}}
                     <a href="{{ route('wilayah.detail', ['kode' => '3302']) }}"
                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('wilayah*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
                         Detail Wilayah
                     </a>
 
-                    {{-- 3. Portal Pengiriman --}}
-                    <a href="{{ route('pengiriman.index') }}"
-                       class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('pengiriman*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
-                        Portal Pengiriman
-                    </a>
+                    {{-- 3. Portal Pengiriman (Distributor & Admin) --}}
+                    @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
+                        <a href="{{ route('pengiriman.index') }}"
+                           class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('pengiriman*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
+                            Portal Pengiriman
+                        </a>
+                    @endif
 
-                    {{-- 4. Portal BUMDes --}}
-                    <a href="{{ route('panen.index') }}"
-                       class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('panen*') || request()->is('jadwal-tanam*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
-                        Portal BUMDes
-                    </a>
+                    {{-- 4. Portal BUMDes (BUMDes & Admin) --}}
+                    @if(auth()->check() && (auth()->user()->isBumdes() || auth()->user()->isAdmin()))
+                        <a href="{{ route('panen.index') }}"
+                           class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('panen*') || request()->is('jadwal-tanam*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
+                            Portal BUMDes
+                        </a>
+                    @endif
 
-                    {{-- 5. Panel Admin --}}
-                    <a href="{{ route('admin.pengguna.index') }}"
-                       class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('admin*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
-                        Panel Admin
-                    </a>
+                    {{-- 5. Panel Admin (Khusus Admin) --}}
+                    @if(auth()->check() && auth()->user()->isAdmin())
+                        <a href="{{ route('admin.pengguna.index') }}"
+                           class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition {{ request()->is('admin*') ? 'bg-emerald-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
+                            Panel Admin
+                        </a>
+                    @endif
                 </nav>
 
                 <!-- Status / Auth User (Sesuai Design Mockup) -->
