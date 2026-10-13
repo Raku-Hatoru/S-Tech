@@ -441,7 +441,7 @@ Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarm
 | `a2d1644` | 2026-10-13 | audit(E): bersihkan berkas mati, kebocoran resi publik, dan catat tabel cakupan PRD [E-01, E-02, E-03, E-04] | Hapus welcome.blade.php & SecurityHeaders kosong, tutup eksposur no_resi di halaman detail publik, dokumentasikan matriks cakupan PRD |
 | `372ffa1` | 2026-10-13 | audit(C): perketat otorisasi peran, visibilitas UI, dan isolasi data sesuai PRD 4.1 [C-01, C-02, C-03, C-04, C-05, C-06, C-07] | Pisahkan rute dan policy buat pengiriman khusus distributor, proteksi menu navigasi & tombol aksi dari salah peran, verifikasi data scoping |
 | `db7f9a1` | 2026-10-13 | audit(B): bersihkan elemen UI mati dan perbaiki komponen antarmuka [B-01, B-02, B-03, B-04, B-05, B-06] | Hapus fake footer link spans di layout & login, tambahkan atribut eksplisit type=button, lengkapi test audit UI |
-| `pending` | 2026-10-13 | audit(A): bersihkan metode kontroler mati dan verifikasi backend [A-01] | Hapus metode PetaController@detail dan unused imports, kompilasi production build assets, verifikasi seluruh rute, model, dan dependensi |
+| `66eae27` | 2026-10-13 | audit(A): bersihkan metode kontroler mati dan verifikasi backend [A-01] | Hapus metode PetaController@detail dan unused imports, kompilasi production build assets, verifikasi seluruh rute, model, dan dependensi |
 
 ---
 
