@@ -130,10 +130,48 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | D-05 | `database/seeders/DatabaseSeeder.php:19` | Eksekusi Seeder Demo di Production | `DemoUserSeeder::class` dipanggil tanpa pengecekan environment `app()->isProduction()` | `php artisan db:seed` di production akan men-seed akun demo publik | DECISION | Dilaporkan ke user; rekomendasi guard environment diusulkan di bagian 6 | - |
 | D-06 | `routes/web.php:32-37` | Ketiadaan Registrasi Publik & Reset Password | Tidak ada rute registrasi mandiri atau lupa password pada rute web | Akses guest ke `/register` atau `/password/reset` menghasilkan HTTP 404 | DECISION | Dikonfirmasi sesuai PRD F-11 (akun diterbitkan terpusat oleh Admin) | - |
 
-### 4.5 Temuan E — Database, Migrasi, Skrip, & Artefak Lainnya
+### 4.5 Temuan E — Non-Goals, Modul Duplikat, & Integritas Data (PRD v1.1)
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| *(belum ada)* | | | | | | | |
+| E-01 | `resources/views/welcome.blade.php` | Boilerplate View Mati | Berkas template default Laravel (72 KB) tidak memiliki pemanggilan rute/controller aktif | Akses `GET /` diarahkan melalui HTTP 302 ke `/peta`, view tidak pernah dirender | DEAD | Hapus berkas template mati | `90a276a` |
+| E-02 | `app/Http/Middleware/SecurityHeaders.php` | Berkas Kosong Tak Terdaftar | Berkas middleware kosong 0-byte tidak terdaftar pada pipeline di `bootstrap/app.php` | Tidak pernah dieksekusi dalam lifecycle HTTP request | DEAD | Hapus berkas kosong | `90a276a` |
+| E-03 | `resources/views/peta/detail.blade.php:204-206`, `app/Http/Controllers/WilayahController.php:215, 229` | Pelanggaran Privasi Resi Publik (PRD 4.1 & 13) | Field `no_resi` (`RESI - CONTOH - 0001` atau resi pengiriman aktif) diekspos di kartu detail wilayah publik untuk pengunjung anonim | Tamu publik tanpa autentikasi dapat melihat nomor resi pengiriman | NOT-ALLOWED | Ganti eksposur resi pada halaman publik dengan indikator agregat kanal logistik | `90a276a` |
+| E-04 | `app/Http/Controllers/WilayahController.php:151-178, 238-254, 287-305` | Unlabeled Hardcoded Demo Showcase Data | Angka metrik KPI dan tabel 12-bulan untuk Kabupaten Banyumas (3302) di-hardcode di controller alih-alih membaca tabel `forecasts` | Halaman `/wilayah/3302` menampilkan angka mockup statis tanpa label data contoh | DECISION | Laporkan ke user; ajukan opsi menambahkan label showcase atau beralih 100% ke tabel `forecasts` | - |
+
+---
+
+### 4.6 Keputusan Modul Tumpang Tindih (Overlapping Modules)
+Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarmuka:
+1. **Beranda Aplikasi (`welcome.blade.php` vs `PetaController@index`)**:
+   - **Pemenang (Winner)**: `PetaController@index` ([`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php)) yang diakses via rute `/peta` dan redirect root `/`. Memenuhi PRD bagian 12 ("Peta Indonesia (beranda)"), responsif, terhubung ke Leaflet & GeoJSON, serta lolos verifikasi runtime.
+   - **Yang Dieliminasi (Loser)**: `resources/views/welcome.blade.php` (boilerplate default Laravel). Tidak memiliki fitur unik dan tidak pernah dapat dijangkau dari navigasi.
+2. **Panel Admin & Manajemen Entitas**:
+   - Hanya ada 1 panel admin tunggal yang terintegrasi pada prefiks `/admin/*` (`pengguna`, `dataset`, `forecast`, `pengaturan`). Tidak ditemukan duplikasi kontroler atau admin panel ganda (seperti Filament/Nova).
+3. **Portal Operasional Sektoral**:
+   - Portal Distributor tunggal pada `/pengiriman` (F-07, F-08).
+   - Portal BUMDes tunggal pada `/panen` dan `/jadwal-tanam` (F-09, F-10).
+   - Tidak ada duplikasi modul CRUD untuk entitas yang sama.
+
+---
+
+### 4.7 Matriks Cakupan Fitur PRD (PRD Coverage Table F-01 s.d. F-14)
+
+| ID | Fitur PRD | Prioritas | Status Impl. | Status Runtime | Lokasi Kode / URL | Catatan Verifikasi |
+|---|---|---|---|---|---|---|
+| **F-01** | Autentikasi & 3 Role (Distributor, BUMDes, Admin) | **Must** | ✅ Lengkap | ✅ Lolos | `LoginController`, `EnsureRole`, `User`, `Role` | Login terisolasi per role, rate-limiting, proteksi brute-force, no user enumeration |
+| **F-02** | Impor Dataset Historis (CSV) | **Must** | ✅ Lengkap | ✅ Lolos | `AdminDatasetController`, `DataHistorisImporter`, `data:import-historis` | Upload via UI admin dan via Artisan CLI, validasi kolom UTF-8 long format |
+| **F-03** | Prediksi Bulanan XGBoost (3 target) + Supply Bergulir | **Must** | ✅ Lengkap | ✅ Lolos | `AdminForecastController`, `ForecastImporter`, `forecast:import`, `ml/` | Pipeline offline Python mengekspor forecasts.csv lalu diimpor ke DB |
+| **F-04** | Perhitungan Status Wilayah (Defisit, Seimbang, Waspada, Penuh) | **Must** | ✅ Lengkap | ✅ Lolos | `StatusService`, `status:recalc` | Ambang rasio dinamis (Setting), roll-forward stok awal survei & pengiriman aktif |
+| **F-05** | Peta Heatmap Indonesia (Zoom level provinsi/kabupaten) | **Must** | ✅ Lengkap | ✅ Lolos | `PetaController`, `peta/index.blade.php`, `Api\StatusController` | Leaflet basemap GeoJSON 38 provinsi & 514 kab/kota, filter komoditas/bulan |
+| **F-06** | Panel Detail Wilayah (Grafik 12 bln, status, pesan dampak) | **Must** | ✅ Lengkap | ✅ Lolos | `WilayahController`, `peta/detail.blade.php`, `Api\WilayahController` | Chart.js 12 bulan aktual vs prediksi, batas ketidakpastian (CI), rekomendasi defisit |
+| **F-07** | Pembuatan Pengiriman + Banner Info Kelebihan Pasokan | **Must** | ✅ Lengkap | ✅ Lolos | `ShipmentController`, `pengiriman/create.blade.php` | Pengecekan otomatis status tujuan (Waspada/Penuh), non-blocking, banner disclaimer |
+| **F-08** | Tracking Pengiriman Gaya JNE (Resi DB, timeline, refresh) | **Must** | ✅ Lengkap | ✅ Lolos | `ShipmentController`, `pengiriman/index.blade.php`, `pengiriman/show.blade.php` | Resi unik, distributor hanya melihat miliknya, perbarui status manual tanpa websocket |
+| **F-09** | Modul BUMDes: Input Panen & Sisa Stok Survei + Rekap | **Must** | ✅ Lengkap | ✅ Lolos | `HarvestReportController`, `panen/index.blade.php` | Terikat 1 kabupaten, sisa stok menjadi stok awal bulan depan, grafik aktual vs prediksi |
+| **F-10** | Rekomendasi Jadwal Tanam (Dummy/Simulasi) | **Could** | ✅ Lengkap | ✅ Lolos | `PlantingController`, `jadwal-tanam/index.blade.php` | Tampil dengan label wajib `PRD F-10 • SIMULASI / DATA CONTOH`, info curah hujan BMKG |
+| **F-11** | Panel Admin (Pengguna, Dataset, Ambang) | **Should** | ✅ Lengkap | ✅ Lolos | `Admin\*Controller`, `resources/views/admin/*` | Manajemen user (toggle aktif), pengaturan ambang batas, pembaruan data |
+| **F-12** | Pesan Dampak (Konten Statis Surplus & Defisit) | **Should** | ✅ Lengkap | ✅ Lolos | `Setting`, `WilayahController`, `peta/detail.blade.php` | Menjelaskan risiko basi, emisi gas, penurunan harga petani vs kelaparan |
+| **F-13** | Ekspor CSV | **Could** | ✅ Lengkap | ✅ Lolos | `HarvestReportController::exportCsv`, `ExportMlData` | Ekspor rekap panen bulanan (`/panen/export-csv`) & ekspor data ML (`data:export-ml`) |
+| **F-14** | Retraining dari UI / Monitoring Model | **Won't** | ❌ Ditiadakan | ℹ️ Sesuai PRD | N/A (Sesuai Non-Goals PRD 2.3 & 6) | Sesuai keputusan PRD: model dilatih offline dengan script Python di server |
 
 ---
 
@@ -144,6 +182,7 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | `e420bec` | 2026-10-13 | audit: inisialisasi audit workspace dan baseline | Baseline repositori sebelum pembersihan |
 | `342bb78` | 2026-10-13 | audit: siapkan dokumen AUDIT.md dan skrip baseline smoke test | Setup awal dokumen audit dan skrip otomatis smoke test PRD |
 | `be34df7` | 2026-10-13 | audit(D): bersihkan kredensial login dan amankan alur autentikasi [D-01, D-02, D-03] | Hapus tombol kredensial demo di login UI, perbaiki implementasi AuditService, lengkapi pengujian keamanan autentikasi |
+| `90a276a` | 2026-10-13 | audit(E): bersihkan berkas mati, kebocoran resi publik, dan catat tabel cakupan PRD [E-01, E-02, E-03, E-04] | Hapus welcome.blade.php & SecurityHeaders kosong, tutup eksposur no_resi di halaman detail publik, dokumentasikan matriks cakupan PRD |
 
 ---
 
@@ -158,3 +197,10 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
    - **Kondisi saat ini**: Tidak ada form registrasi mandiri publik (`/register`) maupun alur reset sandi mandiri (`/forgot-password`). Seluruh akun pengguna dibuat oleh Administrator Nasional melalui menu `/admin/pengguna` (PRD Bagian 4.1 & F-11).
    - **Rekomendasi tindakan**: Pertahankan arsitektur saat ini tanpa membuat rute registrasi publik terbuka.
    - **Status**: Menunggu konfirmasi pengguna.
+
+3. **E-04 (Penanganan Data Hardcoded Showcase Banyumas 3302 pada `WilayahController`)**:
+   - **Kondisi saat ini**: Pada [`WilayahController.php:151-178, 238-254, 287-305`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/app/Http/Controllers/WilayahController.php#L151-L178), Kabupaten Banyumas (kode `3302`) memiliki nilai metrik, 12 baris horizon, dan koridor rekomendasi yang di-hardcode agar identik 100% dengan screenshot desain (`design/Detail Wilayah & Analisis Prediksi 12 Bulan.png`). Di sisi lain, tabel `forecasts` di database sudah memiliki 12 baris prediksi ML nyata untuk Banyumas.
+   - **Pilihan tindakan**:
+     - *Opsi A (Recommended)*: Tetap pertahankan angka showcase untuk Banyumas sebagai data demo kompetisi/video namun tambahkan label banner kecil *"Data Contoh Showcase Mockup"* pada header halaman detail Banyumas agar memenuhi kaidah transparansi PRD Section 13.
+     - *Opsi B*: Hapus percabangan `if ($kode === '3302')` dan gunakan 100% data dinamis dari tabel `forecasts` database (namun angka pada video demo akan mengikuti data asli ML bukan persis mockup desain).
+   - **Status**: Menunggu keputusan pengguna.

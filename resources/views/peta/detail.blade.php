@@ -201,8 +201,8 @@
           </div>
           <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
             <div class="flex justify-between">
-              <span class="text-slate-500">ID Resi:</span>
-              <span class="font-mono font-bold text-slate-800">{{ $cardPengiriman['no_resi'] }}</span>
+              <span class="text-slate-500">Kanal Distribusi:</span>
+              <span class="font-medium text-slate-800">Mitra Logistik Terdaftar</span>
             </div>
             <div class="flex justify-between">
               <span class="text-slate-500">Kurir / Armada:</span>

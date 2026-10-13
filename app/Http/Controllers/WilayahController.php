@@ -212,7 +212,6 @@ class WilayahController extends Controller
         // Pengiriman aktif menuju kabupaten ini (jika ada data demo/nyata)
         $cardPengiriman = [
             'total_formatted' => '+2,5 ton',
-            'no_resi' => 'RESI - CONTOH - 0001',
             'kurir' => 'Truk Tronton #08',
             'status_transit' => 'Menuju Gudang Tambak',
         ];
@@ -226,7 +225,6 @@ class WilayahController extends Controller
             if ($shipment) {
                 $cardPengiriman = [
                     'total_formatted' => '+'.NumberFormatter::formatTon((float) $shipment->jumlah_kg, 1),
-                    'no_resi' => $shipment->no_resi,
                     'kurir' => 'Armada Mitra '.($shipment->user->organisasi ?? 'Logistik'),
                     'status_transit' => $shipment->status->label(),
                 ];
