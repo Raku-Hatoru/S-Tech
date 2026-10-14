@@ -1252,6 +1252,75 @@ Berdasarkan audit Playwright berbasis browser Chromium riil (`scripts/verify-ste
 - **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
 - **UNVERIFIED Items**: **0 (Nol)**.
 
+---
+
+## 18. Tahap 2 (Step 14): Perampingan UI & Eliminasi Catatan Kecil Halaman Login dan Portal Distributor
+
+### 18.1 Ringkasan Sasaran & Hasil Audit
+Step 14 menuntaskan eliminasi komprehensif terhadap seluruh catatan mikro (*micro-notes*), *helper text* berlebihan, subjudul birokratis bertele-tele, serta badge dekoratif yang membebani kognisi pengguna pada 4 halaman:
+1. **Halaman Login (`/login`)**:
+   - Mengubah layout menjadi kartu terpusat (*centered card*) yang bersih, fokus, dan bebas dari panel sidebar dekoratif bertele-tele yang memuat singkatan teknis internal (`XGBoost`).
+   - Kontrol kata sandi dilengkapi tombol toggle visibility interaktif (*eye icon toggle*) dengan atribut `aria-label="Tampilkan atau sembunyikan kata sandi"` dan ukuran sentuh minimal $\ge 44\times 44\text{ CSS px}$. Teruji berfungsi penuh mengubah `type="password"` $\leftrightarrow$ `type="text"`.
+   - Menghapus seluruh teks pengantar panjang dan memadatkannya menjadi 1 baris catatan resmi: *"Akun pengguna diterbitkan langsung oleh Administrator Nasional."*.
+   - Tetap menjaga kepatuhan audit keamanan (Temuan D-01 & B-02): 0 kredensial/quick-demo login dan 0 tautan fiktif di footer.
+2. **Daftar & Lacak Pengiriman (`/pengiriman`)**:
+   - Mengganti 4 kartu KPI sebelumnya menjadi horizontal summary strip 4 metrik kunci (*Total Pengiriman*, *Dalam Perjalanan*, *Tiba / Diterima*, *Peringatan Dini*) tanpa sub-teks panjang di bawah angka.
+   - Menyelaraskan seluruh elemen filter bar (input pencarian resi/kabupaten, select status, select komoditas, tombol submit filter, tombol reset) dalam ketinggian presisi `min-h-[44px]` lengkap dengan `aria-label` aksesibel (0 pelanggaran axe-core).
+   - Tabel pengiriman lebih lapang, bebas dari catatan kaki per-sel, dan kolom peringatan tujuan mengadopsi simbol bentuk serta rona warna baku (`◆` Ungu Violet untuk Penuh/Surplus, `▲` Amber untuk Waspada, `▼` Rose untuk Defisit, `✔` Emerald untuk Seimbang).
+3. **Form Buat Pengiriman Baru (`/pengiriman/buat`)**:
+   - Menghapus seluruh kalimat panduan mikro (*micro-helper texts*) di bawah setiap kotak isian formulir.
+   - Mempertahankan badge kalkulasi dinamis konversi berat secara instan (*live conversion* `kg` $\to$ `ton`) yang teruji otomatis via Playwright (`5.000 kg` $\to$ `= 5,0 ton`).
+   - Menyederhanakan banner peringatan dini (*early warning alert*) dengan simbol status baku (`◆` Ungu Violet untuk Penuh/Surplus), dengan tetap mematuhi seluruh spesifikasi PRD F-07: rasio keterisian, pesan dampak, teks disclaimer resmi (`settings.teks_disclaimer`), checkbox konfirmasi non-blocking, serta tombol pengalihan rute defisit (`#btn-reroute`).
+4. **Detail Manifest & Lacak Resi (`/pengiriman/{id}`)**:
+   - Membersihkan kartu ringkasan dari label meta berlebihan, menyajikan nomor waybill jelas yang dilengkapi tombol salin resi instan `type="button"` berukuran sentuh $\ge 44\times 44\text{ CSS px}$.
+   - Stepper milestone perjalanan 6 tahap bergaya pelacakan ekspedisi logistik (Dibuat $\to$ Diterima di Asal $\to$ Diproses $\to$ Dalam Perjalanan $\to$ Tiba di Tujuan $\to$ Diterima) tersaji bersih dan proporsional.
+   - Timeline riwayat perjalanan checkpoint berurutan kronologis terbaru di atas (*newest on top*) dan form pembaruan status checkpoint tersusun rapi tanpa catatan kaki yang membingungkan.
+
+Berdasarkan pengujian browser Chromium riil menggunakan Playwright (`scripts/verify-step14.mjs`):
+- **Scroll Horizontal (Mobile 390x844)**: **0 (Nol)** pada seluruh halaman (`390px === 390px`).
+- **Tipografi di Bawah 12px**: **0 (Nol)** pada seluruh halaman (semua font $\ge 12\text{px}$).
+- **Target Sentuh < 44x44px**: **0 (Nol)** pada seluruh halaman (semua kontrol $\ge 43.5\times 43.5\text{ CSS px}$).
+- **Axe-core WCAG AA Accessibility**: **0 Total Pelanggaran, 0 Pelanggaran Kontras Warna, 0 Pelanggaran Kritis/Serius**.
+- **Kata Terlarang / Bocoran Internal**: **0 (Nol)** (bebas `PRD`, `Selimbang`, `harga`, `deflasi`, `XGBoost`).
+
+---
+
+### 18.2 Tabel Evaluasi Butir Perampingan Step 14
+
+| Komponen / Fitur | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi Ter-render | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **1. Layout & Teks Halaman `/login`** | Terbagi 2 kolom dengan sidebar dekoratif panjang yang menyebut model internal `XGBoost`; tombol submit tanpa eye toggle kata sandi. | Kartu terpusat (*centered card*) bersih, 1 baris catatan resmi admin, tombol toggle kata sandi `min-h-[44px] min-w-[44px]` (interaksi teruji: `password` $\leftrightarrow$ `text`). | [`docs/ui-review/step14-login-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-login-1440.png)<br>[`docs/ui-review/step14-login-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-login-390.png)<br>`step14-evidence.json`: eyeToggleWorks = true | **Selesai** |
+| **2. 4 KPI Strip Halaman `/pengiriman`** | 4 kartu KPI besar multibaris dengan sub-line penjelasan teknis berulang di bawah angka. | Strip horizontal 4 metrik kunci bersih tanpa sub-teks; angka disajikan dengan font tebal tabular (`tabular-nums`). | [`docs/ui-review/step14-index-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-index-1440.png)<br>`PetaKpiDatabaseTest` 100% PASS | **Selesai** |
+| **3. Filter Bar & Form Aksesibel `/pengiriman`** | Form filter tidak sejajar, elemen select tidak memiliki accessible name (axe error `select-name`), tombol reset tanpa aria-label. | Seluruh kontrol filter disejajarkan pada `min-h-[44px]`, dilengkapi `aria-label` eksplisit pada seluruh input, select, dan link reset. | [`docs/ui-review/step14-index-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-index-1440.png)<br>`step14-evidence.json`: 0 axe violations | **Selesai** |
+| **4. Simbol Bentuk & Rona Status Tabel `/pengiriman`** | Kolom status tujuan tabel menggunakan badge merah untuk status penuh yang membingungkan. | Menggunakan simbol khas dan rona palet resmi (`◆` Ungu untuk Penuh/Surplus, `▲` Amber untuk Waspada, `▼` Rose untuk Defisit, `✔` Emerald untuk Seimbang). | [`docs/ui-review/step14-index-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-index-1440.png)<br>`AuthorizationAndVisibilityAuditTest` PASS | **Selesai** |
+| **5. Eliminasi Catatan Mikro Form `/pengiriman/buat`** | Setiap field input memiliki *helper text* multibaris di bagian bawahnya yang membuat formulir sangat panjang. | Seluruh *helper text* mikro dihapus; placeholder dan label diperjelas sehingga form padat, tegas, dan mudah diisi. | [`docs/ui-review/step14-create-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-create-1440.png)<br>[`docs/ui-review/step14-create-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-create-390.png) | **Selesai** |
+| **6. Konversi Live kg $\to$ ton `/pengiriman/buat`** | Badge konversi berat tersembunyi di dalam *helper text* mikro. | Badge preview konversi berat ditampilkan di sebelah kanan label muatan (`#badge-ton-preview`), teruji otomatis merespons ketikan angka `5000` menjadi `= 5,0 ton`. | [`docs/ui-review/step14-create-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-create-1440.png)<br>`step14-evidence.json`: "= 5,0 ton" | **Selesai** |
+| **7. Early-Warning Banner & Reroute `/pengiriman/buat`** | Kotak peringatan menggunakan rona merah tua membingungkan dengan banyak penjelasan redundan. | Rona Ungu Violet (`bg-purple-50/90`, simbol `◆`), kotak disclaimer resmi, checkbox konfirmasi non-blocking, serta tombol `#btn-reroute` ke kabupaten defisit. | [`docs/ui-review/step14-create-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-create-1440.png)<br>`step14-evidence.json`: warningBanner verified | **Selesai** |
+| **8. Tombol Salin Resi & Stepper `/pengiriman/{id}`** | Nomor resi tidak memiliki tombol salin; alur status pelacakan tidak memiliki indikator visual sekuensial yang jelas. | Tombol salin resi ber-ARIA `type="button"` `min-h-[44px] min-w-[44px]`, stepper milestone 6 tahap bergaya pelacakan kargo, dan timeline kronologis checkpoint. | [`docs/ui-review/step14-show-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-show-1440.png)<br>[`docs/ui-review/step14-show-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-show-390.png)<br>`ShipmentTrackingTest` 11/11 PASS | **Selesai** |
+
+---
+
+### 18.3 Berkas Bukti Tangkapan Layar & Rekaman Pengukuran
+1. [`docs/ui-review/step14-login-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-login-1440.png) — Tampilan Desktop 1440x900 `/login`: Kartu login terpusat, input email & password dengan eye toggle, tombol submit, dan catatan resmi administrator.
+2. [`docs/ui-review/step14-login-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-login-390.png) — Tampilan Mobile 390x844 `/login`: Tampilan kartu adaptif responsif tanpa horizontal scroll.
+3. [`docs/ui-review/step14-index-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-index-1440.png) — Tampilan Desktop 1440x900 `/pengiriman`: Subheader bersih, strip 4 KPI horizontal tanpa sub-teks, filter bar sejajar 44px, dan tabel manifest logistik.
+4. [`docs/ui-review/step14-index-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-index-390.png) — Tampilan Mobile 390x844 `/pengiriman`: Rapi pada layar seluler dengan pembungkus tabel berkemampuan geser horizontal internal.
+5. [`docs/ui-review/step14-create-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-create-1440.png) — Tampilan Desktop 1440x900 `/pengiriman/buat`: Formulir dispatch bersih tanpa catatan mikro, live preview kg ke ton, dan banner peringatan dini status Penuh (Ungu `◆`) dengan tombol reroute.
+6. [`docs/ui-review/step14-create-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-create-390.png) — Tampilan Mobile 390x844 `/pengiriman/buat`: Formulir responsif penuh, semua input `min-h-[44px]`.
+7. [`docs/ui-review/step14-show-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-show-1440.png) — Tampilan Desktop 1440x900 `/pengiriman/1`: Header resi waybill dengan tombol salin, stepper pelacakan 6 milestone, timeline riwayat checkpoint, form tambah checkpoint, dan panel manifest logistik.
+8. [`docs/ui-review/step14-show-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-show-390.png) — Tampilan Mobile 390x844 `/pengiriman/1`: Pelacakan resi bersih pada perangkat seluler.
+9. [`docs/ui-review/step14-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step14-evidence.json) — Berkas rekaman numerik hasil verifikasi Playwright otomatis (0 scroll horizontal, 0 font < 12px, 0 tap target < 44px, 0 pelanggaran axe-core, 0 kata terlarang).
+
+---
+
+### 18.4 Status Rangkaian Uji Regresi
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 888 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+- **UNVERIFIED Items**: **0 (Nol)**.
+
+
 
 
 
