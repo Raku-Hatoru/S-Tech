@@ -723,10 +723,25 @@ function styleFeat(status, hover = false) {
   };
 }
 
+// ── Sinkronisasi Label Komoditas Dinamis ──────────────────────────────────
+function updateKomoditasLabels() {
+  const komoditasName = state.komoditas.charAt(0).toUpperCase() + state.komoditas.slice(1);
+
+  const kpiTitle = document.getElementById('kpi-komoditas-title');
+  if (kpiTitle) {
+    kpiTitle.textContent = `Total Pasokan ${komoditasName} Nasional`;
+  }
+  const neracaTitle = document.getElementById('panel-neraca-title');
+  if (neracaTitle) {
+    neracaTitle.textContent = `NERACA KOMODITAS ${komoditasName.toUpperCase()}`;
+  }
+}
+
 // ── Muat Data Status dari API ─────────────────────────────────────────────
 async function muatStatusData() {
   document.getElementById('peta-loading').classList.remove('opacity-0', 'pointer-events-none');
   try {
+    updateKomoditasLabels();
     const res = await fetch(`${API_BASE}/status?komoditas=${state.komoditas}&periode=${state.periode}&level=${state.level}`);
     if (!res.ok) throw new Error('API status gagal');
     const json = await res.json();
