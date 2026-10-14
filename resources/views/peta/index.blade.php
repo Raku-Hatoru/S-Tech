@@ -4,13 +4,31 @@
 {{-- Leaflet CSS --}}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style>
+  :root {
+    --status-defisit: #ef4444;
+    --status-seimbang: #16a34a;
+    --status-waspada: #f59e0b;
+    --status-penuh: #8b5cf6;
+    --status-tanpa-data: #64748b;
+  }
+
   /* ── Map Canvas Styling ───────────────────────────── */
   #peta-map {
-    height: 620px;
+    height: 560px;
     background: #080f1d;
-    border-radius: 18px;
+    border-radius: 14px;
     overflow: hidden;
     outline: none;
+  }
+  @media (max-width: 1024px) {
+    #peta-map {
+      height: 480px;
+    }
+  }
+  @media (max-width: 640px) {
+    #peta-map {
+      height: 380px;
+    }
   }
 
   .leaflet-dark-tooltip {
@@ -140,41 +158,6 @@
       </div>
     </div>
 
-    <!-- Kategori Indikator Status (Bar Legenda Sesuai Mockup) -->
-    <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs">
-      <div class="flex items-center justify-between flex-wrap gap-3">
-        <span class="text-[11px] font-black uppercase tracking-wider text-slate-500">
-          Legenda Status Wilayah:
-        </span>
-        <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span>
-            <span class="font-bold text-slate-800">Defisit (&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Kekurangan Pasokan</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
-            <span class="font-bold text-slate-800">Seimbang ({{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Pasokan Aman</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#eab308]"></span>
-            <span class="font-bold text-slate-800">Waspada ({{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Mendekati Jenuh</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#991b1b]"></span>
-            <span class="font-bold text-slate-800">Penuh / Surplus (≥{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Risiko Pembusukan & Emisi</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#64748b]"></span>
-            <span class="font-bold text-slate-500">Tanpa Data</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Banner Peringatan Dini Nasional (Sesuai Mockup) -->
     <div class="p-4 sm:p-5 rounded-2xl bg-rose-50/80 border border-rose-200/90 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-start gap-3.5">
@@ -204,46 +187,82 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- Kolom Kiri: Peta Leaflet (lg:col-span-7 atau 8) -->
-      <div class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md relative">
-        <!-- Floating Header Map Controls -->
-        <div class="absolute top-7 left-7 right-7 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
-            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-            <span>Peta: rasio pasokan terhadap kebutuhan</span>
-            <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-400 hover:text-white transition" title="Informasi tentang data dan metodologi">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
-            </button>
+      <div class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md flex flex-col justify-between">
+        <div class="relative rounded-xl overflow-hidden">
+          <!-- Floating Header Map Controls -->
+          <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
+            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              <span>Peta: rasio pasokan terhadap kebutuhan</span>
+              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-400 hover:text-white transition" title="Informasi tentang data dan metodologi">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+              </button>
+            </div>
+            <div class="pointer-events-auto flex items-center gap-2">
+              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                Reset Nasional
+              </button>
+            </div>
           </div>
-          <div class="pointer-events-auto flex items-center gap-2">
-            <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-              Reset Nasional
-            </button>
+
+          <!-- Canvas Peta -->
+          <div id="peta-map" class="w-full"></div>
+
+          <!-- Floating Footer Map Stats -->
+          <div class="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
+            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs font-medium text-slate-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Proyeksi: model prakiraan (selisih rata-rata ±3,8%)</span>
+              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-400 hover:text-emerald-300 transition underline font-bold" title="Detail model & sumber data">
+                Tentang data
+              </button>
+            </div>
+            <div class="pointer-events-auto flex items-center gap-1.5">
+              <button type="button" onclick="map.zoomIn()" aria-label="Perbesar peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
+              <button type="button" onclick="map.zoomOut()" aria-label="Perkecil peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div id="peta-loading" class="absolute inset-0 bg-[#0b1329]/90 backdrop-blur-xs flex flex-col items-center justify-center z-30 transition-opacity duration-300">
+            <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+            <div class="text-xs font-bold text-slate-300 mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
           </div>
         </div>
 
-        <!-- Canvas Peta -->
-        <div id="peta-map" class="w-full"></div>
-
-        <!-- Floating Footer Map Stats -->
-        <div class="absolute bottom-7 left-7 right-7 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs font-medium text-slate-200">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Proyeksi: model prakiraan (selisih rata-rata ±3,8%)</span>
-            <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-400 hover:text-emerald-300 transition underline font-bold" title="Detail model & sumber data">
-              Tentang data
-            </button>
+        <!-- Docked Compact Legend Strip -->
+        <div id="map-legend" class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            <span>Legenda Status:</span>
           </div>
-          <div class="pointer-events-auto flex items-center gap-1.5">
-            <button type="button" onclick="map.zoomIn()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
-            <button type="button" onclick="map.zoomOut()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
+          <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
+            <div class="flex items-center gap-1.5" title="Rasio pasokan &lt; {{ round(($ambangDefisit ?? 0.70) * 100) }}%">
+              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-defisit);"></span>
+              <span class="font-bold text-rose-400">▼ Defisit</span>
+              <span class="text-[11px] text-slate-400">(&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5" title="Rasio pasokan {{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt; {{ round(($ambangWaspada ?? 0.90) * 100) }}%">
+              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-seimbang);"></span>
+              <span class="font-bold text-emerald-400">✔ Seimbang</span>
+              <span class="text-[11px] text-slate-400">({{ round(($ambangDefisit ?? 0.70) * 100) }}%–&lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5" title="Rasio pasokan {{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt; {{ round(($ambangPenuh ?? 1.00) * 100) }}%">
+              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-waspada);"></span>
+              <span class="font-bold text-amber-400">▲ Waspada</span>
+              <span class="text-[11px] text-slate-400">({{ round(($ambangWaspada ?? 0.90) * 100) }}%–&lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5" title="Rasio pasokan &ge; {{ round(($ambangPenuh ?? 1.00) * 100) }}%">
+              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-penuh);"></span>
+              <span class="font-bold text-purple-300">◆ Penuh / Surplus</span>
+              <span class="text-[11px] text-slate-400">(&ge;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5" title="Wilayah di luar 34 kabupaten/kota percontohan">
+              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-tanpa-data);"></span>
+              <span class="font-medium text-slate-400">— Tanpa Data</span>
+            </div>
           </div>
-        </div>
-
-        <!-- Loading Overlay -->
-        <div id="peta-loading" class="absolute inset-0 bg-[#0b1329]/90 backdrop-blur-xs flex flex-col items-center justify-center z-30 transition-opacity duration-300">
-          <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-          <div class="text-xs font-bold text-slate-300 mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
         </div>
       </div>
 
@@ -273,18 +292,18 @@
         </div>
 
         <!-- Status Peringatan Pangan Box -->
-        <div id="panel-status-box" class="p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
+        <div id="panel-status-box" class="p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between">
           <div>
-            <div class="text-[10px] font-extrabold uppercase tracking-wider text-rose-800">STATUS PERINGATAN PANGAN</div>
-            <div id="panel-status-label" class="text-xl font-black text-rose-950 mt-0.5">
-              PENUH / SURPLUS
+            <div class="text-[10px] font-extrabold uppercase tracking-wider text-purple-900">STATUS PERINGATAN PANGAN</div>
+            <div id="panel-status-label" class="text-xl font-black text-purple-950 mt-0.5">
+              ◆ PENUH / SURPLUS
             </div>
-            <div id="panel-rasio-label" class="text-xs font-bold text-rose-700 mt-0.5">
+            <div id="panel-rasio-label" class="text-xs font-bold text-purple-700 mt-0.5">
               Rasio Pasokan: 105,1% (Batas Aman: 100%)
             </div>
           </div>
-          <div class="w-10 h-10 rounded-xl bg-rose-200/80 text-rose-800 flex items-center justify-center shrink-0">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <div id="panel-status-icon-box" class="w-10 h-10 rounded-xl bg-purple-200/80 text-purple-800 flex items-center justify-center shrink-0 text-lg font-black">
+            ◆
           </div>
         </div>
 
@@ -625,13 +644,70 @@
 const API_BASE = '/api';
 const GEO_BASE = '/geojson';
 
-const STATUS_COLOR = {
-  defisit:    { fill: '#ef4444', border: '#b91c1c', label: 'Defisit',          badge: 'bg-rose-100 text-rose-800 border-rose-200' },
-  seimbang:   { fill: '#22c55e', border: '#15803d', label: 'Seimbang',         badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
-  waspada:    { fill: '#eab308', border: '#b45309', label: 'Waspada',          badge: 'bg-amber-100 text-amber-800 border-amber-200' },
-  penuh:      { fill: '#991b1b', border: '#7f1d1d', label: 'Penuh / Surplus',   badge: 'bg-red-100 text-red-800 border-red-200' },
-  tanpa_data: { fill: '#64748b', border: '#475569', label: 'Tanpa Data',       badge: 'bg-slate-100 text-slate-600 border-slate-200' },
+const rootStyles = getComputedStyle(document.documentElement);
+const getCssProp = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
+
+const STATUS_CONFIG = {
+  defisit: {
+    color: getCssProp('--status-defisit', '#ef4444'),
+    border: '#b91c1c',
+    symbol: '▼',
+    label: 'Defisit',
+    badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+    panelBoxClass: 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between',
+    textClass: 'text-rose-950',
+    accentClass: 'text-rose-700',
+    iconBgClass: 'bg-rose-200/80 text-rose-800',
+  },
+  seimbang: {
+    color: getCssProp('--status-seimbang', '#16a34a'),
+    border: '#15803d',
+    symbol: '✔',
+    label: 'Seimbang',
+    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    panelBoxClass: 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between',
+    textClass: 'text-emerald-950',
+    accentClass: 'text-emerald-700',
+    iconBgClass: 'bg-emerald-200/80 text-emerald-800',
+  },
+  waspada: {
+    color: getCssProp('--status-waspada', '#f59e0b'),
+    border: '#b45309',
+    symbol: '▲',
+    label: 'Waspada',
+    badgeClass: 'bg-amber-100 text-amber-800 border-amber-200',
+    panelBoxClass: 'p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between',
+    textClass: 'text-amber-950',
+    accentClass: 'text-amber-700',
+    iconBgClass: 'bg-amber-200/80 text-amber-800',
+  },
+  penuh: {
+    color: getCssProp('--status-penuh', '#8b5cf6'),
+    border: '#7c3aed',
+    symbol: '◆',
+    label: 'Penuh / Surplus',
+    badgeClass: 'bg-purple-100 text-purple-800 border-purple-200',
+    panelBoxClass: 'p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between',
+    textClass: 'text-purple-950',
+    accentClass: 'text-purple-700',
+    iconBgClass: 'bg-purple-200/80 text-purple-800',
+  },
+  tanpa_data: {
+    color: getCssProp('--status-tanpa-data', '#64748b'),
+    border: '#475569',
+    symbol: '—',
+    label: 'Tanpa Data',
+    badgeClass: 'bg-slate-100 text-slate-600 border-slate-200',
+    panelBoxClass: 'p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between',
+    textClass: 'text-slate-900',
+    accentClass: 'text-slate-500',
+    iconBgClass: 'bg-slate-200/80 text-slate-700',
+  },
 };
+
+function getStatusConfig(status) {
+  return STATUS_CONFIG[status] ?? STATUS_CONFIG.tanpa_data;
+}
 
 let state = {
   komoditas: document.getElementById('select-komoditas').value,
@@ -655,16 +731,12 @@ const map = L.map('peta-map', {
 let geoLayerProv = null;
 let geoLayerKab  = null;
 
-function getStatusColor(status) {
-  return STATUS_COLOR[status] ?? STATUS_COLOR.tanpa_data;
-}
-
 function styleFeat(status, hover = false) {
-  const col = getStatusColor(status);
+  const conf = getStatusConfig(status);
   return {
-    fillColor:   col.fill,
+    fillColor:   conf.color,
     fillOpacity: hover ? 0.95 : 0.78,
-    color:       col.border,
+    color:       conf.border,
     weight:      hover ? 2.5 : 1,
     opacity:     1,
   };
@@ -762,15 +834,15 @@ async function renderMapLayer() {
 function buildTooltip(props, d) {
   const nama = props.nama ?? '—';
   const status = d?.status ?? 'tanpa_data';
-  const col = getStatusColor(status);
+  const conf = getStatusConfig(status);
   const rasio = d?.rasio_persen ?? '—';
   const supply = d?.supply_formatted ?? d?.total_supply_formatted ?? '—';
 
-  return `<div style="background:#0f172a;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;min-width:170px;color:#fff;font-family:inherit">
+  return `<div style="background:#0f172a;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;min-width:180px;color:#fff;font-family:inherit;box-shadow:0 10px 25px -5px rgba(0,0,0,.5)">
     <div style="font-weight:800;font-size:.85rem;color:#f1f5f9;margin-bottom:4px">${nama}</div>
     <div style="display:flex;align-items:center;gap:6px">
-      <div style="width:10px;height:10px;border-radius:2px;background:${col.fill}"></div>
-      <span style="font-size:.7rem;font-weight:700;color:${col.fill}">${col.label} (${rasio})</span>
+      <div style="width:10px;height:10px;border-radius:2px;background:${conf.color}"></div>
+      <span style="font-size:.72rem;font-weight:700;color:${conf.color}">${conf.symbol} ${conf.label} (${rasio})</span>
     </div>
     <div style="font-size:.7rem;color:#94a3b8;margin-top:5px">Supply: <span style="color:#e2e8f0;font-weight:600">${supply}</span></div>
   </div>`;
@@ -819,17 +891,29 @@ async function updatePanelWilayah(kode) {
     // Cari titik sesuai periode yang aktif
     const point = json.seri.find(s => s.periode === state.periode) || json.status_terbaru;
     if (point) {
-      const col = getStatusColor(point.status);
-      const isSurplus = point.status === 'penuh';
+      const conf = getStatusConfig(point.status);
 
       // Status Box
       const box = document.getElementById('panel-status-box');
-      box.className = isSurplus
-        ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between'
-        : (point.status === 'defisit' ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between' : 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between');
+      if (box) box.className = conf.panelBoxClass;
 
-      document.getElementById('panel-status-label').textContent = point.label.toUpperCase();
-      document.getElementById('panel-rasio-label').textContent = `Rasio Pasokan: ${point.rasio_persen} (Batas Aman: 100%)`;
+      const statusLabel = document.getElementById('panel-status-label');
+      if (statusLabel) {
+        statusLabel.textContent = `${conf.symbol} ${point.label.toUpperCase()}`;
+        statusLabel.className = `text-xl font-black mt-0.5 ${conf.textClass}`;
+      }
+
+      const rasioLabel = document.getElementById('panel-rasio-label');
+      if (rasioLabel) {
+        rasioLabel.textContent = `Rasio Pasokan: ${point.rasio_persen} (Batas Aman: 100%)`;
+        rasioLabel.className = `text-xs font-bold mt-0.5 ${conf.accentClass}`;
+      }
+
+      const iconBox = document.getElementById('panel-status-icon-box');
+      if (iconBox) {
+        iconBox.className = `w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg font-black ${conf.iconBgClass}`;
+        iconBox.textContent = conf.symbol;
+      }
 
       // Neraca Supply & Demand
       document.getElementById('panel-neraca-periode').textContent = point.periode;
@@ -904,16 +988,21 @@ searchInput.addEventListener('input', (e) => {
     return;
   }
 
-  searchDropdown.innerHTML = matches.map(m => `
+  searchDropdown.innerHTML = matches.map(m => {
+    const conf = getStatusConfig(m.status);
+    return `
     <div onclick="pilihWilayahHasil('${m.kode}', '${m.nama.replace("'", "\\'")}')"
          class="px-3.5 py-2.5 hover:bg-slate-50 cursor-pointer flex items-center justify-between border-b border-slate-100 text-xs">
       <div>
         <div class="font-bold text-slate-800">${m.nama}</div>
         <div class="text-[10px] text-slate-400">${m.nama_provinsi ?? ''}</div>
       </div>
-      <span class="text-[10px] font-bold px-2 py-0.5 rounded ${getStatusColor(m.status).badge}">${getStatusColor(m.status).label}</span>
-    </div>
-  `).join('');
+      <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded ${conf.badgeClass}">
+        <span>${conf.symbol}</span>
+        <span>${conf.label}</span>
+      </span>
+    </div>`;
+  }).join('');
   searchDropdown.classList.remove('hidden');
 });
 
@@ -963,14 +1052,17 @@ function filterTabel(q) {
   }
 
   tbody.innerHTML = filtered.map(d => {
-    const col = getStatusColor(d.status);
+    const conf = getStatusConfig(d.status);
     return `<tr class="hover:bg-slate-50 transition cursor-pointer" onclick="updatePanelWilayah('${d.kode}')">
       <td class="px-4 py-3">
         <div class="font-bold text-slate-900">${d.nama}</div>
         <div class="text-[11px] text-slate-400">${d.nama_provinsi ?? ''}</div>
       </td>
       <td class="px-4 py-3">
-        <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${col.badge}">${col.label}</span>
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold ${conf.badgeClass}">
+          <span>${conf.symbol}</span>
+          <span>${conf.label}</span>
+        </span>
       </td>
       <td class="px-4 py-3 text-right font-semibold text-slate-900">${d.rasio_persen ?? '—'}</td>
       <td class="px-4 py-3 text-right text-slate-600">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>

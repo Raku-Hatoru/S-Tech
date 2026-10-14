@@ -72,6 +72,33 @@ Mengapa hasil di browser saat ini berbeda dari klaim komit-komit sebelumnya?
 
 ---
 
+## Step 1 — Legenda Status Wilayah (Kontras, Docked, Konsisten Warna)
+
+### 1. Dasar Spesifikasi Produk (docs/PRD.md)
+Sesuai rujukan wajib:
+- **docs/PRD.md Bab 8.3 (Status & Ambang Batas)**:
+  > *"| Defisit | < 70% | Info wilayah membutuhkan pasokan + dampak kekurangan |*  
+  > *| Seimbang | 70% – < 90% | Tanpa peringatan |*  
+  > *| Waspada | 90% – < 100% | Banner kuning |*  
+  > *| Penuh | ≥ 100% | Banner merah + dampak kelebihan pasokan |"*
+- **docs/PRD.md Bab 2.2 Butir 2**:
+  > *"Menentukan status wilayah (Defisit / Seimbang / Waspada / Penuh) dan menampilkannya di peta heatmap Indonesia dengan level kabupaten/provinsi menyesuaikan zoom."*
+- **docs/PRD.md Bab 8.4 (Pesan Dampak)**:
+  > *"Surplus/Penuh: Pangan berisiko basi/terbuang dan menghasilkan emisi gas ke lingkungan; harga di tingkat petani dapat turun karena pasokan melimpah"*  
+  > *"Defisit: Risiko kekurangan pangan di wilayah tersebut hingga kelaparan bila tidak dipenuhi"*
+
+### 2. Tabel Evaluasi & Bukti Rendered Step 1
+
+| Item / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi Ter-render (File Path / Printed Lines / Browser) | Status |
+|:---|:---|:---|:---|:---:|
+| **1. Definisi Variabel CSS Status Tunggal** | Warna status didefinisikan terpisah-pisah dan hardcoded hex di berbagai elemen (`STATUS_COLOR` di JS, inline hex di Blade). | Ditetapkan satu kali di `:root` (`--status-defisit`, `--status-seimbang`, `--status-waspada`, `--status-penuh`, `--status-tanpa-data`) pada `app.css` & view. Seluruh komponen (poligon, legenda, badge, panel, tooltip, tabel) membaca CSS variable ini. | Inspeksi browser Playwright (`step1-1440.png`):<br>`--status-defisit: #ef4444`<br>`--status-seimbang: #16a34a`<br>`--status-waspada: #f59e0b`<br>`--status-penuh: #8b5cf6`<br>`--status-tanpa-data: #64748b` | **Selesai** |
+| **2. Diferensiasi Rona & Aksesibilitas Buta Warna** | Kategori Defisit (`#ef4444`) dan Penuh/Surplus (`#991b1b`) keduanya menggunakan spektrum merah. Sulit dibedakan pengguna protanopia/deuteranopia. | Penuh/Surplus diubah menjadi Ungu-Violet (`#8b5cf6`), berbeda rona secara tegas dari Defisit. Contrast ratio terhadap canvas peta gelap (`#080f1d`) terukur **4,52:1** (melampaui syarat minimal 3:1). Simulasi Protanopia menghasilkan kontras jelas (`#4c6345` vs `#4288f6`). | Tangkapan layar `docs/ui-review/step1-1440.png` & `docs/ui-review/step1-390.png`. Pengukuran computed style: `Contrast Ratio: 4.52:1`. Poligon Leaflet terisi `#8b5cf6` (terbukti via DOM `peta-rendered-step1.html`). | **Selesai** |
+| **3. Simbol Unik Status (Non-Color Reliance)** | Indikator status hanya berupa lingkaran polos (`rounded-full`) yang bergantung pada persepsi warna semata. | Setiap status dilengkapi simbol bentuk khas yang konsisten: Defisit `▼`, Seimbang `✔`, Waspada `▲`, Penuh `◆`, Tanpa Data `—` pada legenda, tooltip hover peta, panel wilayah terpilih, dropdown pencarian, dan tabel rekapitulasi. | `step1-1440.png`, `step1-390.png`, `peta-rendered-step1.html`: tooltip menampilkan `◆ Penuh / Surplus`, panel wilayah menampilkan `◆ PENUH / SURPLUS` dengan box ikon `◆`. | **Selesai** |
+| **4. Integrasi Legenda ke Dalam Kartu Peta (Docked)** | Legenda berupa kartu mandiri besar di atas peta (`peta/index.blade.php:161-195`), menyita ruang vertikal >70px di layar utama. | Kartu terpisah dihapus. Legenda ditempatkan menyatu (*docked*) tepat di bawah kanvas peta di dalam kontainer kartu Leaflet (`#map-legend`), dengan 5 item yang membungkus rapi (*wrap*) pada layar sempit mobile. Nilai ambang tetap dinamis membaca tabel `settings`. | `docs/ui-review/step1-1440.png` (desktop docked strip) dan `docs/ui-review/step1-390.png` (mobile wrapping responsif). | **Selesai** |
+| **5. Verifikasi Typo "Selimbang" vs "Seimbang"** | Dugaan adanya salah ketik "Selimbang" di antarmuka atau basis data. | Pemindaian menyeluruh di seluruh kode repositori dan SQLite DB menghasilkan 0 kemunculan "Selimbang". Ejaan resmi terbukti menggunakan "Seimbang" baku. | `curl -s http://127.0.0.1:8099/peta \| grep -in "selimbang"` = 0 matches.<br>`curl -s http://127.0.0.1:8099/peta \| grep -n "Seimbang"`:<br>- Baris 648: `✔ Seimbang`<br>- Baris 1001: `Seimbang / Aman`<br>- Baris 1086: `label: 'Seimbang'` | **Selesai** |
+
+---
+
 ## 2. Tabel Evaluasi Perubahan Antarmuka (Before & After - Historis Awal)
 
 | No | Komponen / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi / Pengukuran | Status |

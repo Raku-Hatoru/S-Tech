@@ -3,7 +3,20 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+:root {
+    --status-defisit: #ef4444;
+    --status-seimbang: #16a34a;
+    --status-waspada: #f59e0b;
+    --status-penuh: #8b5cf6;
+    --status-tanpa-data: #64748b;
+}
+
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-status-defisit: var(--status-defisit);
+    --color-status-seimbang: var(--status-seimbang);
+    --color-status-waspada: var(--status-waspada);
+    --color-status-penuh: var(--status-penuh);
+    --color-status-tanpa-data: var(--status-tanpa-data);
 }

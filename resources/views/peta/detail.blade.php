@@ -357,7 +357,7 @@
       </div>
 
       <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-slate-500 gap-2">
-        <span>Menampilkan 12 horizon periode berurutan. Format: Standar Statistik Pangan Nasional.</span>
+        <span>Menampilkan 12 horizon periode berurutan. Format: Standar BPS & PRD Ketahanan Pangan RI.</span>
         <span class="font-bold text-slate-700">Toleransi Kesalahan Model (WAPE): ±14,2%</span>
       </div>
     </div>
