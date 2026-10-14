@@ -335,7 +335,7 @@
         <!-- Header: Nama Wilayah, Provinsi, Kode (1 Baris) -->
         <div class="border-b border-slate-100 pb-2.5">
           <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-baseline gap-1.5 flex-wrap">
-            <span id="panel-nama">Kabupaten Banyumas</span><span class="text-slate-400 font-normal">,</span>
+            <span id="panel-nama">Kabupaten Banyumas</span><span class="text-slate-600 font-medium">,</span>
             <span id="panel-provinsi" class="text-xs font-semibold text-slate-600">Jawa Tengah</span>
             <span id="panel-kode" class="text-xs font-mono font-medium text-slate-500">3302</span>
           </h2>
@@ -344,7 +344,7 @@
         <!-- Status Wilayah Box -->
         <div id="panel-status-box" class="p-3.5 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between">
           <div>
-            <div class="text-[11px] font-extrabold uppercase tracking-wider text-purple-950">STATUS WILAYAH</div>
+            <div class="text-xs font-extrabold uppercase tracking-wider text-purple-950">STATUS WILAYAH</div>
             <div id="panel-status-label" class="text-lg font-black text-purple-950 mt-0.5">
               ◆ PENUH / SURPLUS
             </div>
@@ -376,19 +376,19 @@
           <div class="grid grid-cols-3 gap-2">
             <!-- Pasokan -->
             <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[11px] font-bold text-slate-600">Pasokan</div>
+              <div class="text-xs font-bold text-slate-600">Pasokan</div>
               <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5" id="panel-supply-formatted">18.500,0 t</div>
             </div>
 
             <!-- Kebutuhan -->
             <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[11px] font-bold text-slate-600">Kebutuhan</div>
+              <div class="text-xs font-bold text-slate-600">Kebutuhan</div>
               <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5" id="panel-demand-formatted">17.600,0 t</div>
             </div>
 
             <!-- Selisih -->
             <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[11px] font-bold text-slate-600">Selisih</div>
+              <div class="text-xs font-bold text-slate-600">Selisih</div>
               <div class="text-sm sm:text-base font-black text-rose-700 mt-0.5" id="panel-selisih">+900,0 t</div>
             </div>
           </div>
@@ -417,7 +417,7 @@
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
         <!-- 1. Total Pasokan -->
         <div class="p-2.5 sm:p-3 bg-slate-50/70 rounded-xl border border-slate-100 flex flex-col justify-between">
-          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pasokan</div>
+          <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">Total Pasokan</div>
           <div class="text-base sm:text-lg lg:text-2xl font-black text-slate-900 tracking-tight mt-1">
             <span id="kpi-total-supply" class="tabular-nums">{{ $ringkasan['total_supply_formatted'] ?? '1.105.796,7 ton' }}</span>
           </div>
@@ -425,7 +425,7 @@
 
         <!-- 2. Total Kebutuhan -->
         <div class="p-2.5 sm:p-3 bg-slate-50/70 rounded-xl border border-slate-100 flex flex-col justify-between">
-          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Total Kebutuhan</div>
+          <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">Total Kebutuhan</div>
           <div class="text-base sm:text-lg lg:text-2xl font-black text-slate-900 tracking-tight mt-1">
             <span id="kpi-demand-val" class="tabular-nums">{{ $ringkasan['total_demand_formatted'] ?? '494.273,2 ton' }}</span>
           </div>
@@ -433,19 +433,19 @@
 
         <!-- 3. Wilayah Surplus/Penuh -->
         <div class="p-2.5 sm:p-3 bg-purple-50/60 rounded-xl border border-purple-100/80 flex flex-col justify-between">
-          <div class="text-[10px] sm:text-xs font-bold text-purple-700 uppercase tracking-wider">Wilayah Surplus/Penuh</div>
+          <div class="text-xs font-bold text-purple-800 uppercase tracking-wider">Wilayah Surplus/Penuh</div>
           <div class="text-base sm:text-lg lg:text-2xl font-black text-purple-900 tracking-tight mt-1 flex items-baseline gap-1">
             <span id="kpi-jumlah-penuh" class="tabular-nums">{{ $ringkasan['jumlah_penuh'] ?? 23 }}</span>
-            <span class="text-[10px] sm:text-xs font-bold text-purple-600">wilayah</span>
+            <span class="text-xs font-bold text-purple-800">wilayah</span>
           </div>
         </div>
 
         <!-- 4. Wilayah Defisit/Waspada -->
         <div class="p-2.5 sm:p-3 bg-amber-50/60 rounded-xl border border-amber-100/80 flex flex-col justify-between">
-          <div class="text-[10px] sm:text-xs font-bold text-amber-700 uppercase tracking-wider">Wilayah Defisit/Waspada</div>
+          <div class="text-xs font-bold text-amber-800 uppercase tracking-wider">Wilayah Defisit/Waspada</div>
           <div class="text-base sm:text-lg lg:text-2xl font-black text-amber-900 tracking-tight mt-1 flex items-baseline gap-1">
             <span id="kpi-jumlah-defisit-waspada" class="tabular-nums">{{ $ringkasan['jumlah_defisit_waspada'] ?? 10 }}</span>
-            <span class="text-[10px] sm:text-xs font-bold text-amber-600">wilayah</span>
+            <span class="text-xs font-bold text-amber-800">wilayah</span>
           </div>
         </div>
       </div>

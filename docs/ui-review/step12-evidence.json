@@ -118,7 +118,7 @@
       "coloredPilotCount": 34,
       "outsideCount": 0,
       "mapCardHeight": 675,
-      "sideCardHeight": 467
+      "sideCardHeight": 466
     },
     "768": {
       "hasHorizontalScroll": false,
@@ -134,7 +134,7 @@
       "coloredPilotCount": 34,
       "outsideCount": 0,
       "mapCardHeight": 739,
-      "sideCardHeight": 423
+      "sideCardHeight": 422
     },
     "1024": {
       "hasHorizontalScroll": false,

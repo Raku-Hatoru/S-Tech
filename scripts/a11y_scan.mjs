@@ -45,14 +45,17 @@ async function run() {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
+  const vpWidth = parseInt(process.env.VIEWPORT_WIDTH || '1440', 10);
+  const vpHeight = parseInt(process.env.VIEWPORT_HEIGHT || '900', 10);
+
   try {
     const context = await browser.newContext({
-      viewport: { width: 1440, height: 900 },
+      viewport: { width: vpWidth, height: vpHeight },
       deviceScaleFactor: 1,
     });
     const page = await context.newPage();
 
-    console.log(`[INFO] Loading ${BASE_URL}/peta at 1440x900...`);
+    console.log(`[INFO] Loading ${BASE_URL}/peta at ${vpWidth}x${vpHeight}...`);
     await page.goto(`${BASE_URL}/peta`, { waitUntil: 'networkidle' });
 
     // Wait for map and status data to populate
