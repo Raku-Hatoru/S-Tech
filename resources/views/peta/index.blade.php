@@ -14,11 +14,21 @@
 
   /* ── Map Canvas Styling ───────────────────────────── */
   #peta-map {
-    height: 620px;
+    height: 560px;
     background: #080f1d;
     border-radius: 18px;
     overflow: hidden;
     outline: none;
+  }
+  @media (max-width: 1024px) {
+    #peta-map {
+      height: 480px;
+    }
+  }
+  @media (max-width: 640px) {
+    #peta-map {
+      height: 380px;
+    }
   }
 
   .leaflet-dark-tooltip {
@@ -135,10 +145,10 @@
         </label>
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
           <button type="button" id="btn-toggle-prov" onclick="switchLayerLevel('provinsi')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
-            Level Provinsi
+            Provinsi
           </button>
           <button type="button" id="btn-toggle-kab" onclick="switchLayerLevel('kabupaten')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs">
-            Level Kabupaten/Kota
+            Kabupaten/Kota
           </button>
         </div>
       </div>
@@ -158,29 +168,29 @@
       </div>
     </div>
 
-    <!-- Banner Peringatan Dini Nasional (Sesuai Mockup) -->
-    <div class="p-4 sm:p-5 rounded-2xl bg-rose-50/80 border border-rose-200/90 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-start gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700 shrink-0">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        </div>
-        <div>
-          <h4 class="text-sm font-bold text-rose-950">
-            Status Nasional: 28 Kabupaten Berstatus PENUH (Risiko Surplus), 42 Kabupaten DEFISIT.
-          </h4>
-          <p class="text-xs text-rose-800/90 mt-0.5">
-            Distribusi pasokan darurat direkomendasikan segera dialihkan ke lumbung wilayah defisit pangan untuk stabilisasi harga.
-          </p>
+    <!-- Banner Peringatan Dini Nasional (Ringkas & Dismissible) -->
+    <div id="banner-peringatan-nasional" class="px-4 py-3 rounded-xl bg-rose-50/90 border border-rose-200 flex items-center justify-between gap-3 text-xs shadow-2xs">
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-rose-100 text-rose-700 shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        </span>
+        <div class="truncate sm:overflow-visible sm:whitespace-normal">
+          <span class="font-bold text-rose-950">Status Nasional:</span>
+          <span class="text-rose-900 font-semibold">28 Kab. Penuh/Surplus, 42 Kab. Defisit.</span>
+          <span class="text-rose-800/80 hidden md:inline ml-1">Rekomendasi relokasi pasokan pangan ke wilayah defisit aktif.</span>
         </div>
       </div>
-      @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
-        <div class="shrink-0">
-          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+      <div class="flex items-center gap-2 shrink-0">
+        @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
+          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-2xs transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
             Disposisi Logistik
           </a>
-        </div>
-      @endif
+        @endif
+        <button type="button" onclick="document.getElementById('banner-peringatan-nasional').style.display='none'" class="p-1 rounded-lg text-rose-400 hover:text-rose-700 hover:bg-rose-100 transition" aria-label="Tutup pemberitahuan">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
     <!-- Main Content: Peta Heatmap (Kiri 65%) + Panel Wilayah Terpilih (Kanan 35%) -->
@@ -718,8 +728,17 @@ function getStatusColor(status) {
   return STATUS_COLOR[status] ?? STATUS_COLOR.tanpa_data;
 }
 
-function styleFeat(status, hover = false) {
+function styleFeat(status, hover = false, isSelected = false) {
   const col = getStatusColor(status);
+  if (isSelected) {
+    return {
+      fillColor:   col.fill,
+      fillOpacity: hover ? 0.95 : 0.88,
+      color:       '#f59e0b', // Amber-500 kontras tinggi untuk wilayah terpilih
+      weight:      3.5,
+      opacity:     1,
+    };
+  }
   return {
     fillColor:   col.fill,
     fillOpacity: hover ? 0.95 : 0.78,
@@ -727,6 +746,20 @@ function styleFeat(status, hover = false) {
     weight:      hover ? 2.5 : 1,
     opacity:     1,
   };
+}
+
+function applySelectionHighlight(kode) {
+  const activeLayer = state.level === 'provinsi' ? geoLayerProv : geoLayerKab;
+  if (!activeLayer) return;
+  activeLayer.eachLayer(l => {
+    const k = l.feature?.properties?.kode;
+    const isSelected = (k === kode);
+    const status = state.statusData[k]?.status ?? 'tanpa_data';
+    l.setStyle(styleFeat(status, false, isSelected));
+    if (isSelected) {
+      l.bringToFront();
+    }
+  });
 }
 
 // ── Sinkronisasi Label Komoditas Dinamis ──────────────────────────────────
@@ -786,12 +819,19 @@ async function renderMapLayer() {
     if (!geoLayerProv) {
       const geo = await fetchGeoJSON(`${GEO_BASE}/provinsi.json`);
       geoLayerProv = L.geoJSON(geo, {
-        style: feat => styleFeat(state.statusData[feat.properties.kode]?.status ?? 'tanpa_data'),
+        style: feat => styleFeat(state.statusData[feat.properties.kode]?.status ?? 'tanpa_data', false, feat.properties.kode === state.selectedKode),
         onEachFeature: (feat, layer) => {
           const kode = feat.properties.kode;
           layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), { sticky: true, className: 'leaflet-dark-tooltip' });
-          layer.on('mouseover', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', true)); this.bringToFront(); });
-          layer.on('mouseout', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', false)); });
+          layer.on('mouseover', function() {
+            const isSelected = (kode === state.selectedKode);
+            this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', true, isSelected));
+            this.bringToFront();
+          });
+          layer.on('mouseout', function() {
+            const isSelected = (kode === state.selectedKode);
+            this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', false, isSelected));
+          });
           layer.on('click', function() {
             map.fitBounds(layer.getBounds(), { padding: [30, 30] });
             updatePanelWilayah(kode);
@@ -801,8 +841,10 @@ async function renderMapLayer() {
     } else {
       geoLayerProv.eachLayer(l => {
         const k = l.feature.properties.kode;
-        l.setStyle(styleFeat(state.statusData[k]?.status ?? 'tanpa_data'));
+        const isSelected = (k === state.selectedKode);
+        l.setStyle(styleFeat(state.statusData[k]?.status ?? 'tanpa_data', false, isSelected));
         l.setTooltipContent(buildTooltip(l.feature.properties, state.statusData[k]));
+        if (isSelected) l.bringToFront();
       });
     }
     if (!map.hasLayer(geoLayerProv)) geoLayerProv.addTo(map);
@@ -811,12 +853,19 @@ async function renderMapLayer() {
     if (!geoLayerKab) {
       const geo = await fetchGeoJSON(`${GEO_BASE}/kabupaten.json`);
       geoLayerKab = L.geoJSON(geo, {
-        style: feat => styleFeat(state.statusData[feat.properties.kode]?.status ?? 'tanpa_data'),
+        style: feat => styleFeat(state.statusData[feat.properties.kode]?.status ?? 'tanpa_data', false, feat.properties.kode === state.selectedKode),
         onEachFeature: (feat, layer) => {
           const kode = feat.properties.kode;
           layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), { sticky: true, className: 'leaflet-dark-tooltip' });
-          layer.on('mouseover', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', true)); this.bringToFront(); });
-          layer.on('mouseout', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', false)); });
+          layer.on('mouseover', function() {
+            const isSelected = (kode === state.selectedKode);
+            this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', true, isSelected));
+            this.bringToFront();
+          });
+          layer.on('mouseout', function() {
+            const isSelected = (kode === state.selectedKode);
+            this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', false, isSelected));
+          });
           layer.on('click', function() {
             updatePanelWilayah(kode);
           });
@@ -825,8 +874,10 @@ async function renderMapLayer() {
     } else {
       geoLayerKab.eachLayer(l => {
         const k = l.feature.properties.kode;
-        l.setStyle(styleFeat(state.statusData[k]?.status ?? 'tanpa_data'));
+        const isSelected = (k === state.selectedKode);
+        l.setStyle(styleFeat(state.statusData[k]?.status ?? 'tanpa_data', false, isSelected));
         l.setTooltipContent(buildTooltip(l.feature.properties, state.statusData[k]));
+        if (isSelected) l.bringToFront();
       });
     }
     if (!map.hasLayer(geoLayerKab)) geoLayerKab.addTo(map);
@@ -853,6 +904,11 @@ function buildTooltip(props, d) {
 // ── Switch Level Geografis ───────────────────────────────────────────────
 function switchLayerLevel(lvl) {
   state.level = lvl;
+  if (lvl === 'provinsi' && state.selectedKode && state.selectedKode.length === 4) {
+    state.selectedKode = state.selectedKode.substring(0, 2);
+  } else if (lvl === 'kabupaten' && state.selectedKode && state.selectedKode.length === 2) {
+    state.selectedKode = state.selectedKode === '33' ? '3302' : state.selectedKode + '01';
+  }
   const isProv = lvl === 'provinsi';
   document.getElementById('btn-toggle-prov').className = isProv
     ? 'flex-1 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs'
@@ -877,6 +933,7 @@ function pilihBulanIni() {
 // ── Update Panel Wilayah Terpilih (Kanan) ────────────────────────────────
 async function updatePanelWilayah(kode) {
   state.selectedKode = kode;
+  applySelectionHighlight(kode);
 
   try {
     const res = await fetch(`${API_BASE}/wilayah/${kode}/seri?komoditas=${state.komoditas}`);
