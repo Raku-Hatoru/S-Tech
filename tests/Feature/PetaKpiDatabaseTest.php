@@ -173,11 +173,11 @@ class PetaKpiDatabaseTest extends TestCase
 
         // Assert metrik riil dan elemen ID konsisten ada
         $response->assertSee('id="kpi-total-supply"', false);
+        $response->assertSee('id="kpi-demand-val"', false);
         $response->assertSee('id="kpi-jumlah-penuh"', false);
         $response->assertSee('id="kpi-jumlah-defisit-waspada"', false);
-        $response->assertSee('id="kpi-selisih-bersih"', false);
         $response->assertSee('id="banner-nasional-text"', false);
-        $response->assertSee('Total Pasokan Terpantau (34 Wilayah)');
+        $response->assertSee('Total Pasokan');
     }
 
     /**

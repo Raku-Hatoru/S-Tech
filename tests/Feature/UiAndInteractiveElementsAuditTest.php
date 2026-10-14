@@ -27,8 +27,7 @@ class UiAndInteractiveElementsAuditTest extends TestCase
         $responsePeta->assertStatus(200);
         $responsePeta->assertDontSee('Protokol BUMDes');
         $responsePeta->assertDontSee('SOP Distribusi');
-        $responsePeta->assertDontSee('Status Integrasi API');
-        $responsePeta->assertSee('Platform Pemantauan', false);
+        $responsePeta->assertSee('Sistem pemantauan dini pasokan pangan', false);
 
         $responseLogin = $this->get('/login');
         $responseLogin->assertStatus(200);

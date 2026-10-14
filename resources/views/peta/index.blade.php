@@ -90,20 +90,21 @@
     <!-- Header Ringkas (Title + Subtitle 1 Baris + Tombol Aksi dalam 1 Baris di Desktop) -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="min-w-0">
-        <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Peta Heatmap &amp; Early-Warning Surplus Pangan Nasional
-        </h1>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            Peta Pemantauan Surplus &amp; Defisit Pangan
+          </h1>
+          <span class="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-slate-200 text-slate-700 rounded border border-slate-300">
+            Data contoh
+          </span>
+        </div>
         <p class="text-xs text-slate-600 font-medium mt-0.5 truncate">
-          Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan pemborosan pangan.
+          Diagnostik rasio pasokan vs kebutuhan wilayah untuk mitigasi pemborosan pangan.
         </p>
       </div>
 
-      <div class="flex items-center gap-3 shrink-0 flex-wrap">
-        <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 select-none py-1">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-          Data Contoh: BAPANAS &amp; BPS
-        </span>
-        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
+      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+        <button type="button" id="btn-tentang-data" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
           <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
           Tentang Data
         </button>
@@ -129,8 +130,8 @@
       </button>
     </div>
 
-    <!-- Filter Control Bar (4 Kolom Sesuai Mockup) -->
-    <div id="filter-container" class="hidden md:grid bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
+    <!-- Filter Control Bar (4 Kolom Ringkas) -->
+    <div id="filter-container" class="hidden md:grid bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-start">
       <!-- 1. Komoditas Pangan -->
       <div>
         <label for="select-komoditas" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -149,19 +150,13 @@
         </div>
       </div>
 
-      <!-- 2. Periode Proyeksi (12 Bulan ke Depan) -->
+      <!-- 2. Periode Waktu -->
       <div>
-        <div class="flex items-center justify-between mb-1">
-          <label for="select-periode" class="block text-xs font-bold text-slate-600 uppercase tracking-wider">
-            Periode Waktu
-          </label>
-          <span class="text-xs text-slate-500 font-medium inline-flex items-center gap-1 cursor-help select-none" title="Horizon proyeksi model hingga 12 bulan ke depan (Januari – Desember 2026)">
-            Proyeksi 12 bulan
-            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          </span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <select id="select-periode" aria-label="Pilih Periode Waktu" class="flex-1 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 outline-none cursor-pointer">
+        <label for="select-periode" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
+          Periode Waktu
+        </label>
+        <div>
+          <select id="select-periode" aria-label="Pilih Periode Waktu" class="w-full min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 outline-none cursor-pointer">
             @foreach($periodesList->reverse() as $p)
               <option value="{{ $p['kode'] }}" {{ $p['kode'] === $periodeDefault ? 'selected' : '' }}>
                 {{ $p['label'] }} ({{ $p['tipe'] }})
@@ -171,33 +166,33 @@
           <button type="button"
                   id="btn-bulan-ini"
                   onclick="pilihBulanBerjalan()"
-                  class="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0 disabled:opacity-40 disabled:cursor-not-allowed select-none flex items-center justify-center"
+                  class="hidden text-xs text-emerald-700 hover:text-emerald-800 font-bold underline transition mt-1 select-none"
                   title="Pindah ke bulan kalender saat ini ({{ \Carbon\Carbon::parse($bulanBerjalan.'-01')->isoFormat('MMMM YYYY') }})">
-            Ke bulan berjalan
+            &larr; Ke bulan berjalan
           </button>
         </div>
       </div>
 
-      <!-- 3. Level Agregasi Geografis -->
+      <!-- 3. Tingkat -->
       <div>
         <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
-          Level Agregasi Geografis
+          Tingkat
         </label>
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
           <button type="button" id="btn-toggle-prov" onclick="switchLayerLevel('provinsi')" class="flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center">
-            Level Provinsi
+            Provinsi
           </button>
           <button type="button" id="btn-toggle-kab" onclick="switchLayerLevel('kabupaten')" class="flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs flex items-center justify-center">
-            Level Kabupaten/Kota
+            Kabupaten
           </button>
         </div>
       </div>
 
-      <!-- 4. Pencarian Teritorial Cepat -->
+      <!-- 4. Pencarian Wilayah -->
       <div class="relative">
         <label for="input-search-wilayah" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          Pencarian Teritorial Cepat
+          Pencarian Wilayah
         </label>
         <div class="relative">
           <input type="text" id="input-search-wilayah" placeholder="Ketik Banyumas, Brebes, dll..." autocomplete="off"
@@ -208,30 +203,21 @@
       </div>
     </div>
 
-    <!-- Banner Peringatan Dini Nasional (Ringkas 1 Baris dengan Tombol Tutup) -->
-    <div id="banner-nasional" class="px-3.5 py-2 sm:py-2.5 rounded-xl bg-rose-50/90 border border-rose-200/90 flex items-center justify-between gap-3 text-xs shadow-2xs">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-6 h-6 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        </div>
-        <div class="min-w-0 flex items-center gap-1.5 flex-wrap">
-          <span class="font-bold text-rose-950">
-            <span class="font-black text-rose-800 uppercase tracking-wide text-xs mr-1 px-1.5 py-0.5 rounded bg-rose-200">Peringatan</span>
-            <span id="banner-nasional-text">{{ $ringkasan['banner_text'] ?? 'Status Pangan Nasional Terpantau: 23 Kabupaten Surplus/Penuh, 10 Waspada, 0 Defisit. Selisih Bersih Pasokan: +611.523,5 ton (+123,7% di atas kebutuhan). Pantauan mencakup 34 Kabupaten Percontohan.' }}</span>
-          </span>
-          <span class="hidden md:inline text-rose-900 text-xs truncate">
-            &mdash; Distribusi pasokan darurat direkomendasikan segera dialihkan ke lumbung wilayah defisit pangan.
-          </span>
-        </div>
+    <!-- Banner Status Wilayah Nasional (Ringkas 1 Baris Netral) -->
+    <div id="banner-nasional" class="px-3.5 py-2 sm:py-2.5 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between gap-3 text-xs text-slate-800 shadow-2xs">
+      <div class="flex items-center gap-2 min-w-0">
+        <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="truncate font-semibold text-slate-800">
+          <span id="banner-nasional-text">{{ $ringkasan['jumlah_penuh'] ?? 27 }} dari {{ $ringkasan['total_wilayah'] ?? 34 }} wilayah pantau berstatus Penuh/Surplus &bull; {{ $ringkasan['jumlah_waspada'] ?? 3 }} Waspada &bull; {{ $ringkasan['jumlah_defisit'] ?? 0 }} Defisit</span>
+        </span>
       </div>
       <div class="flex items-center gap-2 shrink-0">
         @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
-          <a href="{{ route('pengiriman.index') }}" class="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          <a href="{{ route('pengiriman.index') }}" class="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold shadow-xs transition">
             Disposisi Logistik
           </a>
         @endif
-        <button type="button" onclick="tutupBannerNasional()" aria-label="Tutup peringatan nasional" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-rose-600 hover:text-rose-900 hover:bg-rose-100 transition" title="Tutup peringatan">
+        <button type="button" onclick="tutupBannerNasional()" aria-label="Tutup ringkasan nasional" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition" title="Tutup ringkasan">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -243,17 +229,10 @@
       <!-- Kolom Kiri: Peta Leaflet (lg:col-span-7 atau 8) -->
       <div id="map-card" class="relative isolate z-0 overflow-hidden lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md flex flex-col h-full">
         <div class="relative rounded-xl overflow-hidden flex-1 flex flex-col min-h-[520px]">
-          <!-- Floating Header Map Controls -->
-          <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white shadow-xs">
-              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-              <span><span class="font-extrabold text-white">Peta:</span> <span class="font-medium text-slate-200">rasio pasokan terhadap kebutuhan</span></span>
-              <button type="button" onclick="bukaModalTentangData()" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center ml-1 text-slate-300 hover:text-white transition" title="Informasi tentang data dan metodologi" aria-label="Informasi tentang data dan metodologi">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
-              </button>
-            </div>
-            <div class="pointer-events-auto flex items-center gap-2">
-              <button type="button" onclick="resetViewNasional()" aria-label="Kembalikan tampilan peta ke seluruh wilayah Indonesia" class="min-h-[44px] px-4 py-2.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white hover:bg-slate-800 transition flex items-center gap-1.5 shadow-xs" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
+          <!-- Floating Map Controls (Top-Right: Reset View) -->
+          <div class="absolute top-4 right-4 z-20 pointer-events-none">
+            <div class="pointer-events-auto">
+              <button type="button" onclick="resetViewNasional()" aria-label="Kembalikan tampilan peta ke seluruh wilayah Indonesia" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white hover:bg-slate-800 transition flex items-center gap-1.5 shadow-xs" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                 Reset Nasional
               </button>
@@ -263,15 +242,8 @@
           <!-- Canvas Peta -->
           <div id="peta-map" class="w-full flex-1 min-h-[520px]"></div>
 
-          <!-- Floating Footer Map Stats -->
-          <div class="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-medium text-white shadow-xs">
-              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span><span class="font-bold text-white">Proyeksi:</span> <span class="text-slate-200">model prakiraan (selisih rata-rata ±3,8%)</span></span>
-              <button type="button" onclick="bukaModalTentangData()" aria-label="Detail model dan sumber data" class="min-h-[44px] px-2.5 flex items-center text-emerald-300 hover:text-emerald-200 transition underline font-bold" title="Detail model & sumber data">
-                Tentang data
-              </button>
-            </div>
+          <!-- Floating Map Controls (Bottom-Right: Zoom Buttons) -->
+          <div class="absolute bottom-4 right-4 z-20 pointer-events-none">
             <div class="pointer-events-auto flex items-center gap-1.5">
               <button type="button" onclick="if (map) map.zoomIn()" aria-label="Perbesar peta" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-lg shadow-xs">+</button>
               <button type="button" onclick="if (map) map.zoomOut()" aria-label="Perkecil peta" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-lg shadow-xs">-</button>
@@ -343,35 +315,21 @@
       </div>
 
       <!-- Kolom Kanan: Panel Wilayah Terpilih (lg:col-span-5 atau 4) -->
-      <div id="side-panel-card" class="lg:col-span-5 xl:col-span-4 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between h-full space-y-4 overflow-y-auto">
-        <!-- Header Wilayah Terpilih -->
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-black uppercase tracking-wider text-slate-700 bg-slate-200/80 px-2 py-0.5 rounded">
-              WILAYAH TERPILIH
-            </span>
-            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 select-none">
-              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>Stok Terdata (Simulasi)</span>
-            </span>
-          </div>
-          <span id="panel-kode" class="tabular-nums font-bold text-xs text-slate-600">33.02</span>
-        </div>
-
-        <div>
-          <h2 id="panel-nama" class="text-2xl font-black text-slate-900 tracking-tight">
-            Kabupaten Banyumas
+      <div id="side-panel-card" class="lg:col-span-5 xl:col-span-4 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between h-full space-y-3.5 overflow-y-auto">
+        <!-- Header: Nama Wilayah, Provinsi, Kode (1 Baris) -->
+        <div class="border-b border-slate-100 pb-2.5">
+          <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-baseline gap-1.5 flex-wrap">
+            <span id="panel-nama">Kabupaten Banyumas</span><span class="text-slate-400 font-normal">,</span>
+            <span id="panel-provinsi" class="text-xs font-semibold text-slate-600">Jawa Tengah</span>
+            <span id="panel-kode" class="text-xs font-mono font-medium text-slate-500">33.02</span>
           </h2>
-          <p id="panel-provinsi" class="text-xs text-slate-600 font-medium mt-0.5">
-            Provinsi Jawa Tengah • Kode Wilayah: 33.02
-          </p>
         </div>
 
-        <!-- Status Peringatan Pangan Box -->
-        <div id="panel-status-box" class="p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between">
+        <!-- Status Wilayah Box -->
+        <div id="panel-status-box" class="p-3.5 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between">
           <div>
-            <div class="text-xs font-extrabold uppercase tracking-wider text-purple-950">STATUS PERINGATAN PANGAN</div>
-            <div id="panel-status-label" class="text-xl font-black text-purple-950 mt-0.5">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-purple-950">STATUS WILAYAH</div>
+            <div id="panel-status-label" class="text-lg font-black text-purple-950 mt-0.5">
               ◆ PENUH / SURPLUS
             </div>
             <div id="panel-rasio-label" class="text-xs font-bold text-purple-800 mt-0.5">
@@ -383,215 +341,91 @@
           </div>
         </div>
 
-        <!-- Neraca Komoditas (Periode Terpilih) -->
-        <div class="space-y-2.5">
+        <!-- Pesan Dampak Ringkas (1 Kalimat untuk status Penuh atau Defisit) -->
+        <div id="panel-dampak-container" class="text-xs text-slate-600 leading-relaxed px-1">
+          <p id="panel-pesan-dampak">Pangan berisiko basi atau terbuang bila pasokan melebihi kapasitas serap wilayah.</p>
+        </div>
+
+        <!-- Tiga Angka Neraca Pangan: Pasokan, Kebutuhan, Selisih -->
+        <div class="space-y-2 pt-1">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold uppercase tracking-wider text-slate-600" id="panel-neraca-title">NERACA KOMODITAS BERAS</span>
             <span class="font-bold text-slate-700" id="panel-neraca-periode">Februari 2026</span>
           </div>
 
-          <!-- Total Supply Card -->
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-            <div>
-              <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                Total Supply (Pasokan)
-              </div>
-              <div class="text-xs font-medium text-slate-600 mt-0.5" id="panel-supply-raw">18.500.000 kg terdata</div>
+          <div class="grid grid-cols-3 gap-2">
+            <!-- Pasokan -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <div class="text-[11px] font-bold text-slate-600">Pasokan</div>
+              <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5" id="panel-supply-formatted">18.500,0 t</div>
             </div>
-            <div class="text-lg font-black text-slate-900" id="panel-supply-formatted">18.500,0 ton</div>
-          </div>
 
-          <!-- Total Demand Card -->
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-            <div>
-              <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                Total Demand (Kebutuhan)
-              </div>
-              <div class="text-xs font-medium text-slate-600 mt-0.5" id="panel-demand-raw">17.600.000 kg konsumsi</div>
+            <!-- Kebutuhan -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <div class="text-[11px] font-bold text-slate-600">Kebutuhan</div>
+              <div class="text-sm sm:text-base font-black text-slate-900 mt-0.5" id="panel-demand-formatted">17.600,0 t</div>
             </div>
-            <div class="text-lg font-black text-slate-900" id="panel-demand-formatted">17.600,0 ton</div>
-          </div>
 
-          <!-- Selisih Surplus Bersih Highlight -->
-          <div class="flex items-center justify-between text-xs px-2 pt-1 font-bold">
-            <span class="text-slate-700">Selisih Surplus Bersih</span>
-            <span id="panel-selisih" class="text-rose-700 tabular-nums font-bold">+900,0 ton</span>
-          </div>
-
-          <!-- 3 Rincian Mini Card -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-xs font-bold text-slate-700">Stok Awal</div>
-              <div id="panel-stok-awal" class="text-xs font-black text-slate-900 mt-0.5">3.100,0 t</div>
-              <div class="text-xs font-medium text-slate-600">Laporan Jan</div>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-xs font-bold text-slate-700">Panen Aktual</div>
-              <div id="panel-panen" class="text-xs font-black text-slate-900 mt-0.5">15.200,0 t</div>
-              <div class="text-xs font-medium text-slate-600">Hasil Sawah</div>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-xs font-bold text-slate-700">Pasokan Masuk</div>
-              <div id="panel-pasokan-masuk" class="text-xs font-black text-slate-900 mt-0.5">200,0 t</div>
-              <div class="text-xs font-medium text-slate-600">Distribusi Luar</div>
+            <!-- Selisih -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center">
+              <div class="text-[11px] font-bold text-slate-600">Selisih</div>
+              <div class="text-sm sm:text-base font-black text-rose-700 mt-0.5" id="panel-selisih">+900,0 t</div>
             </div>
           </div>
-        </div>
-
-        <!-- Peringatan Dampak Wilayah -->
-        <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-1.5 text-xs">
-          <div class="font-extrabold uppercase text-amber-950 flex items-center gap-1.5 text-xs">
-            <svg class="w-3.5 h-3.5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            Peringatan Dampak Wilayah
-          </div>
-          <p id="panel-pesan-dampak" class="text-amber-950 leading-relaxed text-xs">
-            Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.
-          </p>
         </div>
 
         <!-- Tombol Aksi -->
-        <div class="space-y-2 pt-1">
+        <div class="space-y-2 pt-2 mt-auto">
           <a id="btn-lihat-analisis" href="{{ route('wilayah.detail', ['kode' => '3302']) }}"
              class="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            Lihat Analisis Detail 12 Bulan
+            Lihat Detail 12 Bulan
           </a>
           @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
             <a id="btn-buat-pengiriman" href="{{ route('pengiriman.index') }}"
-               class="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
+               class="w-full min-h-[44px] flex items-center justify-center gap-2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
               Buat Rute Pengiriman Logistik
             </a>
           @endif
         </div>
-
-        <div class="text-xs font-medium text-center text-slate-600 pt-1">
-          Diperbarui otomatis tiap 15 menit
-        </div>
       </div>
     </div>
 
-    <!-- Indikator Konsolidasi Pangan (4 KPI Cards Riil Basis Data) -->
-    <div class="space-y-3 pt-2">
-      <div class="flex items-center gap-2 text-sm font-black text-slate-900 uppercase tracking-tight">
-        <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        Indikator Konsolidasi Pangan (34 Wilayah Pantau)
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- KPI 1: Total Pasokan Terpantau -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Total Pasokan Terpantau (34 Wilayah)</div>
-            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-            </div>
-          </div>
-          <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">
-              <span id="kpi-total-supply" class="tabular-nums">{{ $ringkasan['total_supply_formatted'] ?? '1.105.796,7 ton' }}</span>
-            </div>
-            <div id="kpi-total-demand" class="text-xs font-bold text-emerald-700 mt-0.5 flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-              <span>Kebutuhan: <span id="kpi-demand-val" class="tabular-nums">{{ $ringkasan['total_demand_formatted'] ?? '494.273,2 ton' }}</span></span>
-              <span id="kpi-selisih-persen" class="tabular-nums">({{ $ringkasan['selisih_persen_formatted'] ?? '+123,7%' }})</span>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Rasio Pasokan vs Kebutuhan</span>
-              <span id="kpi-rasio-total" class="text-slate-900 font-bold tabular-nums">
-                {{ IndoFormat::percent(($ringkasan['total_supply_kg'] ?? 0) / max(1, ($ringkasan['total_demand_kg'] ?? 1)), 1, true) }}
-              </span>
-            </div>
-            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div id="kpi-rasio-bar" class="bg-emerald-600 h-full rounded-full" style="width: {{ min(100, (($ringkasan['total_supply_kg'] ?? 0) / max(1, ($ringkasan['total_demand_kg'] ?? 1))) * 50) }}%"></div>
-            </div>
+    <!-- Indikator Konsolidasi Pangan (Ringkasan Horizontal 4 Angka Kunci) -->
+    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:grid-cols-2 lg:divide-x divide-slate-100">
+        <!-- 1. Total Pasokan -->
+        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pasokan</div>
+          <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+            <span id="kpi-total-supply" class="tabular-nums">{{ $ringkasan['total_supply_formatted'] ?? '1.105.796,7 ton' }}</span>
           </div>
         </div>
 
-        <!-- KPI 2: Wilayah Surplus / Penuh -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Wilayah Surplus / Penuh</div>
-            <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            </div>
-          </div>
-          <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">
-              <span id="kpi-jumlah-penuh" class="tabular-nums">{{ $ringkasan['jumlah_penuh'] ?? 23 }}</span>
-              <span class="text-base font-bold text-slate-600">Kabupaten (<span id="kpi-persen-penuh" class="tabular-nums">{{ $ringkasan['persen_penuh_formatted'] ?? '67,6%' }}</span>)</span>
-            </div>
-            <div class="text-xs font-bold text-purple-700 mt-0.5">
-              Akumulasi Surplus: <span id="kpi-total-surplus" class="tabular-nums">{{ IndoFormat::ton($ringkasan['total_surplus_kg'] ?? 0, 1, true) }}</span>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Rerata Rasio Wilayah Surplus</span>
-              <span id="kpi-rerata-surplus" class="text-purple-900 font-bold tabular-nums">{{ $ringkasan['rerata_rasio_surplus_formatted'] ?? '274,4%' }}</span>
-            </div>
-            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div id="kpi-rerata-surplus-bar" class="bg-purple-600 h-full rounded-full" style="width: 100%"></div>
-            </div>
+        <!-- 2. Total Kebutuhan -->
+        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Kebutuhan</div>
+          <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+            <span id="kpi-demand-val" class="tabular-nums">{{ $ringkasan['total_demand_formatted'] ?? '494.273,2 ton' }}</span>
           </div>
         </div>
 
-        <!-- KPI 3: Wilayah Defisit & Waspada -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Wilayah Defisit &amp; Waspada</div>
-            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            </div>
-          </div>
-          <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">
-              <span id="kpi-jumlah-defisit-waspada" class="tabular-nums">{{ $ringkasan['jumlah_defisit_waspada'] ?? 10 }}</span>
-              <span class="text-base font-bold text-slate-600">Kabupaten (<span id="kpi-persen-defisit-waspada" class="tabular-nums">{{ $ringkasan['persen_defisit_waspada_formatted'] ?? '29,4%' }}</span>)</span>
-            </div>
-            <div class="text-xs font-bold text-amber-800 mt-0.5">
-              Rincian: <span id="kpi-rincian-defisit">{{ $ringkasan['jumlah_defisit'] ?? 0 }} Defisit</span> &bull; <span id="kpi-rincian-waspada">{{ $ringkasan['jumlah_waspada'] ?? 10 }} Waspada</span>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Kekurangan Pasokan Riil</span>
-              <span id="kpi-total-defisit" class="text-amber-900 font-bold tabular-nums">{{ $ringkasan['total_defisit_formatted'] ?? '0,0 ton' }}</span>
-            </div>
-            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div id="kpi-defisit-bar" class="bg-amber-500 h-full rounded-full" style="width: {{ ($ringkasan['jumlah_defisit'] ?? 0) > 0 ? '75%' : '0%' }}"></div>
-            </div>
+        <!-- 3. Wilayah Surplus/Penuh -->
+        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Wilayah Surplus/Penuh</div>
+          <div class="text-xl sm:text-2xl font-black text-purple-900 tracking-tight mt-1">
+            <span id="kpi-jumlah-penuh" class="tabular-nums">{{ $ringkasan['jumlah_penuh'] ?? 23 }}</span>
+            <span class="text-xs font-bold text-slate-500">wilayah</span>
           </div>
         </div>
 
-        <!-- KPI 4: Neraca Bersih Konsolidasi -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Neraca Bersih Konsolidasi</div>
-            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            </div>
-          </div>
-          <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">
-              <span id="kpi-selisih-bersih" class="tabular-nums">{{ $ringkasan['selisih_formatted'] ?? '+611.523,5 ton' }}</span>
-            </div>
-            <div class="text-xs font-bold text-slate-700 mt-0.5 flex items-center gap-1">
-              <span id="kpi-nama-komoditas">Komoditas {{ $komoditasDefault->nama ?? 'Beras' }}</span> &bull; <span id="kpi-jumlah-seimbang">{{ $ringkasan['jumlah_seimbang'] ?? 1 }} Wilayah Seimbang</span>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Cakupan Wilayah Pantau</span>
-              <span id="kpi-cakupan-wilayah" class="text-slate-900 font-bold tabular-nums">{{ $ringkasan['total_wilayah'] ?? 34 }} / 34 Kabupaten</span>
-            </div>
-            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div id="kpi-cakupan-bar" class="bg-emerald-600 h-full rounded-full" style="width: 100%"></div>
-            </div>
+        <!-- 4. Wilayah Defisit/Waspada -->
+        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Wilayah Defisit/Waspada</div>
+          <div class="text-xl sm:text-2xl font-black text-amber-900 tracking-tight mt-1">
+            <span id="kpi-jumlah-defisit-waspada" class="tabular-nums">{{ $ringkasan['jumlah_defisit_waspada'] ?? 10 }}</span>
+            <span class="text-xs font-bold text-slate-500">wilayah</span>
           </div>
         </div>
       </div>
@@ -711,6 +545,17 @@
               </div>
               <p class="leading-relaxed">
                 Proyeksi menggunakan model <strong>Autoregressive XGBoost v1</strong> yang dilatih dengan deret waktu historis panen, anomali iklim BMKG, dan tren konsumsi. Model menghasilkan proyeksi horizon 12 bulan ke depan dengan deviasi rata-rata (MAE: ±3,8%, WAPE: ±14,2%).
+              </p>
+            </div>
+
+            <!-- Klausul Regulasi & Batasan Sistem (Dipindahkan dari Footer) -->
+            <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/90 space-y-1.5">
+              <div class="font-bold text-amber-950 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg>
+                Klausul Regulasi &amp; Batasan Sistem
+              </div>
+              <p class="leading-relaxed text-amber-900">
+                Sistem ini merupakan platform pemantauan &amp; pelacakan dini pasokan pangan, bukan platform transaksi jual-beli komersial. Dikelola sesuai ketentuan dan kerangka tata kelola ketahanan pangan nasional Republik Indonesia.
               </p>
             </div>
           </div>
@@ -986,63 +831,24 @@ async function muatStatusData() {
 function updateKpiCards(r, komoditas) {
   if (!r) return;
 
-  // Banner
+  // Banner Ringkas 1 Baris
   const bannerText = document.getElementById('banner-nasional-text');
-  if (bannerText && r.banner_text) {
-    bannerText.textContent = r.banner_text;
+  if (bannerText) {
+    bannerText.textContent = `${r.jumlah_penuh ?? 0} dari ${r.total_wilayah ?? 34} wilayah pantau berstatus Penuh/Surplus · ${r.jumlah_waspada ?? 0} Waspada · ${r.jumlah_defisit ?? 0} Defisit`;
   }
 
-  // KPI 1: Total Pasokan Terpantau
+  // 4 Angka Kunci Horizontal Summary Strip
   const supplyEl = document.getElementById('kpi-total-supply');
-  if (supplyEl) supplyEl.textContent = r.total_supply_formatted;
+  if (supplyEl && r.total_supply_formatted) supplyEl.textContent = r.total_supply_formatted;
+
   const demandVal = document.getElementById('kpi-demand-val');
-  if (demandVal) demandVal.textContent = r.total_demand_formatted;
-  const selisihPersenEl = document.getElementById('kpi-selisih-persen');
-  if (selisihPersenEl) selisihPersenEl.textContent = `(${r.selisih_persen_formatted})`;
-  const rasioTotalEl = document.getElementById('kpi-rasio-total');
-  if (rasioTotalEl) {
-    const rasioVal = r.total_demand_kg > 0 ? (r.total_supply_kg / r.total_demand_kg) * 100 : 0;
-    rasioTotalEl.textContent = IndoFormat.percent(rasioVal, 1);
-  }
-  const rasioBar = document.getElementById('kpi-rasio-bar');
-  if (rasioBar) {
-    const pct = r.total_demand_kg > 0 ? Math.min(100, (r.total_supply_kg / r.total_demand_kg) * 50) : 0;
-    rasioBar.style.width = `${pct}%`;
-  }
+  if (demandVal && r.total_demand_formatted) demandVal.textContent = r.total_demand_formatted;
 
-  // KPI 2: Wilayah Surplus / Penuh
   const jmlPenuhEl = document.getElementById('kpi-jumlah-penuh');
-  if (jmlPenuhEl) jmlPenuhEl.textContent = r.jumlah_penuh;
-  const persenPenuhEl = document.getElementById('kpi-persen-penuh');
-  if (persenPenuhEl) persenPenuhEl.textContent = r.persen_penuh_formatted;
-  const totalSurplusEl = document.getElementById('kpi-total-surplus');
-  if (totalSurplusEl) totalSurplusEl.textContent = IndoFormat.ton(r.total_surplus_kg, 1, true);
-  const rerataSurplusEl = document.getElementById('kpi-rerata-surplus');
-  if (rerataSurplusEl) rerataSurplusEl.textContent = r.rerata_rasio_surplus_formatted;
+  if (jmlPenuhEl && r.jumlah_penuh !== undefined) jmlPenuhEl.textContent = r.jumlah_penuh;
 
-  // KPI 3: Wilayah Defisit & Waspada
   const jmlDefEl = document.getElementById('kpi-jumlah-defisit-waspada');
-  if (jmlDefEl) jmlDefEl.textContent = r.jumlah_defisit_waspada;
-  const persenDefEl = document.getElementById('kpi-persen-defisit-waspada');
-  if (persenDefEl) persenDefEl.textContent = r.persen_defisit_waspada_formatted;
-  const rincianDef = document.getElementById('kpi-rincian-defisit');
-  if (rincianDef) rincianDef.textContent = `${r.jumlah_defisit} Defisit`;
-  const rincianWaspada = document.getElementById('kpi-rincian-waspada');
-  if (rincianWaspada) rincianWaspada.textContent = `${r.jumlah_waspada} Waspada`;
-  const totalDefisitEl = document.getElementById('kpi-total-defisit');
-  if (totalDefisitEl) totalDefisitEl.textContent = r.total_defisit_formatted;
-  const defisitBar = document.getElementById('kpi-defisit-bar');
-  if (defisitBar) defisitBar.style.width = r.jumlah_defisit > 0 ? '75%' : '0%';
-
-  // KPI 4: Neraca Bersih Konsolidasi
-  const selisihEl = document.getElementById('kpi-selisih-bersih');
-  if (selisihEl) selisihEl.textContent = r.selisih_formatted;
-  const namaKomEl = document.getElementById('kpi-nama-komoditas');
-  if (namaKomEl && komoditas) namaKomEl.textContent = `Komoditas ${komoditas.nama}`;
-  const seimbangEl = document.getElementById('kpi-jumlah-seimbang');
-  if (seimbangEl) seimbangEl.textContent = `${r.jumlah_seimbang} Wilayah Seimbang`;
-  const cakupanEl = document.getElementById('kpi-cakupan-wilayah');
-  if (cakupanEl) cakupanEl.textContent = `${r.total_wilayah} / 34 Kabupaten`;
+  if (jmlDefEl && r.jumlah_defisit_waspada !== undefined) jmlDefEl.textContent = r.jumlah_defisit_waspada;
 }
 
 // ── Fetch & Cache GeoJSON ────────────────────────────────────────────────
@@ -1174,13 +980,9 @@ function updateTombolBulanBerjalan() {
   const sel = document.getElementById('select-periode');
   if (!btn || !sel) return;
   if (sel.value === BULAN_BERJALAN) {
-    btn.disabled = true;
-    btn.classList.add('opacity-40', 'cursor-not-allowed');
-    btn.classList.remove('hover:bg-emerald-200');
+    btn.classList.add('hidden');
   } else {
-    btn.disabled = false;
-    btn.classList.remove('opacity-40', 'cursor-not-allowed');
-    btn.classList.add('hover:bg-emerald-200');
+    btn.classList.remove('hidden');
   }
 }
 
@@ -1202,12 +1004,7 @@ function clearPanelWilayah() {
   const ids = [
     'panel-supply-formatted',
     'panel-demand-formatted',
-    'panel-supply-raw',
-    'panel-demand-raw',
     'panel-selisih',
-    'panel-stok-awal',
-    'panel-panen',
-    'panel-pasokan-masuk',
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -1216,7 +1013,7 @@ function clearPanelWilayah() {
   const statusLabel = document.getElementById('panel-status-label');
   if (statusLabel) {
     statusLabel.textContent = '— DATA TIDAK TERSEDIA';
-    statusLabel.className = 'text-xl font-black mt-0.5 text-slate-500';
+    statusLabel.className = 'text-lg font-black mt-0.5 text-slate-500';
   }
   const rasioLabel = document.getElementById('panel-rasio-label');
   if (rasioLabel) {
@@ -1230,8 +1027,10 @@ function clearPanelWilayah() {
   }
   const statusBox = document.getElementById('panel-status-box');
   if (statusBox) {
-    statusBox.className = 'p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between';
+    statusBox.className = 'p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between';
   }
+  const dampakContainer = document.getElementById('panel-dampak-container');
+  if (dampakContainer) dampakContainer.classList.add('hidden');
 }
 
 // ── Update Panel Wilayah Terpilih (Kanan) ────────────────────────────────
@@ -1245,11 +1044,12 @@ async function updatePanelWilayah(kode) {
     const json = await res.json();
 
     const w = json.wilayah;
-    document.getElementById('panel-nama').textContent = w.nama;
-    document.getElementById('panel-kode').textContent = kode;
-    document.getElementById('panel-provinsi').textContent = w.nama_provinsi
-      ? `Provinsi ${w.nama_provinsi} • Kode Wilayah: ${kode}`
-      : `Provinsi ${w.nama} • Kode Wilayah: ${kode}`;
+    const elNama = document.getElementById('panel-nama');
+    if (elNama) elNama.textContent = w.nama;
+    const elKode = document.getElementById('panel-kode');
+    if (elKode) elKode.textContent = kode;
+    const elProv = document.getElementById('panel-provinsi');
+    if (elProv) elProv.textContent = w.nama_provinsi ?? w.nama;
 
     // Cari titik sesuai periode yang aktif
     const point = json.seri.find(s => s.periode === state.periode) || json.status_terbaru;
@@ -1263,7 +1063,7 @@ async function updatePanelWilayah(kode) {
       const statusLabel = document.getElementById('panel-status-label');
       if (statusLabel) {
         statusLabel.textContent = `${conf.symbol} ${point.label.toUpperCase()}`;
-        statusLabel.className = `text-xl font-black mt-0.5 ${conf.textClass}`;
+        statusLabel.className = `text-lg font-black mt-0.5 ${conf.textClass}`;
       }
 
       const rasioLabel = document.getElementById('panel-rasio-label');
@@ -1279,33 +1079,33 @@ async function updatePanelWilayah(kode) {
       }
 
       // Neraca Supply & Demand
-      document.getElementById('panel-neraca-periode').textContent = point.periode;
-      document.getElementById('panel-supply-formatted').textContent = point.supply_formatted || '—';
-      document.getElementById('panel-demand-formatted').textContent = point.demand_formatted || '—';
-      document.getElementById('panel-supply-raw').textContent = `${IndoFormat.kg(point.supply_kg)} terdata`;
-      document.getElementById('panel-demand-raw').textContent = `${IndoFormat.kg(point.demand_kg)} konsumsi`;
+      const neracaPeriode = document.getElementById('panel-neraca-periode');
+      if (neracaPeriode) neracaPeriode.textContent = point.periode;
+      const supplyEl = document.getElementById('panel-supply-formatted');
+      if (supplyEl) supplyEl.textContent = point.supply_formatted || '—';
+      const demandEl = document.getElementById('panel-demand-formatted');
+      if (demandEl) demandEl.textContent = point.demand_formatted || '—';
 
       const selisihKg = (point.supply_kg || 0) - (point.demand_kg || 0);
-      document.getElementById('panel-selisih').textContent = IndoFormat.ton(selisihKg, 1, true);
-      document.getElementById('panel-selisih').className = selisihKg >= 0 ? 'text-rose-700 tabular-nums font-bold' : 'text-blue-700 tabular-nums font-bold';
-
-      // Breakdown mini boxes (estimasi proporsional representatif)
-      const supplyKg = point.supply_kg || 0;
-      document.getElementById('panel-stok-awal').textContent = IndoFormat.ton(supplyKg * 0.17, 1);
-      document.getElementById('panel-panen').textContent = IndoFormat.ton(supplyKg * 0.81, 1);
-      document.getElementById('panel-pasokan-masuk').textContent = IndoFormat.ton(supplyKg * 0.02, 1);
-
-      if (point.stok_estimasi) {
-        document.getElementById('panel-stok-badge').innerHTML = '<span class="text-amber-600 font-medium inline-flex items-center gap-1">⚠ Stok Estimasi</span>';
-        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-medium text-amber-700 select-none';
-      } else {
-        document.getElementById('panel-stok-badge').innerHTML = '<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> <span>Stok Terdata (Simulasi)</span>';
-        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-medium text-slate-600 select-none';
+      const selisihEl = document.getElementById('panel-selisih');
+      if (selisihEl) {
+        selisihEl.textContent = IndoFormat.ton(selisihKg, 1, true);
+        selisihEl.className = selisihKg >= 0 ? 'text-sm sm:text-base font-black text-rose-700 mt-0.5' : 'text-sm sm:text-base font-black text-blue-700 mt-0.5';
       }
-    }
 
-    if (json.pesan_dampak) {
-      document.getElementById('panel-pesan-dampak').textContent = json.pesan_dampak;
+      // Dampak Wilayah: ONE sentence about impact, shown only for penuh or defisit
+      const dampakContainer = document.getElementById('panel-dampak-container');
+      const pesanDampakEl = document.getElementById('panel-pesan-dampak');
+      if (point.status === 'penuh' || point.status === 'defisit') {
+        if (dampakContainer) dampakContainer.classList.remove('hidden');
+        if (pesanDampakEl) {
+          pesanDampakEl.textContent = json.pesan_dampak || (point.status === 'penuh'
+            ? 'Pangan berisiko basi atau terbuang bila pasokan melebihi kapasitas serap wilayah.'
+            : 'Wilayah mengalami defisit pasokan kritis; intervensi logistik darurat diperlukan.');
+        }
+      } else {
+        if (dampakContainer) dampakContainer.classList.add('hidden');
+      }
     }
 
     // Link tombol ke detail

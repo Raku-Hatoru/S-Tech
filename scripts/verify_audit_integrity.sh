@@ -58,7 +58,7 @@ check() {
     fi
 }
 
-check "Mode Publik badge di header" "grep -q 'Mode Publik' ${RESP_FILE}"
+check "Mode Publik tidak tampil untuk guest" "! grep -q 'Mode Publik' ${RESP_FILE}"
 check "Tombol Masuk di header" "grep -q 'Masuk' ${RESP_FILE}"
 check "Portal Pengiriman TERSEMBUNYI" "! grep -q 'Portal Pengiriman' ${RESP_FILE}"
 check "Portal BUMDes TERSEMBUNYI" "! grep -q 'Portal BUMDes' ${RESP_FILE}"

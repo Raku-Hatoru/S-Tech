@@ -933,5 +933,94 @@ PENGUKURAN DOM & INTERSEKSI POLIGON STEP 9 (scripts/verify-step9.mjs)
 - **Smoke Test Demo Flow PRD 16**: `./scripts/smoke_test.sh` -> **11/11 PASS**.
 - **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS**.
 
+---
+
+## 14. Step 10 — Information Reduction & Visual Hierarchy Focus
+
+### 14.1 Ringkasan Eksekutif & Sasaran Perampingan
+Sesuai arahan spesifikasi Step 10, antarmuka publik `/peta` dirampingkan dari kepadatan visual berlebih (*cognitive overload*) menjadi antarmuka fokus operasional yang langsung memberikan informasi esensial bagi pengurus BUMDes, distributor logistik, pengambil kebijakan, dan publik umum tanpa menghilangkan transparansi data contoh.
+
+Prinsip perampingan:
+1. **First-Screen Visibility (1440x900 Tanpa Scroll)**: Seluruh blok esensial (Header, Filter 4 Kolom, Banner 1 Baris Netral, Peta Leaflet, dan Panel Samping) tampil secara serentak pada layar pertama tanpa membutuhkan interaksi scroll.
+2. **Ketiadaan Data yang Dihapus Permanen (*Zero Data Loss*)**: Seluruh rincian teknis, klausul hukum, dan metrik sekunder dipindahkan secara terstruktur ke modal interaktif (`#modal-tentang-data`), halaman analisis detail (`/wilayah/{kode}`), atau footer halaman ringkas.
+3. **Penyederhanaan Tipografi & Komponen**: Judul diringkas menjadi $\le 60$ karakter, subjudul $\le 100$ karakter, label filter dipadatkan, dan kartu KPI digantikan menjadi horizontal summary strip 4 angka kunci.
+
+---
+
+### 14.2 Tabel Pengukuran Kepadatan Teks (Before vs After)
+Pengukuran dihitung secara objektif menggunakan Playwright DOM TreeWalker pada node teks terlihat (*visible text nodes*, `display !== 'none'` dan `visibility !== 'hidden'`):
+
+| Area / Komponen | Text Blocks Sebelum (Step 9) | Text Blocks Sesudah (Step 10) | Reduksi | Status Kepatuhan |
+| :--- | :---: | :---: | :---: | :---: |
+| **Header Area** | 5 | 5 | 0 (0%) | **OPTIMAL** (Judul 40 kar, Subjudul 79 kar, Badge "Data contoh", 2 tombol aksi) |
+| **Filter Row** | 8 | 7 | -1 (-13%) | **TEREDUKSI** (Label `Tingkat`, link text `← Ke bulan berjalan`) |
+| **National Banner** | 3 | 1 | -2 (-67%) | **TEREDUKSI** (1 baris ringkas netral tanpa tag merah darurat) |
+| **Map Card** | 19 | 14 | -5 (-26%) | **TEREDUKSI** (Hapus 2 floating overlay bars, pertahankan reset, zoom & legenda) |
+| **Side Panel** | 32 | 18 | -14 (-44%) | **TEREDUKSI** (Nama+provinsi 1 baris, 1 kalimat dampak, 3 kotak neraca) |
+| **KPI Area** | 34 | 10 | -24 (-71%) | **TEREDUKSI** (Strip horizontal 4 angka kunci tanpa progress bar) |
+| **Footer** | 4 | 2 | -2 (-50%) | **TEREDUKSI** (1 baris klausul regulasi + update otomatis 15 mnt) |
+| **TOTAL HALAMAN** | **105** | **57** | **-48 (-45,7%)** | **PENURUNAN BEBAN KOGNITIF SEBESAR 45,7%** |
+
+---
+
+### 14.3 Tabel Perpindahan Elemen Informasi (Moved-Items Table)
+Menjamin bahwa tidak ada data yang hilang; seluruh elemen yang dirampingkan dari tampilan utama telah dipindahkan ke lokasi yang tepat:
+
+| Elemen Asli yang Disederhanakan | Lokasi Sebelumnya | Lokasi Baru yang Sah & Dapat Diakses | Keterangan Rationale |
+| :--- | :--- | :--- | :--- |
+| **Chip "Data Contoh: BAPANAS & BPS"** | Header halaman utama | Di dalam Modal `#modal-tentang-data` (Bagian Header & Sumber Data) | Menghindari redundansi dengan badge "Data contoh" di sebelah judul utama. |
+| **Badge "Mode Publik"** | Header navbar navigasi | Dihapus dari navbar publik (Status login ditunjukkan via tombol "Masuk") | Pengunjung publik cukup diidentifikasi dengan adanya tombol login. Role name user login disederhanakan tanpa prefix `Peran: `. |
+| **Chip "Proyeksi 12 bulan"** | Label filter periode waktu | Di dalam Modal `#modal-tentang-data` (Bagian Model Prakiraan) | Horizon 12 bulan sudah tertera pada masing-masing opsi pilihan periode waktu (`2026-03 (Proyeksi)`, dst). |
+| **Tombol besar "Ke bulan berjalan"** | Kolom filter periode waktu | Link teks kecil `← Ke bulan berjalan` di bawah dropdown periode | Muncul secara kondisional hanya ketika periode yang dipilih tidak sama dengan bulan berjalan kalender. |
+| **Label "LEVEL AGREGASI GEOGRAFIS"** | Kolom filter level | Diperpendek menjadi label `"Tingkat"` | Lebih padat, tidak memakan tinggi vertikal form filter. |
+| **Overlay Bar Peta Atas** (*"Peta: rasio pasokan..."*) | Mengambang di atas peta kanvas | Penjelasan ada di Subjudul halaman & Modal `#modal-tentang-data` | Kanvas peta bebas dari halangan visual kontrol floating yang redundan. |
+| **Overlay Bar Peta Bawah** (*"Proyeksi: model prakiraan ±3,8%"*) | Mengambang di bawah peta kanvas | Di dalam Modal `#modal-tentang-data` (Bagian Model Prakiraan) | Rincian deviasi akurasi model prakiraan MAE ±3,8% terdokumentasi lengkap di modal. |
+| **3 Mini Box Samping** (*"Stok Awal", "Panen", "Pasokan Masuk"*) | Panel samping wilayah terpilih | Halaman Analisis Detail Wilayah ([`/wilayah/{kode}`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/detail.blade.php#L134-L142)) | Rincian dekomposisi stok awal, panen, dan distribusi masuk tersedia lengkap di halaman detail wilayah. |
+| **Badge "Stok Terdata (Simulasi)"** | Panel samping header | Di dalam Modal `#modal-tentang-data` & Badge "Data contoh" | Disatukan di bawah payung data contoh resmi. |
+| **Teks "Diperbarui otomatis tiap 15 menit"** | Bawah tombol aksi panel samping | Suffix footer halaman utama | Menjadi penanda waktu global bagi seluruh sistem daripada spesifik per-panel. |
+| **Klausul Regulasi Multibaris** | Banner kuning besar di footer | Di dalam Modal `#modal-tentang-data` (Bagian Klausul Regulasi) | Footer diringkas menjadi 1 baris bersih; narasi hukum lengkap tetap dapat dibaca di modal. |
+| **Progress Bar & Sub-line KPI** | 4 Kartu KPI multibaris | Strip horizontal 4 angka kunci (Rincian per-kabupaten ada di tabel rekapitulasi) | Angka kunci keputusan (Total pasokan, Kebutuhan, Wilayah surplus, Wilayah defisit) tampil tegas dan langsung terbaca. |
+
+---
+
+### 14.4 Bukti Pengukuran Browser Nyata (Playwright Verification at 1440x900)
+Hasil pengukuran otomasi Playwright (`scripts/verify-step10.mjs`):
+```
+======================================================
+STEP 10 INFORMATION REDUCTION - BROWSER EVIDENCE
+======================================================
+Title: "Peta Pemantauan Surplus & Defisit Pangan" (40 chars, <= 60 chars: PASS)
+Subtitle: "Diagnostik rasio pasokan vs kebutuhan wilayah untuk mitigasi pemborosan pangan." (79 chars, <= 100 chars: PASS)
+
+[FIRST SCREEN VISIBILITY AT 1440x900 (NO SCROLL)]
+Header in first screen: PASS
+Filter in first screen: PASS
+Banner in first screen: PASS
+Map Card in first screen: PASS (top: 373px, visible height: 527px)
+Side Panel in first screen: PASS
+
+[MAP CONTAINMENT RULE (HARD RULE 2)]
+Total interactive polygons: 507 (expect > 400: PASS)
+Colored pilot polygons: 34 (expect >= 34: PASS)
+Polygons outside map card: 0 (expect 0: PASS)
+```
+
+---
+
+### 14.5 Berkas Bukti Screenshot & Rendered HTML
+1. [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png) — Tampilan Desktop 1440x900 (Hirarki visual bersih, judul ringkas, strip KPI horizontal, peta Leaflet 507 poligon dengan kontrol terkurung rapi).
+2. [`docs/ui-review/step10-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-390.png) — Tampilan Mobile 390x844 (Nol scroll horizontal, target sentuh $\ge 44\text{ px}$, akordeon filter ringkas).
+3. [`docs/ui-review/peta-rendered-step10.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step10.html) — DOM HTML lengkap yang dirender oleh browser (78.291 bytes).
+4. [`docs/ui-review/step10-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-evidence.json) — Hasil ekstraksi node teks dan kalkulasi koordinat geometris.
+
+---
+
+### 14.6 Status Rangkaian Pengujian Lengkap
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **101 passed, 896 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+
+
 
 

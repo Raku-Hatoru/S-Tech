@@ -86,12 +86,7 @@
                     @auth
                         <div class="hidden xl:flex items-center gap-1.5 text-xs font-semibold text-slate-600 select-none py-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            <span>Peran: {{ auth()->user()->role->nama ?? 'Operator' }}</span>
-                        </div>
-                    @else
-                        <div class="hidden xl:flex items-center gap-1.5 text-xs font-semibold text-slate-500 select-none py-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                            <span>Mode Publik</span>
+                            <span>{{ auth()->user()->role->nama ?? 'Operator' }}</span>
                         </div>
                     @endauth
 
@@ -168,27 +163,12 @@
 
     <!-- Footer Resmi -->
     <footer class="mt-auto bg-white border-t border-slate-200">
-        {{-- Klausul & Regulasi Banner --}}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-            <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-3">
-                <svg class="w-5 h-5 text-amber-700 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                    <line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
-                </svg>
-                <div class="text-xs text-amber-900 leading-relaxed">
-                    <span class="font-bold uppercase tracking-wider block mb-0.5 text-amber-950">Klausul Regulasi &amp; Batasan Sistem</span>
-                    Sistem ini merupakan platform pemantauan &amp; pelacakan dini pasokan pangan, bukan platform transaksi jual-beli komersial. Dikelola sesuai ketentuan dan kerangka tata kelola ketahanan pangan nasional Republik Indonesia.
-                </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600">
+            <div>
+                <span>&copy; {{ date('Y') }} SIPANGAN WASPADA &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
             </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
-            <div class="flex items-center gap-2">
-                <span>&copy; {{ date('Y') }} SIPANGAN WASPADA. Tata Kelola Terpadu Ketahanan Pangan RI.</span>
-            </div>
-            <div class="text-xs text-slate-600 font-medium">
-                <span>Platform Pemantauan &amp; Mitigasi Early-Warning Ketahanan Pangan Nasional</span>
+            <div class="text-xs text-slate-500 font-medium">
+                <span>Diperbarui otomatis tiap 15 menit</span>
             </div>
         </div>
     </footer>

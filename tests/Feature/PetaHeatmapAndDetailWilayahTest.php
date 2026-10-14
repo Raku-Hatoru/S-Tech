@@ -81,7 +81,7 @@ class PetaHeatmapAndDetailWilayahTest extends TestCase
         $response->assertSee('Waspada');
         $response->assertSee('Penuh');
         $response->assertSee('Tanpa Data');
-        $response->assertSee('Level Agregasi');
+        $response->assertSee('Tingkat');
         $response->assertSee('Tabel Wilayah');
     }
 
