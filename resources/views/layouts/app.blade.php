@@ -34,7 +34,7 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="font-bold text-lg tracking-tight text-slate-900">SIPANGAN WASPADA</span>
-                                <span class="px-2 py-0.5 text-xs font-bold tracking-wider uppercase bg-emerald-100 text-emerald-800 rounded">RESMI</span>
+                                <span class="px-2 py-0.5 text-xs font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded border border-slate-200">PROTOTIPE</span>
                             </div>
                             <p class="text-xs text-slate-600 font-medium">Sistem Pemantauan &amp; Early-Warning Surplus Pangan Nasional</p>
                         </div>
@@ -83,13 +83,13 @@
                 <!-- Status / Auth User (Sesuai Design Mockup) -->
                 <div class="flex items-center gap-3">
                     @auth
-                        <div class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 select-none">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <div class="hidden xl:flex items-center gap-1.5 text-xs font-semibold text-slate-600 select-none py-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                             <span>Peran: {{ auth()->user()->role->nama ?? 'Operator' }}</span>
                         </div>
                     @else
-                        <div class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600 select-none">
-                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <div class="hidden xl:flex items-center gap-1.5 text-xs font-semibold text-slate-500 select-none py-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                             <span>Mode Publik</span>
                         </div>
                     @endauth

@@ -30,10 +30,27 @@ class PetaController extends Controller
             ->reverse()
             ->values();
 
-        // Periode default: data aktual terakhir (bukan prediksi)
-        $periodeDefault = $statusService->getTanggalAktualTerakhir()
-            ? Carbon::parse($statusService->getTanggalAktualTerakhir())->format('Y-m')
-            : Carbon::now()->format('Y-m');
+        // Data tanggal aktual terakhir dari basis data riil (PRD 10.1 & PRD 2.3)
+        $maxActual = $statusService->getTanggalAktualTerakhir();
+        $maxActualYm = $maxActual ? Carbon::parse($maxActual)->format('Y-m') : '2025-12';
+
+        // Periode default: data aktual terakhir
+        $periodeDefault = $maxActualYm;
+
+        // Bulan kalender berjalan saat ini
+        $bulanBerjalan = Carbon::now()->format('Y-m');
+
+        // Buat metadata periode (Aktual vs Proyeksi) berbasis data riil
+        $periodesList = $periodes->map(function ($p) use ($maxActualYm) {
+            $isAktual = $p <= $maxActualYm;
+
+            return [
+                'kode' => $p,
+                'label' => Carbon::parse($p.'-01')->isoFormat('MMMM YYYY'),
+                'tipe' => $isAktual ? 'Aktual' : 'Proyeksi',
+                'is_aktual' => $isAktual,
+            ];
+        });
 
         // Daftar provinsi untuk panel fallback tabel dan pencarian
         $provinsiList = Provinsi::orderBy('nama')->get(['kode', 'nama']);
@@ -53,7 +70,9 @@ class PetaController extends Controller
             'komoditasList' => $komoditasList,
             'komoditasDefault' => $komoditasDefault,
             'periodes' => $periodes,
+            'periodesList' => $periodesList,
             'periodeDefault' => $periodeDefault,
+            'bulanBerjalan' => $bulanBerjalan,
             'provinsiList' => $provinsiList,
             'ambangDefisit' => $ambangDefisit,
             'ambangWaspada' => $ambangWaspada,

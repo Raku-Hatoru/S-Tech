@@ -67,12 +67,12 @@
         </p>
       </div>
 
-      <div class="flex items-center gap-2 shrink-0 flex-wrap">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs select-none">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Data Resmi: BAPANAS &amp; BPS
+      <div class="flex items-center gap-3 shrink-0 flex-wrap">
+        <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 select-none py-1">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          Data Contoh: BAPANAS &amp; BPS
         </span>
-        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, engine XGBoost, dan cakupan data">
+        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
           <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
           Tentang Data
         </button>
@@ -109,18 +109,25 @@
           <label for="select-periode" class="block text-xs font-bold text-slate-600 uppercase tracking-wider">
             Periode Waktu
           </label>
-          <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">12 Bulan ke Depan</span>
+          <span class="text-xs text-slate-500 font-medium inline-flex items-center gap-1 cursor-help select-none" title="Horizon proyeksi model hingga 12 bulan ke depan (Januari – Desember 2026)">
+            Proyeksi 12 bulan
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </span>
         </div>
         <div class="flex items-center gap-1.5">
           <select id="select-periode" aria-label="Pilih Periode Waktu" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none cursor-pointer">
-            @foreach($periodes->reverse() as $p)
-              <option value="{{ $p }}" {{ $p === $periodeDefault ? 'selected' : '' }}>
-                {{ \Carbon\Carbon::parse($p)->isoFormat('MMMM YYYY') }}
+            @foreach($periodesList->reverse() as $p)
+              <option value="{{ $p['kode'] }}" {{ $p['kode'] === $periodeDefault ? 'selected' : '' }}>
+                {{ $p['label'] }} ({{ $p['tipe'] }})
               </option>
             @endforeach
           </select>
-          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0">
-            Bulan Ini
+          <button type="button"
+                  id="btn-bulan-ini"
+                  onclick="pilihBulanBerjalan()"
+                  class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0 disabled:opacity-40 disabled:cursor-not-allowed select-none"
+                  title="Pindah ke bulan kalender saat ini ({{ \Carbon\Carbon::parse($bulanBerjalan.'-01')->isoFormat('MMMM YYYY') }})">
+            Ke bulan berjalan
           </button>
         </div>
       </div>
@@ -275,9 +282,9 @@
             <span class="text-xs font-black uppercase tracking-wider text-slate-700 bg-slate-200/80 px-2 py-0.5 rounded">
               WILAYAH TERPILIH
             </span>
-            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-xs font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded">
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              Stok Terverifikasi
+            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 select-none">
+              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Stok Terdata (Simulasi)</span>
             </span>
           </div>
           <span id="panel-kode" class="tabular-nums font-bold text-xs text-slate-600">33.02</span>
@@ -586,17 +593,17 @@
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span class="font-extrabold uppercase tracking-wider text-emerald-400">SIPANGAN-XGBOOST v1</span>
-                <span class="text-slate-300">• 34 Titik Pantau Terverifikasi (Wilayah Percontohan)</span>
+                <span class="text-slate-300">• 34 Wilayah Percontohan (Data Contoh)</span>
               </div>
-              <span class="text-xs text-slate-200 font-semibold bg-slate-800 px-2.5 py-1 rounded-md">Data Resmi: BAPANAS &amp; BPS</span>
+              <span class="text-xs text-slate-200 font-semibold bg-slate-800 px-2.5 py-1 rounded-md">Data Contoh: Estimasi BPS &amp; BAPANAS</span>
             </div>
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                Sumber Data Resmi
+                Sumber Data Acuan
               </div>
               <p class="leading-relaxed">
-                Data dihimpun dari <strong>Badan Pangan Nasional (BAPANAS)</strong> dan <strong>Badan Pusat Statistik (BPS)</strong> untuk data konsumsi, neraca regional, dan iklim dasar. Data realisasi panen dikonsolidasikan langsung dari laporan mitra BUMDes dan penyuluh pertanian lapangan terverifikasi.
+                Basis data historis mengacu pada statistik <strong>Badan Pangan Nasional (BAPANAS)</strong> dan <strong>Badan Pusat Statistik (BPS)</strong> untuk pola konsumsi per kapita, neraca regional, dan iklim dasar. Data realisasi panen dikonsolidasikan dari simulasi pelaporan mitra BUMDes dan estimasi pertanian percontohan (PRD 2.3 &amp; 14).
               </p>
             </div>
 
@@ -1068,10 +1075,34 @@ function resetViewNasional() {
   map.setView([-2.5, 118.0], 5);
 }
 
-function pilihBulanIni() {
-  document.getElementById('select-periode').value = '{{ $periodeDefault }}';
-  state.periode = '{{ $periodeDefault }}';
+const BULAN_BERJALAN = '{{ $bulanBerjalan }}';
+
+function updateTombolBulanBerjalan() {
+  const btn = document.getElementById('btn-bulan-ini');
+  const sel = document.getElementById('select-periode');
+  if (!btn || !sel) return;
+  if (sel.value === BULAN_BERJALAN) {
+    btn.disabled = true;
+    btn.classList.add('opacity-40', 'cursor-not-allowed');
+    btn.classList.remove('hover:bg-emerald-200');
+  } else {
+    btn.disabled = false;
+    btn.classList.remove('opacity-40', 'cursor-not-allowed');
+    btn.classList.add('hover:bg-emerald-200');
+  }
+}
+
+function pilihBulanBerjalan() {
+  const sel = document.getElementById('select-periode');
+  if (!sel) return;
+  sel.value = BULAN_BERJALAN;
+  state.periode = BULAN_BERJALAN;
+  updateTombolBulanBerjalan();
   muatStatusData();
+}
+
+function pilihBulanIni() {
+  pilihBulanBerjalan();
 }
 
 // ── Update Panel Wilayah Terpilih (Kanan) ────────────────────────────────
@@ -1136,11 +1167,11 @@ async function updatePanelWilayah(kode) {
       document.getElementById('panel-pasokan-masuk').textContent = IndoFormat.ton(supplyKg * 0.02, 1);
 
       if (point.stok_estimasi) {
-        document.getElementById('panel-stok-badge').innerHTML = '⚠ Stok Estimasi';
-        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded';
+        document.getElementById('panel-stok-badge').innerHTML = '<span class="text-amber-600 font-medium inline-flex items-center gap-1">⚠ Stok Estimasi</span>';
+        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-medium text-amber-700 select-none';
       } else {
-        document.getElementById('panel-stok-badge').innerHTML = '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Stok Terverifikasi';
-        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded';
+        document.getElementById('panel-stok-badge').innerHTML = '<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> <span>Stok Terdata (Simulasi)</span>';
+        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-medium text-slate-600 select-none';
       }
     }
 
@@ -1337,10 +1368,12 @@ document.getElementById('select-komoditas').addEventListener('change', e => {
 
 document.getElementById('select-periode').addEventListener('change', e => {
   state.periode = e.target.value;
+  updateTombolBulanBerjalan();
   muatStatusData();
 });
 
 // ── Inisialisasi Awal ────────────────────────────────────────────────────
+updateTombolBulanBerjalan();
 muatStatusData();
 </script>
 @endpush

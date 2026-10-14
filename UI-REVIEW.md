@@ -393,7 +393,8 @@ Pengujian dilakukan dengan membandingkan angka yang dirender pada antarmuka terh
 | `ee0f0c7` | `ui(step-2-layout): optimalkan kerapian top area dimensi peta dan highlight poligon terpilih` | Mengunci rasio tinggi kartu peta vs panel samping (1:1), visibilitas peta 80,4% tanpa scroll, dan highlight poligon. |
 | `a5f6d7f` | `ui(step-3-typography): standarisasi tipografi minimal 12px dan rasio kontras warna wcag aa` | Menstandarisasi tipografi minimal 12px, kontras teks WCAG AA (≥ 4.5:1), dan tinggi kartu KPI seragam. |
 | `8ad728f` | `ui(step-4-kpi-numbers): konsistensi format angka indonesia dan integrasi metrik kpi riil basis data` | Integrasi metrik KPI riil agregasi basis data, pemisah ribuan titik/koma, dan penghapusan metrik simulasi statis. |
-| `6a12e22` | `ui(step-5-neutral-pricing): netralisasi terminologi harga dan penghapusan estimasi deflasi mikro` | Menghapus estimasi deflasi produsen -14,2%, netralisasi 21 narasi harga ke dampak logistik dan emisi pangan. |
+| `d25cc21` | `ui(step-5-neutral-pricing): netralisasi terminologi harga dan penghapusan estimasi deflasi mikro` | Menghapus estimasi deflasi produsen -14,2%, netralisasi 21 narasi harga ke dampak logistik dan emisi pangan. |
+| `ad6d15b` | `ui(step-6-honest-labels): period logic aktual proyeksi dan label data jujur` | Label periode (Aktual/Proyeksi), tombol ke bulan berjalan, restyle chips non-klik, audit klaim data contoh. |
 
 ---
 
@@ -495,3 +496,153 @@ Pembaruan langsung pada record SQLite telah tereksekusi pada tabel `settings` (i
    - `scripts/smoke_test.sh`: **11/11 PASS** (100% alur demo PRD Bab 16 berjalan mulus tanpa hambatan).
    - `vendor/bin/pint --dirty --format agent`: Format PSR-12 rapi dan bersih.
    - **UNVERIFIED Items**: **0 (Nol)**. Seluruh klaim visual terbukti melalui rendering browser Playwright dan inspeksi HTTP live.
+
+---
+
+## 10. Step 6 — Honest & Unambiguous Labels (Kejujuran Label Periode & Audit Klaim Data)
+
+### 10.1 Logika Periode (Period Logic)
+1. **Pemilihan Periode Default**:
+   - Berdasarkan audit basis data, tabel `data_historis` dan `status_wilayah` memiliki data aktual (*ground-truth*) hingga **Desember 2025** (`2025-12`). Seluruh data dari Januari 2026 hingga Desember 2026 merupakan hasil prediksi model (*multi-horizon forecast*).
+   - Sesuai dengan **docs/PRD.md Bab 10.1 (Keputusan)**:
+     > *"Dataset memakai data riil seluruh Indonesia, sudah tersedia, periode 2023–2025 (±36 bulan) [Keputusan]."*
+   - Serta **docs/PRD.md Bab 10.3 (Dataset Prediksi)**:
+     > *"`periode_dasar`: Bulan data terakhir yang dipakai model (2025-12); `periode_target`: Bulan yang diprediksi (2026-01 s.d. 2026-12)."*
+   - Oleh karena itu, peta secara jujur dan objektif default ke **Desember 2025** sebagai bulan data faktual terakhir yang lengkap, bukan langsung melompat ke proyeksi tanpa pemberitahuan.
+2. **Label Opsi Dropdown Berbasis Data Riil**:
+   - Seluruh 36 opsi pada dropdown `#select-periode` dilabeli secara eksplisit berdasarkan kolom `sumber` pada basis data:
+     - Bulan `2024-01` s.d. `2025-12` dilabeli **`(Aktual)`** (contoh: `Desember 2025 (Aktual)`).
+     - Bulan `2026-01` s.d. `2026-12` dilabeli **`(Proyeksi)`** (contoh: `Oktober 2026 (Proyeksi)`).
+3. **Tombol "Ke bulan berjalan"**:
+   - Tombol hijau `"Bulan Ini"` diubah namanya menjadi **`Ke bulan berjalan`** dengan tooltip interaktif: `Pindah ke bulan kalender saat ini (Oktober 2026)`.
+   - Mengklik tombol ini otomatis menyetel dropdown ke bulan kalender berjalan (`2026-10`) dan memicu pembaruan peta secara dinamis.
+   - Logika status reaktif diterapkan: saat pengguna memilih bulan kalender berjalan (`2026-10`), tombol `Ke bulan berjalan` otomatis dinonaktifkan (`disabled`) dengan styling transparan (`opacity-40 cursor-not-allowed`) untuk mencegah klik redundan.
+4. **Chip Horizon Proyeksi**:
+   - Chip statis `"12 Bulan ke Depan"` yang sebelumnya menyerupai tombol hijau diganti dengan label informatif tanpa border button: `Proyeksi 12 bulan` disertai tooltip semantik: `title="Horizon proyeksi model hingga 12 bulan ke depan (Januari – Desember 2026)"` dan ikon info.
+
+---
+
+### 10.2 Penyingkiran Badge Teknis "SIPANGAN-XGBOOST"
+- Badge teknis `SIPANGAN-XGBOOST` disingkirkan sepenuhnya dari seluruh area *header* publik halaman utama dan atribut tombol.
+- Sesuai spesifikasi, detail teknis algoritma model machine learning hanya dipertahankan di dalam modal **"Tentang Data"** (`#modal-tentang-data`).
+- Atribut title pada tombol diubah dari *"Informasi metodologi, engine XGBoost, dan cakupan data"* menjadi *"Informasi metodologi, sumber data acuan, dan pemodelan"*.
+
+---
+
+### 10.3 Restyling Chip Non-Klik Menjadi Label Informatif
+Komponen badge yang bersifat informatif dan tidak memiliki aksi klik sebelumnya menggunakan styling pil tombol (`bg-white/bg-slate-100`, `border border-slate-200`, `shadow-2xs`, `rounded-lg`). Seluruh komponen ini direstyling menjadi **label teks murni** (tanpa border pil, tanpa background tombol, tanpa hover, dan kursor default `select-none`):
+1. **`Data Contoh: BAPANAS & BPS`** (sebelumnya `Data Resmi: BAPANAS & BPS`):
+   - Direstyling dari pill berbingkai putih menjadi teks datar `text-xs font-semibold text-slate-600` dengan ikon arsip `text-slate-400`.
+2. **`Mode Publik`** (pada header navigasi):
+   - Direstyling dari kotak abu-abu `bg-slate-100 border` menjadi label teks inline `text-xs font-semibold text-slate-500` dengan dot indikator `bg-slate-400`.
+3. **`Stok Terdata (Simulasi)`** (pada side panel wilayah):
+   - Direstyling dari badge hijau tebal `bg-emerald-100 text-emerald-900 border` menjadi teks inline datar `text-xs font-medium text-slate-600` dengan ikon checklist netral `text-slate-400`.
+4. Tombol yang tetap mempertahankan gaya tombol aksi fungsional: **"Tentang Data"** (membuka modal) dan **"Unduh Buletin (.PDF)"** (memicu cetak dokumen).
+
+---
+
+### 10.4 Audit Klaim Data & Keputusan Produk (DECISION Items)
+
+Berdasarkan investigasi menyeluruh pada berkas seeder (`WilayahSeeder.php`, `DatabaseSeeder.php`), skrip generator (`database/data/generate_sample_datasets.php`), berkas data (`dataset_historis_sample.csv`, `forecasts_sample.csv`), serta dokumen `docs/PRD.md`, diperoleh temuan fakta berikut:
+
+| Item Klaim | Teks Asli di Antarmuka | Realita Bukti di Kode & Basis Data | Status Audit | Keputusan Produk (DECISION) |
+|:---|:---|:---|:---:|:---|
+| **Klaim 1: Badge Brand Header** | `RESMI` (latar hijau emerald) | Aplikasi ini merupakan prototipe lomba ketahanan pangan (PRD Bab 16 & 17), bukan portal operasional berbadan hukum kementerian/badan negara. | **TIDAK BENAR** | **DECISION-01**: Mengganti badge `RESMI` menjadi `PROTOTIPE` dengan styling netral (`bg-slate-100 text-slate-700 border-slate-200`). |
+| **Klaim 2: Sumber Data Publik** | `Data Resmi: BAPANAS & BPS` | Dataset historis dibuat via `generate_sample_datasets.php` menggunakan proxy konsumsi per kapita dan data sintetik percontohan (PRD Bab 10 & 14). | **KLAIM SEMU** | **DECISION-02**: Mengganti teks menjadi `Data Contoh: BAPANAS & BPS` di header dan `Data Contoh: Estimasi BPS & BAPANAS` di modal. |
+| **Klaim 3: Status Stok Side Panel** | `Stok Terverifikasi` | Angka stok awal merupakan perhitungan bergulir model (*rolling stock*) dari dataset sampel, belum diaudit fisik oleh enumerator lapangan untuk 34 kabupaten. | **TIDAK BENAR** | **DECISION-03**: Mengganti label menjadi `Stok Terdata (Simulasi)` baik pada Blade maupun mutasi DOM JavaScript. |
+| **Klaim 4: Cakupan Wilayah Modal** | `34 Titik Pantau Terverifikasi` | 34 kabupaten/kota berasal dari seeder percontohan (`WilayahSeeder.php`), bukan stasiun pemantauan terakreditasi pemerintah. | **MENYESATKAN** | **DECISION-04**: Mengganti teks di modal menjadi `34 Wilayah Percontohan (Data Contoh)`. |
+
+---
+
+### 10.5 Tabel Ringkasan Pekerjaan Step 6
+
+| No | Komponen / Fitur | Sebelum (Step 5) | Sesudah (Step 6) | Bukti Render / Lokasi | Status |
+|:---:|:---|:---|:---|:---|:---:|
+| 1 | **Periode Default** | Default ke Desember 2025 tanpa kejelasan status data | Default tetap Desember 2025 dengan kepastian data riil faktual terakhir (PRD 10.1) | `PetaController.php:33-40`, `peta-rendered-step6.html` | **Selesai** |
+| 2 | **Label Dropdown Periode** | Nama bulan polos (`Desember 2025`, `Oktober 2026`) | Dilabeli jujur per data riil: `(Aktual)` atau `(Proyeksi)` | `curl /peta \| grep 'option value='` (36 opsi terverifikasi) | **Selesai** |
+| 3 | **Tombol Bulan Berjalan** | Teks `Bulan Ini`, klik hanya me-reset ke Desember 2025 | Teks `Ke bulan berjalan`, beralih ke Oktober 2026 dan otomatis `disabled` saat aktif | `peta/index.blade.php:127`, `step6-1440.png` | **Selesai** |
+| 4 | **Chip Horizon Proyeksi** | Tombol semu `12 Bulan ke Depan` latar hijau | Label informatif `Proyeksi 12 bulan` + tooltip native & ikon info | `peta/index.blade.php:113`, `step6-1440.png` | **Selesai** |
+| 5 | **Badge Teknis Header** | Atribut tooltip memuat istilah `engine XGBoost` | Bersih dari jargon teknis, model details terisolasi di modal | `peta/index.blade.php:75`, `peta-rendered-step6.html` | **Selesai** |
+| 6 | **Restyling Chip Non-Klik** | 3 chip bergaya tombol pil (`bg-white/bg-slate-100`, border) | Menjadi label informatif datar tanpa border/shadow/hover | `app.blade.php:91`, `peta/index.blade.php:71,286`, `step6-1440.png` | **Selesai** |
+| 7 | **Audit Brand Header** | Badge `RESMI` | Diganti `PROTOTIPE` (DECISION-01) | `app.blade.php:37`, `step6-1440.png` | **Selesai** |
+| 8 | **Audit Sumber Data** | `Data Resmi: BAPANAS & BPS` | Diganti `Data Contoh: BAPANAS & BPS` (DECISION-02) | `peta/index.blade.php:73`, `step6-1440.png` | **Selesai** |
+| 9 | **Audit Stok Side Panel** | `Stok Terverifikasi` | Diganti `Stok Terdata (Simulasi)` (DECISION-03) | `peta/index.blade.php:288,1180`, `step6-1440.png` | **Selesai** |
+| 10 | **Audit Titik Pantau** | `34 Titik Pantau Terverifikasi` | Diganti `34 Wilayah Percontohan (Data Contoh)` (DECISION-04) | `peta/index.blade.php:601`, `peta-rendered-step6.html` | **Selesai** |
+
+---
+
+### 10.6 Bukti Daftar Lengkap Opsi Dropdown Periode yang Ter-render
+
+Berikut cuplikan nyata opsi `#select-periode` dari berkas render DOM `docs/ui-review/peta-rendered-step6.html`:
+
+```html
+<select id="select-periode" aria-label="Pilih Periode Waktu" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none cursor-pointer">
+  <option value="2026-12">Desember 2026 (Proyeksi)</option>
+  <option value="2026-11">November 2026 (Proyeksi)</option>
+  <option value="2026-10">Oktober 2026 (Proyeksi)</option>
+  <option value="2026-09">September 2026 (Proyeksi)</option>
+  <option value="2026-08">Agustus 2026 (Proyeksi)</option>
+  <option value="2026-07">Juli 2026 (Proyeksi)</option>
+  <option value="2026-06">Juni 2026 (Proyeksi)</option>
+  <option value="2026-05">Mei 2026 (Proyeksi)</option>
+  <option value="2026-04">April 2026 (Proyeksi)</option>
+  <option value="2026-03">Maret 2026 (Proyeksi)</option>
+  <option value="2026-02">Februari 2026 (Proyeksi)</option>
+  <option value="2026-01">Januari 2026 (Proyeksi)</option>
+  <option value="2025-12" selected>Desember 2025 (Aktual)</option>
+  <option value="2025-11">November 2025 (Aktual)</option>
+  <option value="2025-10">Oktober 2025 (Aktual)</option>
+  <option value="2025-09">September 2025 (Aktual)</option>
+  <option value="2025-08">Agustus 2025 (Aktual)</option>
+  <option value="2025-07">Juli 2025 (Aktual)</option>
+  <option value="2025-06">Juni 2025 (Aktual)</option>
+  <option value="2025-05">Mei 2025 (Aktual)</option>
+  <option value="2025-04">April 2025 (Aktual)</option>
+  <option value="2025-03">Maret 2025 (Aktual)</option>
+  <option value="2025-02">Februari 2025 (Aktual)</option>
+  <option value="2025-01">Januari 2025 (Aktual)</option>
+  <option value="2024-12">Desember 2024 (Aktual)</option>
+  <option value="2024-11">November 2024 (Aktual)</option>
+  <option value="2024-10">Oktober 2024 (Aktual)</option>
+  <option value="2024-09">September 2024 (Aktual)</option>
+  <option value="2024-08">Agustus 2024 (Aktual)</option>
+  <option value="2024-07">Juli 2024 (Aktual)</option>
+  <option value="2024-06">Juni 2024 (Aktual)</option>
+  <option value="2024-05">Mei 2024 (Aktual)</option>
+  <option value="2024-04">April 2024 (Aktual)</option>
+  <option value="2024-03">Maret 2024 (Aktual)</option>
+  <option value="2024-02">Februari 2024 (Aktual)</option>
+  <option value="2024-01">Januari 2024 (Aktual)</option>
+</select>
+```
+
+---
+
+### 10.7 Bukti Render & Pengujian (*Rendered Evidence*)
+
+1. **Inspeksi Render Live (HTTP Curl & Grep Port 8099)**:
+   - Button `Ke bulan berjalan`: Ter-render aktif pada baris 536.
+   - Button `Bulan Ini`: **0 kemunculan (CLEAN)**.
+   - Chip `Proyeksi 12 bulan`: Ter-render aktif pada baris 416.
+   - Chip `12 Bulan ke Depan`: **0 kemunculan (CLEAN)**.
+   - Brand badge `PROTOTIPE`: Ter-render pada baris 308.
+   - Brand badge `RESMI`: **0 kemunculan (CLEAN)**.
+   - Label `Data Contoh: BAPANAS & BPS`: Ter-render pada baris 371.
+   - Label `Data Resmi: BAPANAS`: **0 kemunculan (CLEAN)**.
+   - Label `Stok Terdata (Simulasi)`: Ter-render pada baris 687 dan baris 1597.
+   - Label `Stok Terverifikasi`: **0 kemunculan (CLEAN)**.
+   - Modal `34 Wilayah Percontohan (Data Contoh)`: Ter-render pada baris 993.
+   - Modal `34 Titik Pantau Terverifikasi`: **0 kemunculan (CLEAN)**.
+
+2. **Tangkapan Layar Browser Riil (Playwright Chromium)**:
+   - `docs/ui-review/step6-1440.png` (Desktop 1440x900)
+   - `docs/ui-review/step6-1024.png` (Tablet Landscape 1024x768)
+   - `docs/ui-review/step6-768.png` (Tablet Portrait 768x1024)
+   - `docs/ui-review/step6-390.png` (Mobile 390x844)
+   - Berkas DOM HTML ter-render lengkap: `docs/ui-review/peta-rendered-step6.html` (90.777 bytes).
+
+3. **Hasil Verifikasi Otomatis**:
+   - `php artisan test --compact`: **101 passed, 897 assertions** (100% PASS).
+   - `./scripts/smoke_test.sh`: **11/11 PASS** (100% PASS alur PRD Bab 16).
+   - `vendor/bin/pint --dirty --format agent`: **PASSED** (PSR-12).
+   - **Item UNVERIFIED**: **0 (Nol)**. Seluruh klaim visual terbukti melalui rendering Playwright browser.
