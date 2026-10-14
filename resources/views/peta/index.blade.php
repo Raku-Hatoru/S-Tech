@@ -5,7 +5,7 @@
 
 @push('styles')
 {{-- Leaflet CSS --}}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}" />
 <style>
   :root {
     --status-defisit: #ef4444;
@@ -15,14 +15,24 @@
     --status-tanpa-data: #64748b;
   }
 
-  /* ── Map Canvas Styling ───────────────────────────── */
+  /* ── Map Container & Canvas Stacking Context ────── */
+  #map-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 0;
+  }
+
   #peta-map {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 0;
     width: 100%;
     height: 100%;
     min-height: 520px;
     background: #080f1d;
     border-radius: 14px;
-    overflow: hidden;
     outline: none;
     flex: 1 1 auto;
   }
@@ -37,6 +47,25 @@
       min-height: 450px;
       max-height: 600px;
     }
+  }
+
+  /* ── Leaflet Container & Preflight Resets ────────── */
+  .leaflet-container {
+    overflow: hidden !important;
+    position: relative !important;
+    font-family: inherit !important;
+    background-color: #080f1d !important;
+  }
+  .leaflet-container img {
+    max-width: none !important;
+  }
+  .leaflet-pane svg {
+    max-width: none !important;
+  }
+
+  /* ── Modal Top-Layer Stacking ─────────────────────── */
+  #modal-tentang-data {
+    z-index: 1000 !important;
   }
 
   .leaflet-dark-tooltip {
@@ -212,7 +241,7 @@
     <div id="peta-content-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:items-stretch">
 
       <!-- Kolom Kiri: Peta Leaflet (lg:col-span-7 atau 8) -->
-      <div id="map-card" class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md flex flex-col h-full">
+      <div id="map-card" class="relative isolate z-0 overflow-hidden lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md flex flex-col h-full">
         <div class="relative rounded-xl overflow-hidden flex-1 flex flex-col min-h-[520px]">
           <!-- Floating Header Map Controls -->
           <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
@@ -607,7 +636,7 @@
     </div>
 
     <!-- Modal Tentang Data -->
-    <div id="modal-tentang-data" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-tentang-title" role="dialog" aria-modal="true">
+    <div id="modal-tentang-data" class="fixed inset-0 z-[1000] hidden overflow-y-auto" aria-labelledby="modal-tentang-title" role="dialog" aria-modal="true">
       <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="tutupModalTentangData()"></div>
       <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
@@ -701,7 +730,7 @@
 
 @push('scripts')
 {{-- Leaflet JS --}}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="{{ asset('vendor/leaflet/leaflet.js') }}"></script>
 
 <script>
 const API_BASE = '/api';
@@ -823,12 +852,15 @@ let map = null;
 if (typeof L !== 'undefined') {
   map = L.map('peta-map', {
     center: [-2.5, 118.0], // Full Indonesia center default
-    zoom: 5,
-    minZoom: 4,
+    zoom: 4.5,
+    minZoom: 2.5,
     maxZoom: 11,
+    zoomSnap: 0.25,
+    zoomDelta: 0.5,
     zoomControl: false,
     attributionControl: false,
   });
+  window._leaflet_map = map;
 }
 
 let geoLayerProv = null;
@@ -888,18 +920,17 @@ function fitToPilotBounds() {
   const activeLayer = state.level === 'provinsi' ? geoLayerProv : geoLayerKab;
   if (!activeLayer) return;
 
-  const pilotBounds = L.latLngBounds();
+  const allBounds = L.latLngBounds();
   let count = 0;
   activeLayer.eachLayer(layer => {
-    const kode = String(layer.feature?.properties?.kode ?? '');
-    if (state.statusData[kode]) {
-      pilotBounds.extend(layer.getBounds());
+    if (layer.feature && layer.feature.properties) {
+      allBounds.extend(layer.getBounds());
       count++;
     }
   });
 
-  if (count > 0 && pilotBounds.isValid()) {
-    map.fitBounds(pilotBounds, { padding: [24, 24] });
+  if (count > 0 && allBounds.isValid()) {
+    map.fitBounds(allBounds, { padding: [12, 12], animate: false });
   }
 }
 
@@ -945,6 +976,7 @@ async function muatStatusData() {
       const msgEl = document.getElementById('peta-error-msg');
       if (msgEl) msgEl.textContent = err.message || 'Terjadi gangguan saat mengambil data status wilayah. Silakan periksa koneksi atau coba muat ulang.';
     }
+    clearPanelWilayah();
   } finally {
     if (loadingEl) loadingEl.classList.add('opacity-0', 'pointer-events-none');
   }
@@ -1132,7 +1164,7 @@ function switchLayerLevel(lvl) {
 }
 
 function resetViewNasional() {
-  if (map) map.setView([-2.5, 118.0], 5);
+  fitToPilotBounds();
 }
 
 const BULAN_BERJALAN = '{{ $bulanBerjalan }}';
@@ -1164,6 +1196,42 @@ function pilihBulanBerjalan() {
 
 function pilihBulanIni() {
   pilihBulanBerjalan();
+}
+
+function clearPanelWilayah() {
+  const ids = [
+    'panel-supply-formatted',
+    'panel-demand-formatted',
+    'panel-supply-raw',
+    'panel-demand-raw',
+    'panel-selisih',
+    'panel-stok-awal',
+    'panel-panen',
+    'panel-pasokan-masuk',
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '—';
+  });
+  const statusLabel = document.getElementById('panel-status-label');
+  if (statusLabel) {
+    statusLabel.textContent = '— DATA TIDAK TERSEDIA';
+    statusLabel.className = 'text-xl font-black mt-0.5 text-slate-500';
+  }
+  const rasioLabel = document.getElementById('panel-rasio-label');
+  if (rasioLabel) {
+    rasioLabel.textContent = 'Rasio Pasokan: —';
+    rasioLabel.className = 'text-xs font-bold mt-0.5 text-slate-500';
+  }
+  const iconBox = document.getElementById('panel-status-icon-box');
+  if (iconBox) {
+    iconBox.className = 'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg font-black bg-slate-200 text-slate-600';
+    iconBox.textContent = '—';
+  }
+  const statusBox = document.getElementById('panel-status-box');
+  if (statusBox) {
+    statusBox.className = 'p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between';
+  }
 }
 
 // ── Update Panel Wilayah Terpilih (Kanan) ────────────────────────────────
@@ -1252,6 +1320,7 @@ async function updatePanelWilayah(kode) {
 
   } catch (err) {
     console.error(err);
+    clearPanelWilayah();
   }
 }
 
@@ -1376,11 +1445,16 @@ function toggleTabel() {
 document.getElementById('tabel-filter-input').addEventListener('input', e => filterTabel(e.target.value));
 
 // ── Modal Tentang Data ───────────────────────────────────────────────────
+let lastFocusedElement = null;
+
 function bukaModalTentangData() {
   const modal = document.getElementById('modal-tentang-data');
   if (modal) {
+    lastFocusedElement = document.activeElement;
     modal.classList.remove('hidden');
     document.body.classList.add('overflow-hidden');
+    const closeBtn = modal.querySelector('button[aria-label="Tutup modal informasi"]');
+    if (closeBtn) closeBtn.focus();
   }
 }
 
@@ -1389,8 +1463,43 @@ function tutupModalTentangData() {
   if (modal) {
     modal.classList.add('hidden');
     document.body.classList.remove('overflow-hidden');
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+    }
   }
 }
+
+// Focus trap & Escape listener for modal
+document.addEventListener('keydown', e => {
+  const modal = document.getElementById('modal-tentang-data');
+  if (!modal || modal.classList.contains('hidden')) return;
+
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    tutupModalTentangData();
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    const focusables = Array.from(modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+      .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+});
 
 // ── Banner Peringatan Nasional ───────────────────────────────────────────
 function tutupBannerNasional() {
@@ -1403,7 +1512,20 @@ function tutupBannerNasional() {
   }
 }
 
-// Invalidate size on resize and after initial layout
+// ── ResizeObserver & Map Sizing Lifecycle ────────────────────────────────
+if (typeof ResizeObserver !== 'undefined') {
+  const mapContainer = document.getElementById('peta-map');
+  if (mapContainer) {
+    const ro = new ResizeObserver(() => {
+      if (map && map.invalidateSize) {
+        map.invalidateSize();
+      }
+    });
+    ro.observe(mapContainer);
+  }
+}
+
+// Fallback resize listener and delayed invalidateSize
 window.addEventListener('resize', () => {
   if (map && map.invalidateSize) {
     map.invalidateSize();

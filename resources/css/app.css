@@ -26,3 +26,40 @@
     outline: 2px solid #059669 !important;
     outline-offset: 2px !important;
 }
+
+/* ── Map Container Stacking Context & Isolation ────── */
+#map-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 0;
+}
+
+#peta-map {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 0;
+}
+
+/* ── Leaflet Container & Preflight Resets ──────────── */
+.leaflet-container {
+    overflow: hidden !important;
+    position: relative !important;
+    font-family: inherit !important;
+    background-color: #080f1d !important;
+}
+
+.leaflet-container img {
+    max-width: none !important;
+}
+
+.leaflet-pane svg {
+    max-width: none !important;
+}
+
+/* ── Top-layer Modal Stacking ───────────────────────── */
+#modal-tentang-data {
+    z-index: 1000 !important;
+}
+

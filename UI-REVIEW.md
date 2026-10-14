@@ -35,11 +35,11 @@ Berikut adalah tabel konsolidasi status akhir untuk seluruh butir evaluasi antar
 | 8 | **Diferensiasi Warna & Simbol Status Aksesibel** (P1) | Kategori Penuh/Surplus menggunakan warna ungu violet `#8b5cf6` (rasio kontras 4.52:1 terhadap kanvas gelap `#080f1d`). Disertai simbol bentuk unik (▼ Defisit, ✔ Seimbang, ▲ Waspada, ◆ Penuh/Surplus, — Tanpa Data) di peta, legenda, panel wilayah, dan tabel. | [`docs/ui-review/step1-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step1-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
 | 9 | **Integrasi Legenda Docked ke Kontainer Peta** (P1) | Legenda dipindahkan menyatu (*docked*) tepat di bawah kanvas peta (`#map-legend`) dengan format ringkas, membaca nilai ambang dinamis dari basis data settings (`<70%`, `70%–<90%`, `90%–<100%`, `≥100%`). Menghemat ruang vertikal >70px. | [`docs/ui-review/step1-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step1-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
 | 10 | **Standarisasi Tipografi Minimal 12px & Kontras WCAG AA** (P1) | 0 teks berukuran `< 12px`. 0 teks dengan rasio kontras `< 4.5:1`. 4 kartu KPI memiliki tinggi seragam rapi (`min-h-[148px]`). Diverifikasi otomatis via pemindaian axe-core (0 pelanggaran) dan DOM tree walker di Playwright. | [`docs/ui-review/axe-step8-final.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/axe-step8-final.json)<br>[`docs/ui-review/step3-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step3-1440.png) | **Selesai** |
-| 11 | **Tata Letak Kontainer Peta, Rasio Tinggi 1:1, & Highlight Poligon** (P1) | Banner nasional 1 baris dismissible (tinggi 76px). Rasio tinggi kartu peta vs panel samping identik 1:1 (793,5px vs 793,5px, selisih 0,00px). Visibilitas peta tanpa scroll 77,9% ($\ge 60\%$). Poligon wilayah terpilih memiliki highlight outline emas tebal 3.5px (`#fbbf24`) dan diangkat ke depan (`bringToFront()`). | [`docs/ui-review/step2-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step2-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
-| 12 | **Responsivitas Viewport & Ukuran Touch Target** (P2) | Nol pergeseran horizontal pada 390px, 768px, 1024px (`scrollWidth == windowWidth`). 100% target sentuh interaktif $\ge 44 \times 44\text{ px}$ (0 pelanggar). Tinggi peta mobile proporsional 60vh (520px = 61,6%). Filter terlipat ke akordeon drawer mobile. | [`docs/ui-review/step7-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-390.png)<br>[`docs/ui-review/step7-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-768.png)<br>[`docs/ui-review/step7-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1024.png) | **Selesai** |
-| 13 | **Aksesibilitas Semantik Dasar & Keyboard Navigation** (P2) | Landmark semantik lengkap (`header`, `nav aria-label`, `main`, `footer`), tepat 1 heading `<h1>`, indikator fokus keyboard `:focus-visible` tampak jelas (`#059669`), `aria-label` pada seluruh tombol berikon, tabel rekapitulasi dapat difokus via keyboard (`tabindex="0" role="region"`). | [`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png)<br>[`docs/ui-review/peta-rendered-step7.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step7.html) | **Selesai** |
+| 11 | **Tata Letak Kontainer Peta, Rasio Tinggi 1:1, Highlight Poligon, & Isolasi Z-Index** (P1) | Banner 1 baris dismissible. Rasio tinggi kartu peta vs panel samping 1:1. 100% poligon terisolasi di dalam `#map-card` (0 poligon di luar). Stacking context terisolasi (`isolation: isolate; z-index: 0`). Sticky header dan modal (`z-1000`) berada strictly di atas seluruh layer peta. | [`docs/ui-review/step9-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-1440.png)<br>[`docs/ui-review/step9-modal.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-modal.png) | **Selesai** |
+| 12 | **Responsivitas Viewport & Ukuran Touch Target** (P2) | Nol pergeseran horizontal pada 390px, 768px, 1024px (`scrollWidth == windowWidth`). 100% target sentuh interaktif $\ge 44 \times 44\text{ px}$ (0 pelanggar). Tinggi peta mobile proporsional 60vh (520px = 61,6%). Filter terlipat ke akordeon drawer mobile. 507 poligon terkurung rapi di semua viewport. | [`docs/ui-review/step9-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-390.png)<br>[`docs/ui-review/step9-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-768.png)<br>[`docs/ui-review/step9-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-1024.png) | **Selesai** |
+| 13 | **Aksesibilitas Semantik Dasar & Keyboard Navigation** (P2) | Landmark semantik lengkap (`header`, `nav aria-label`, `main`, `footer`), tepat 1 heading `<h1>`, indikator fokus keyboard `:focus-visible` tampak jelas (`#059669`), `aria-label` pada seluruh tombol berikon, tabel rekapitulasi dapat difokus via keyboard (`tabindex="0" role="region"`). Modal dilengkapi focus trap & escape handler. | [`docs/ui-review/step9-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-1440.png)<br>[`docs/ui-review/peta-rendered-step9.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step9.html) | **Selesai** |
 | 14 | **Sinkronisasi Parameter URL (Query String)** (P2) | State filter dan wilayah terpilih tidak disinkronisasikan ke query string URL melalui `history.replaceState`. Halaman `/peta` saat ini memuat state default saat di-reload. Fitur ini tidak terdapat pada kode basis. | *Tidak ada berkas bukti rendering (fitur tidak terimplementasi pada kode klien)* | **UNVERIFIED** |
-| 15 | **Penanganan State Kosong & Galat (Empty & Error States)** (P2) | Pesan state kosong baku (`"Tidak ada data untuk periode ini"` dan `"Wilayah tidak ditemukan"`). Overlay status galat `#peta-error-state` (*"Gagal Memuat Data Spasial"*) dengan tombol *"Coba Lagi"* muncul saat request API gagal (teruji via simulasi pemblokiran jaringan di Playwright). | [`docs/ui-review/step7-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-error.png)<br>[`scripts/shot-error.mjs`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/scripts/shot-error.mjs) | **Selesai** |
+| 15 | **Penanganan State Kosong & Galat (Empty & Error States)** (P2) | Pesan state kosong baku (`"Tidak ada data untuk periode ini"`). Overlay status galat `#peta-error-state` (*"Gagal Memuat Data Spasial"*) dengan tombol *"Coba Lagi"* muncul saat request API gagal, dan angka metrik panel samping otomatis tereset ke placeholder netral `—`. | [`docs/ui-review/step9-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-error.png)<br>[`scripts/verify-step9.mjs`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/scripts/verify-step9.mjs) | **Selesai** |
 
 ---
 
@@ -832,5 +832,106 @@ Pengujian regresi kepatuhan audit dijalankan melalui `./scripts/verify_audit_int
 - **Item**: Sinkronisasi Parameter URL via `history.replaceState` (Task 14).
 - **Status**: **UNVERIFIED**.
 - **Keterangan**: Pada basis kode saat ini, interaksi filter dropdown dan pemilihan wilayah di `/peta` berjalan secara client-side reaktif tanpa sinkronisasi URL query string (`?komoditas=...&periode=...`). Hal ini dicatat secara jujur karena ketiadaan kode implementasi dan berkas bukti rendering pada cabang ini.
+
+---
+
+## 13. Step 9 — Map Containment, Stacking Context, & Localized Spatial Rendering
+
+### 13.1 Analisis Masalah Awal & Diagnosis (Root Cause Analysis)
+1. **Ketergantungan CDN Eksternal pada Lingkungan Terisolasi**:
+   - Aset `leaflet.js` dan `leaflet.css` sebelumnya dimuat dari CDN publik `https://unpkg.com/leaflet@1.9.4/...`.
+   - Pada eksekusi headless browser di lingkungan sandbox/offline, Chromium mengalami `net::ERR_INTERNET_DISCONNECTED`. Akibatnya objek global `window.L` tidak terdefinisi dan kanvas Leaflet tidak merender poligon spasial apapun (`totalPolygons = 0`).
+2. **Ketiadaan Stacking Context Terisolasi pada `#map-card`**:
+   - Leaflet menggunakan z-index internal tinggi pada layer-layernya (`leaflet-overlay-pane: 400`, `leaflet-marker-pane: 600`, `leaflet-tooltip-pane: 650`, `leaflet-popup-pane: 700`).
+   - Karena `#map-card` berstatus `position: static` dan `isolation: auto`, stacking context Leaflet bocor (*bleed through*) ke root document, melampaui sticky header (`z-50`) dan modal informasi (`z-50`).
+3. **Ketiadaan `overflow: hidden` pada Kontainer Induk**:
+   - Kontainer `#map-card` tidak memiliki `overflow: hidden`, sehingga poligon yang terletak di luar batas kanvas dapat mencuat keluar dari kartu peta.
+4. **Pembatasan Zoom Diskret**:
+   - Konfigurasi `minZoom: 4` dan ketiadaan `zoomSnap` fraksional memaksa zoom integer diskret (zoom 4 = 523px lebar Indonesia), sehingga pada kontainer tablet (509px) poligon ujung barat Aceh mencuat ~13px ke luar batas.
+
+### 13.2 Perbaikan Arsitektur Antarmuka & Kode
+1. **Vendoring Aset Mandiri (Offline-Ready Leaflet)**:
+   - Mengunduh dan menempatkan berkas pustaka `leaflet.js`, `leaflet.css`, serta aset grafis marker secara lokal di `public/vendor/leaflet/`.
+   - Mengganti referensi eksternal di [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php) menjadi tautan lokal `{{ asset('vendor/leaflet/leaflet.css') }}` dan `{{ asset('vendor/leaflet/leaflet.js') }}`.
+2. **Isolasi Stacking Context & Skala Z-Index**:
+   - Menerapkan `position: relative; overflow: hidden; isolation: isolate; z-index: 0;` pada `#map-card` dan `#peta-map` baik di [`resources/css/app.css`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/css/app.css) maupun Blade `<style>`. Seluruh layer Leaflet (z-index 400–700) kini terkurung sepenuhnya di dalam `#map-card`.
+   - Mengukuhkan hirarki z-index:
+     - `#map-card` / `#peta-map`: `z-index: 0` (isolated context).
+     - Sticky Header (`<header>`): `z-index: 50`.
+     - Modal Tentang Data (`#modal-tentang-data`): `z-index: 1000 !important`.
+3. **Reset Preflight Tailwind untuk Leaflet**:
+   - Menambahkan aturan reset pada `.leaflet-container { overflow: hidden !important; position: relative !important; font-family: inherit !important; background-color: #080f1d !important; }`.
+   - Memastikan `max-width: none !important;` pada `.leaflet-container img` dan `.leaflet-pane svg`.
+4. **Zoom Fraksional & Framing Nasional Presisi**:
+   - Mengaktifkan `zoomSnap: 0.25` dan `minZoom: 2.5` pada konfigurasi Leaflet.
+   - Memperbarui fungsi `fitToPilotBounds()` dan `resetViewNasional()` agar menghitung rentang batas seluruh wilayah Indonesia dengan padding proporsional (`{ padding: [12, 12], animate: false }`).
+5. **Siklus Hidup & ResizeObserver**:
+   - Mengintegrasikan `ResizeObserver` pada kontainer `#peta-map` agar `map.invalidateSize()` otomatis terpanggil secara reaktif saat ukuran kontainer berubah (rotasi layar, resize window, atau perubahan layout fleksibel).
+6. **Aksesibilitas Modal & Focus Trap**:
+   - Menambahkan event listener keyboard `Escape` untuk menutup modal.
+   - Menerapkan fokus otomatis ke tombol tutup saat modal dibuka dan pengembalian fokus ke elemen pemicu saat ditutup, disertai penjebak fokus (`focus trap`) pada tombol interaktif modal.
+7. **Ketahanan Galat API & Placeholder Netral**:
+   - Mengimplementasikan fungsi `clearPanelWilayah()` yang otomatis mereset seluruh metrik panel samping (stok awal, panen, pasokan masuk, rasio pasokan, selisih) ke tanda strip netral (`—`) ketika pemanggilan endpoint API status mengalami kegagalan.
+
+### 13.3 Berkas Bukti Rendering Nyata (Playwright Evidence)
+1. [`docs/ui-review/step9-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-1440.png) — Desktop Lebar (1440x900, Zoom 4.25, 507 poligon terkurung 100% di dalam `#peta-map`).
+2. [`docs/ui-review/step9-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-1024.png) — Tablet Landscape (1024x768, Zoom 3.75, 507 poligon terkurung 100%, 0 poligon di luar).
+3. [`docs/ui-review/step9-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-768.png) — Tablet Portrait (768x1024, Zoom 4.25, 507 poligon terkurung 100%, 0 poligon di luar).
+4. [`docs/ui-review/step9-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-390.png) — Mobile iPhone (390x844, Zoom 3.0, 507 poligon terkurung 100%, 0 poligon di luar).
+5. [`docs/ui-review/step9-modal.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-modal.png) — Modal "Tentang Data" terbuka di atas peta (Backdrop blur menutupi peta 100%, z-index 1000).
+6. [`docs/ui-review/step9-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step9-error.png) — Kondisi simulasi kegagalan API (Overlay *"Gagal Memuat Data Spasial"* aktif dan panel wilayah menampilkan placeholder netral `—`).
+7. [`docs/ui-review/peta-rendered-step9.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step9.html) — Output DOM HTML ter-render lengkap (280.546 bytes).
+
+### 13.4 Hasil Pengukuran Otomatis DOM & Stacking (Playwright Test)
+```
+======================================================================
+PENGUKURAN DOM & INTERSEKSI POLIGON STEP 9 (scripts/verify-step9.mjs)
+======================================================================
+1. Desktop Lebar (1440x900):
+   - Map Zoom: 4.25
+   - Total Poligon: 507 (Syarat: > 400) -> PASS
+   - Poligon Wilayah Pilot Terwarnai: 34 (Syarat: >= 34) -> PASS
+   - Poligon di Dalam Kontainer Peta: 507 / 507 (100.0%) -> PASS
+   - Poligon di Luar Kontainer Peta: 0 (Syarat: 0) -> PASS
+   - Isolasi #map-card: isolate | overflow: hidden | zIndex: 0 -> PASS
+   - Isolasi #peta-map: isolate | overflow: hidden | zIndex: 0 -> PASS
+
+2. Tablet Landscape (1024x768):
+   - Map Zoom: 3.75
+   - Total Poligon: 507 / 507 di dalam (100.0%) -> PASS
+   - Poligon di Luar: 0 -> PASS
+
+3. Tablet Portrait (768x1024):
+   - Map Zoom: 4.25
+   - Total Poligon: 507 / 507 di dalam (100.0%) -> PASS
+   - Poligon di Luar: 0 -> PASS
+
+4. Mobile (390x844):
+   - Map Zoom: 3.00
+   - Total Poligon: 507 / 507 di dalam (100.0%) -> PASS
+   - Poligon di Luar: 0 -> PASS
+
+5. Uji Tumpukan Sticky Header (document.elementFromPoint saat scroll 450px):
+   - Titik uji: (720, 41) pada koordinat sticky header
+   - Elemen terdeteksi: <A> di dalam <header> (Bukan peta / bukan poligon SVG) -> PASS
+
+6. Uji Penutup Modal "Tentang Data" (document.elementFromPoint saat modal aktif):
+   - Z-Index Modal: 1000 (Syarat: >= 1000) -> PASS
+   - Titik Pusat: Elemen di dalam modal dialog (<P class="leading-relaxed">) -> PASS
+   - Titik Koordinat Peta di Bawah Modal: 100% mengenai backdrop modal (<DIV class="fixed inset-0 bg-slate-900/60">) -> PASS (0 bleed-through)
+   - Tombol Escape menutup modal: PASS
+
+7. Uji Simulasi Kegagalan API (Network Block):
+   - Overlay #peta-error-state tampil: PASS
+   - Seluruh nilai angka panel samping tereset ke "—": PASS
+======================================================================
+```
+
+### 13.5 Status Rangkaian Uji Regresi
+- **Laravel Pint**: `vendor/bin/pint --format agent` -> **PASSED** (0 file violations).
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **101 passed, 897 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD 16**: `./scripts/smoke_test.sh` -> **11/11 PASS**.
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS**.
+
 
 
