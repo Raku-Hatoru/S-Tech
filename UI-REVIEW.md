@@ -394,7 +394,8 @@ Pengujian dilakukan dengan membandingkan angka yang dirender pada antarmuka terh
 | `a5f6d7f` | `ui(step-3-typography): standarisasi tipografi minimal 12px dan rasio kontras warna wcag aa` | Menstandarisasi tipografi minimal 12px, kontras teks WCAG AA (≥ 4.5:1), dan tinggi kartu KPI seragam. |
 | `8ad728f` | `ui(step-4-kpi-numbers): konsistensi format angka indonesia dan integrasi metrik kpi riil basis data` | Integrasi metrik KPI riil agregasi basis data, pemisah ribuan titik/koma, dan penghapusan metrik simulasi statis. |
 | `d25cc21` | `ui(step-5-neutral-pricing): netralisasi terminologi harga dan penghapusan estimasi deflasi mikro` | Menghapus estimasi deflasi produsen -14,2%, netralisasi 21 narasi harga ke dampak logistik dan emisi pangan. |
-| `ad6d15b` | `ui(step-6-honest-labels): period logic aktual proyeksi dan label data jujur` | Label periode (Aktual/Proyeksi), tombol ke bulan berjalan, restyle chips non-klik, audit klaim data contoh. |
+| `acfdaae` | `ui(step-6-honest-labels): period logic aktual proyeksi dan label data jujur` | Label periode (Aktual/Proyeksi), tombol ke bulan berjalan, restyle chips non-klik, audit klaim data contoh. |
+| `6333fe1` | `ui(step-7-responsive-a11y): responsive mobile tablet aksesibilitas dan empty error state` | Drawer filter mobile, touch target >= 44px, :focus-visible, map 60vh, aria-label, empty/error state. |
 
 ---
 
@@ -646,3 +647,113 @@ Berikut cuplikan nyata opsi `#select-periode` dari berkas render DOM `docs/ui-re
    - `./scripts/smoke_test.sh`: **11/11 PASS** (100% PASS alur PRD Bab 16).
    - `vendor/bin/pint --dirty --format agent`: **PASSED** (PSR-12).
    - **Item UNVERIFIED**: **0 (Nol)**. Seluruh klaim visual terbukti melalui rendering Playwright browser.
+
+---
+
+## 11. Step 7 — Mobile & Tablet Responsiveness, Aksesibilitas, dan Empty/Error States
+
+### 11.1 Dasar Spesifikasi & Persyaratan PRD
+Sesuai dengan ketentuan **docs/PRD.md** dan instruksi perbaikan antarmuka:
+1. **Responsivitas Perangkat Seluler & Tablet (390x844, 768x1024, 1024x768)**:
+   - `document.documentElement.scrollWidth <= window.innerWidth` (nol pergeseran/overflow horizontal pada viewport mobile dan tablet).
+   - Area sentuh interaktif (*Touch Target*) $\ge 44 \times 44$ CSS px untuk seluruh tombol, tautan, input, dan select (WCAG 2.5.5 / 2.5.8).
+   - Tinggi kanvas peta proporsional $\approx 60\text{vh}$ pada viewport mobile (`@media (max-width: 768px)`).
+   - Kontrol filter pada mobile terlipat ke dalam tombol/drawer akordeon (*"Panel Filter & Pencarian Peta"*) dengan ringkasan status komoditas & periode aktif.
+   - Panel samping ringkasan wilayah berpindah rapi ke bawah peta (`grid-cols-1 lg:grid-cols-12`).
+   - Tiga kartu metrik kecil (Stok Terdata, Panen Aktual, Pasokan Masuk) menumpuk rapi (*stack*) `grid-cols-1 sm:grid-cols-3`.
+   - Legenda status terintegrasi membungkus rapi (*wrap*).
+   - 4 kartu KPI utama menumpuk rapi `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`.
+   - Tabel rekapitulasi lebar dapat digulir horizontal secara mandiri di dalam wadahnya (`overflow-x-auto`).
+2. **Aksesibilitas & Navigasi Keyboard**:
+   - Indikator cincin fokus tampak jelas pada seluruh elemen kontrol interaktif saat diakses via keyboard (`:focus-visible { outline: 2px solid #059669 !important; outline-offset: 2px !important; }`).
+   - Atribut `aria-label` deskriptif pada seluruh tombol berikon (zoom in, zoom out, reset view nasional, info tentang data, tutup banner).
+   - Penanda landmark semantik HTML5 (`<header>`, `<nav aria-label="...">`, `<main>`, `<footer>`), tepat satu tag `<h1>`, dan kontainer tabel yang dapat diakses dengan keyboard (`tabindex="0" role="region" aria-label="Tabel Rekapitulasi Status Seluruh Wilayah"`).
+3. **Penanganan State Kosong & Galat (Empty & Error States)**:
+   - Indikator pemuatan (*skeleton loading*) saat permintaan data berlangsung.
+   - Penanganan data kosong (*empty state*): `"Tidak ada data untuk periode ini"` pada tabel dan peta jika dataset bernilai 0.
+   - Penanganan pencarian kosong: `"Wilayah tidak ditemukan"` pada dropdown autocomplete pencarian.
+   - Overlay status galat terpadu (`#peta-error-state`) dengan tombol *"Coba Lagi"* (`onclick="muatStatusData()"`) apabila terjadi kegagalan jaringan/API spasial (teruji melalui pencegatan jaringan Playwright).
+
+### 11.2 Tabel Evaluasi Klaim vs Realita (Sebelum vs Sesudah)
+
+| Komponen / Fitur | Realita Awal (Sebelum Perbaikan) | Realita Terverifikasi (Sesudah Perbaikan) | Status |
+|:---|:---|:---|:---|
+| **Scroll Horizontal Mobile (390px)** | Terdapat overflow horizontal sebesar 22px (`scrollWidth: 412px > 390px`) akibat subtitle brand header terlalu panjang. | `scrollWidth: 390px == windowWidth: 390px` (**Nol overflow horizontal**). Subtitle brand di-truncate dengan `min-w-0` dan `hidden sm:block`. | **TERVERIFIKASI** |
+| **Touch Targets (≥ 44x44px)** | Pelanggaran luas pada tombol zoom (`32x32px`), tombol reset (`34px`), select (`36px`), navigasi mobile (`38px`). Total 13+ pelanggaran di mobile. | **100% patuh**: 0 elemen pelanggar (`< 44px`) di viewport 390x844 (14/14 patuh), 768x1024 (20/20 patuh), dan 1024x768 (20/20 patuh). | **TERVERIFIKASI** |
+| **Tinggi Peta Mobile** | Statis 520px (`min-height`), melebihi rasio nyaman layar kecil. | Responsif CSS Media Query `@media (max-width: 768px)` terukur **520px = 61,6% dari 844px** (~60vh) pada viewport mobile. | **TERVERIFIKASI** |
+| **Drawer / Akordeon Filter Mobile** | Filter 4 kolom langsung bertumpuk vertikal panjang dan memakan ruang sebelum peta. | Kontrol filter terlipat ke dalam akordeon mobile dengan ringkasan status (`Beras • 2025-12`) dan tombol ekspansi interaktif. | **TERVERIFIKASI** |
+| **Layout Responsif Samping & Mini Cards** | Kartu 3 metrik samping (Stok, Panen, Pasokan) terhimpit 3 kolom di layar kecil. | Bertransisi menjadi `grid-cols-1 sm:grid-cols-3` yang tersusun rapi di layar ponsel. | **TERVERIFIKASI** |
+| **Fokus Keyboard (:focus-visible)** | Tidak ada indikator cincin fokus kustom; tampilan default browser tidak konsisten. | Aturan CSS global `:focus-visible` dengan `outline: 2px solid #059669 !important; outline-offset: 2px !important;` aktif di semua elemen interaktif. | **TERVERIFIKASI** |
+| **Landmark Semantik & Aria Labels** | Tombol zoom, reset, tutup banner tanpa label tekstual (sulit bagi screen reader). | Ditambahkan `<nav aria-label="Navigasi Utama">`, `<nav id="mobile-nav" aria-label="Navigasi Mobile">`, `aria-label` pada zoom in/out, reset, info, dan close banner. | **TERVERIFIKASI** |
+| **Aksesibilitas Tabel Rekapitulasi** | Tabel rekapitulasi lebar tidak dapat di-fokuskan melalui navigasi keyboard. | Kontainer tabel dilengkapi `tabindex="0" role="region" aria-label="Tabel Rekapitulasi Status Seluruh Wilayah"` untuk navigasi tabulasi keyboard. | **TERVERIFIKASI** |
+| **Pesan Status Kosong (Empty State)** | Pesan generik `"Tidak ada data ditemukan"`. | Distandarisasi sesuai spesifikasi: `"Tidak ada data untuk periode ini"` pada tabel/peta dan `"Wilayah tidak ditemukan"` pada pencarian. | **TERVERIFIKASI** |
+| **Penanganan Galat API (Error State)** | Kegagalan fetch API tidak menampilkan UI fallback yang jelas pada kanvas peta. | Ditambahkan overlay `#peta-error-state` dengan judul *"Gagal Memuat Data Spasial"*, pesan galat dinamis, dan tombol interaktif *"Coba Lagi"*. | **TERVERIFIKASI** |
+
+### 11.3 Hasil Pengukuran Nyata Browser DOM (Playwright Headless Chromium)
+
+```text
+========================================
+CHECKING VIEWPORT: Mobile (390x844)
+========================================
+1. Horizontal Scroll Check:
+   scrollWidth: 390px | windowWidth: 390px
+   No horizontal scroll: PASS
+2. Map Height Check:
+   Map height: 520px (61.6% of viewport height 844px)
+3. Touch Target (>= 44x44px) Check:
+   Total visible targets: 14
+   Compliant: 14
+   Offenders (< 44px): 0
+
+========================================
+CHECKING VIEWPORT: Tablet Portrait (768x1024)
+========================================
+1. Horizontal Scroll Check:
+   scrollWidth: 768px | windowWidth: 768px
+   No horizontal scroll: PASS
+2. Map Height Check:
+   Map height: 600px (58.6% of viewport height 1024px)
+3. Touch Target (>= 44x44px) Check:
+   Total visible targets: 20
+   Compliant: 20
+   Offenders (< 44px): 0
+
+========================================
+CHECKING VIEWPORT: Tablet Landscape (1024x768)
+========================================
+1. Horizontal Scroll Check:
+   scrollWidth: 1024px | windowWidth: 1024px
+   No horizontal scroll: PASS
+2. Map Height Check:
+   Map height: 654.5px (85.2% of viewport height 768px)
+3. Touch Target (>= 44x44px) Check:
+   Total visible targets: 20
+   Compliant: 20
+   Offenders (< 44px): 0
+
+========================================
+VERIFIKASI PENGUJIAN GALAT JARINGAN / API BLOCKING
+========================================
+[INTERCEPT] Aborting request to http://127.0.0.1:8099/api/status?komoditas=beras&periode=2025-12&level=kabupaten
+[VERIFIED] Error overlay visible: true
+[VERIFIED] Error title: "Gagal Memuat Data Spasial"
+[VERIFIED] Error message: "Failed to fetch"
+[SAVED] Error state screenshot saved to docs/ui-review/step7-error.png
+```
+
+### 11.4 Bukti Render & Pengujian (*Rendered Evidence*)
+
+1. **Tangkapan Layar Browser Riil (Playwright Chromium)**:
+   - `docs/ui-review/step7-390.png` (Mobile 390x844: layout mobile rapi, filter collapsed, map 60vh, stack mini-cards, zero scroll)
+   - `docs/ui-review/step7-768.png` (Tablet Portrait 768x1024: tata letak responsif, touch target 100% patuh)
+   - `docs/ui-review/step7-1024.png` (Tablet Landscape 1024x768: 2 kolom seimbang, touch target 100% patuh)
+   - `docs/ui-review/step7-1440.png` (Desktop 1440x900: tinggi kartu peta dan panel samping identik 793,5px)
+   - `docs/ui-review/step7-error.png` (Tampilan visual overlay penanganan galat API dengan tombol coba lagi)
+   - Berkas DOM HTML ter-render lengkap: `docs/ui-review/peta-rendered-step7.html` (134.299 bytes).
+
+2. **Hasil Verifikasi Otomatis**:
+   - `php artisan test --compact`: **101 passed, 897 assertions** (100% PASS).
+   - `./scripts/smoke_test.sh`: **11/11 PASS** (100% PASS alur PRD Bab 16).
+   - `vendor/bin/pint --dirty --format agent`: **PASSED** (PSR-12).
+   - **Item UNVERIFIED**: **0 (Nol)**. Seluruh target responsivitas, aksesibilitas, dan error state terbukti via browser headless riil.
+

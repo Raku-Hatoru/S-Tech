@@ -31,9 +31,11 @@
       min-height: 480px;
     }
   }
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     #peta-map {
-      min-height: 380px;
+      height: 60vh;
+      min-height: 450px;
+      max-height: 600px;
     }
   }
 
@@ -72,19 +74,34 @@
           <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
           Data Contoh: BAPANAS &amp; BPS
         </span>
-        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
+        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
           <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
           Tentang Data
         </button>
-        <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
+        <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           Unduh Buletin (.PDF)
         </button>
       </div>
     </div>
 
+    <!-- Mobile Filter Accordion Toggle (< md) -->
+    <div class="md:hidden">
+      <button type="button" id="btn-toggle-filter-mobile" onclick="toggleMobileFilter()"
+              class="w-full min-h-[44px] px-4 py-2.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between text-xs font-bold text-slate-800 transition">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          <span>Panel Filter &amp; Pencarian Peta</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="mobile-filter-summary" class="text-xs text-slate-500 font-semibold truncate max-w-[140px]">Beras &bull; {{ $periodeDefault }}</span>
+          <svg id="icon-filter-chevron" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </button>
+    </div>
+
     <!-- Filter Control Bar (4 Kolom Sesuai Mockup) -->
-    <div class="bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
+    <div id="filter-container" class="hidden md:grid bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
       <!-- 1. Komoditas Pangan -->
       <div>
         <label for="select-komoditas" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -92,14 +109,14 @@
           Komoditas Pangan
         </label>
         <div class="relative">
-          <select id="select-komoditas" aria-label="Pilih Komoditas Pangan" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
+          <select id="select-komoditas" aria-label="Pilih Komoditas Pangan" class="w-full min-h-[44px] bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
             @foreach($komoditasList as $k)
               <option value="{{ $k->kode }}" {{ $loop->first ? 'selected' : '' }}>
                 {{ $k->kode === 'beras' ? 'Beras Premium & Medium' : ucfirst($k->nama) }}
               </option>
             @endforeach
           </select>
-          <svg class="w-4 h-4 text-slate-400 absolute right-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          <svg class="w-4 h-4 text-slate-400 absolute right-3 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
       </div>
 
@@ -115,7 +132,7 @@
           </span>
         </div>
         <div class="flex items-center gap-1.5">
-          <select id="select-periode" aria-label="Pilih Periode Waktu" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none cursor-pointer">
+          <select id="select-periode" aria-label="Pilih Periode Waktu" class="flex-1 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 outline-none cursor-pointer">
             @foreach($periodesList->reverse() as $p)
               <option value="{{ $p['kode'] }}" {{ $p['kode'] === $periodeDefault ? 'selected' : '' }}>
                 {{ $p['label'] }} ({{ $p['tipe'] }})
@@ -125,7 +142,7 @@
           <button type="button"
                   id="btn-bulan-ini"
                   onclick="pilihBulanBerjalan()"
-                  class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0 disabled:opacity-40 disabled:cursor-not-allowed select-none"
+                  class="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0 disabled:opacity-40 disabled:cursor-not-allowed select-none flex items-center justify-center"
                   title="Pindah ke bulan kalender saat ini ({{ \Carbon\Carbon::parse($bulanBerjalan.'-01')->isoFormat('MMMM YYYY') }})">
             Ke bulan berjalan
           </button>
@@ -138,10 +155,10 @@
           Level Agregasi Geografis
         </label>
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-          <button type="button" id="btn-toggle-prov" onclick="switchLayerLevel('provinsi')" class="flex-1 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+          <button type="button" id="btn-toggle-prov" onclick="switchLayerLevel('provinsi')" class="flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center">
             Level Provinsi
           </button>
-          <button type="button" id="btn-toggle-kab" onclick="switchLayerLevel('kabupaten')" class="flex-1 py-1 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs">
+          <button type="button" id="btn-toggle-kab" onclick="switchLayerLevel('kabupaten')" class="flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs flex items-center justify-center">
             Level Kabupaten/Kota
           </button>
         </div>
@@ -155,8 +172,8 @@
         </label>
         <div class="relative">
           <input type="text" id="input-search-wilayah" placeholder="Ketik Banyumas, Brebes, dll..." autocomplete="off"
-                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs font-medium text-slate-800 placeholder-slate-500 outline-none focus:border-emerald-600 focus:bg-white transition">
-          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                 class="w-full min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-500 outline-none focus:border-emerald-600 focus:bg-white transition">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <div id="search-dropdown" class="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto hidden"></div>
         </div>
       </div>
@@ -180,12 +197,12 @@
       </div>
       <div class="flex items-center gap-2 shrink-0">
         @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
-          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
+          <a href="{{ route('pengiriman.index') }}" class="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
             Disposisi Logistik
           </a>
         @endif
-        <button type="button" onclick="tutupBannerNasional()" aria-label="Tutup" class="p-1 rounded-lg text-rose-600 hover:text-rose-900 hover:bg-rose-100 transition" title="Tutup peringatan">
+        <button type="button" onclick="tutupBannerNasional()" aria-label="Tutup peringatan nasional" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-rose-600 hover:text-rose-900 hover:bg-rose-100 transition" title="Tutup peringatan">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -202,12 +219,12 @@
             <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white shadow-xs">
               <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
               <span><span class="font-extrabold text-white">Peta:</span> <span class="font-medium text-slate-200">rasio pasokan terhadap kebutuhan</span></span>
-              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-300 hover:text-white transition" title="Informasi tentang data dan metodologi" aria-label="Informasi tentang data dan metodologi">
+              <button type="button" onclick="bukaModalTentangData()" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center ml-1 text-slate-300 hover:text-white transition" title="Informasi tentang data dan metodologi" aria-label="Informasi tentang data dan metodologi">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
               </button>
             </div>
             <div class="pointer-events-auto flex items-center gap-2">
-              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white hover:bg-slate-800 transition flex items-center gap-1.5 shadow-xs" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
+              <button type="button" onclick="resetViewNasional()" aria-label="Kembalikan tampilan peta ke seluruh wilayah Indonesia" class="min-h-[44px] px-4 py-2.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white hover:bg-slate-800 transition flex items-center gap-1.5 shadow-xs" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                 Reset Nasional
               </button>
@@ -222,20 +239,42 @@
             <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-medium text-white shadow-xs">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span><span class="font-bold text-white">Proyeksi:</span> <span class="text-slate-200">model prakiraan (selisih rata-rata ±3,8%)</span></span>
-              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-300 hover:text-emerald-200 transition underline font-bold" title="Detail model & sumber data">
+              <button type="button" onclick="bukaModalTentangData()" aria-label="Detail model dan sumber data" class="min-h-[44px] px-2.5 flex items-center text-emerald-300 hover:text-emerald-200 transition underline font-bold" title="Detail model & sumber data">
                 Tentang data
               </button>
             </div>
             <div class="pointer-events-auto flex items-center gap-1.5">
-              <button type="button" onclick="map.zoomIn()" aria-label="Perbesar peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base shadow-xs">+</button>
-              <button type="button" onclick="map.zoomOut()" aria-label="Perkecil peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base shadow-xs">-</button>
+              <button type="button" onclick="if (map) map.zoomIn()" aria-label="Perbesar peta" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-lg shadow-xs">+</button>
+              <button type="button" onclick="if (map) map.zoomOut()" aria-label="Perkecil peta" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-lg shadow-xs">-</button>
             </div>
           </div>
 
           <!-- Loading Overlay -->
           <div id="peta-loading" class="absolute inset-0 bg-[#0b1329]/90 backdrop-blur-xs flex flex-col items-center justify-center z-30 transition-opacity duration-300">
             <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-            <div class="text-xs font-bold text-white mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
+            <div class="text-xs font-bold text-white mt-3 tracking-wide">Memuat Data Spasial &amp; Status...</div>
+          </div>
+
+          <!-- Empty State Overlay (Jika API mengembalikan 0 data) -->
+          <div id="peta-empty-state" class="hidden absolute inset-0 bg-[#0b1329]/95 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h4 class="text-white font-bold text-base mb-1">Data Belum Tersedia</h4>
+            <p class="text-xs text-slate-300 max-w-sm">Tidak ada data untuk periode ini.</p>
+          </div>
+
+          <!-- Error State Overlay (Jika API gagal / offline) -->
+          <div id="peta-error-state" class="hidden absolute inset-0 bg-[#0b1329]/95 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <h4 class="text-white font-bold text-base mb-1">Gagal Memuat Data Spasial</h4>
+            <p id="peta-error-msg" class="text-xs text-slate-300 max-w-sm mb-4">Terjadi gangguan saat mengambil data status wilayah. Silakan periksa koneksi atau coba muat ulang.</p>
+            <button type="button" onclick="muatStatusData()" class="min-h-[44px] px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Coba Lagi</span>
+            </button>
           </div>
         </div>
 
@@ -353,7 +392,7 @@
           </div>
 
           <!-- 3 Rincian Mini Card -->
-          <div class="grid grid-cols-3 gap-2 pt-1">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
               <div class="text-xs font-bold text-slate-700">Stok Awal</div>
               <div id="panel-stok-awal" class="text-xs font-black text-slate-900 mt-0.5">3.100,0 t</div>
@@ -386,13 +425,13 @@
         <!-- Tombol Aksi -->
         <div class="space-y-2 pt-1">
           <a id="btn-lihat-analisis" href="{{ route('wilayah.detail', ['kode' => '3302']) }}"
-             class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
+             class="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
             Lihat Analisis Detail 12 Bulan
           </a>
           @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
             <a id="btn-buat-pengiriman" href="{{ route('pengiriman.index') }}"
-               class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
+               class="w-full min-h-[44px] flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
               Buat Rute Pengiriman Logistik
             </a>
@@ -532,7 +571,7 @@
     <!-- Tombol Toggle Fallback Tabel Wilayah -->
     <div class="pt-2">
       <button type="button" onclick="toggleTabel()" id="btn-toggle-tabel"
-              class="w-full py-3 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 transition shadow-2xs flex items-center justify-center gap-2">
+              class="w-full min-h-[44px] py-3 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 transition shadow-2xs flex items-center justify-center gap-2">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         <span>Tampilkan Tabel Rekapitulasi Status Seluruh Wilayah</span>
       </button>
@@ -546,9 +585,9 @@
           <p class="text-xs text-slate-600 font-medium">Daftar tabular data neraca pangan per kabupaten/kota</p>
         </div>
         <input type="text" id="tabel-filter-input" placeholder="Cari kabupaten atau provinsi..."
-               class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 placeholder-slate-500 w-64 outline-none focus:border-emerald-600 focus:bg-white transition">
+               class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs font-medium text-slate-800 placeholder-slate-500 w-64 outline-none focus:border-emerald-600 focus:bg-white transition">
       </div>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-xl" tabindex="0" role="region" aria-label="Tabel Rekapitulasi Status Seluruh Wilayah">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
             <tr>
@@ -582,7 +621,7 @@
                 <p class="text-xs text-slate-300">Transparansi sumber data, model prakiraan, dan acuan neraca pangan</p>
               </div>
             </div>
-            <button type="button" onclick="tutupModalTentangData()" class="rounded-lg p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 transition" aria-label="Tutup modal">
+            <button type="button" onclick="tutupModalTentangData()" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition" aria-label="Tutup modal informasi">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
@@ -780,14 +819,17 @@ let state = {
 };
 
 // ── Inisialisasi Peta Leaflet (Tanpa Tile Eksternal) ──────────────────────
-const map = L.map('peta-map', {
-  center: [-2.5, 118.0], // Full Indonesia center default
-  zoom: 5,
-  minZoom: 4,
-  maxZoom: 11,
-  zoomControl: false,
-  attributionControl: false,
-});
+let map = null;
+if (typeof L !== 'undefined') {
+  map = L.map('peta-map', {
+    center: [-2.5, 118.0], // Full Indonesia center default
+    zoom: 5,
+    minZoom: 4,
+    maxZoom: 11,
+    zoomControl: false,
+    attributionControl: false,
+  });
+}
 
 let geoLayerProv = null;
 let geoLayerKab  = null;
@@ -842,6 +884,7 @@ function updateAllLayerStyles() {
 }
 
 function fitToPilotBounds() {
+  if (!map || typeof L === 'undefined') return;
   const activeLayer = state.level === 'provinsi' ? geoLayerProv : geoLayerKab;
   if (!activeLayer) return;
 
@@ -862,14 +905,25 @@ function fitToPilotBounds() {
 
 // ── Muat Data Status dari API ─────────────────────────────────────────────
 async function muatStatusData() {
-  document.getElementById('peta-loading').classList.remove('opacity-0', 'pointer-events-none');
+  const loadingEl = document.getElementById('peta-loading');
+  const errorEl = document.getElementById('peta-error-state');
+  const emptyEl = document.getElementById('peta-empty-state');
+
+  if (loadingEl) loadingEl.classList.remove('opacity-0', 'pointer-events-none');
+  if (errorEl) errorEl.classList.add('hidden');
+  if (emptyEl) emptyEl.classList.add('hidden');
+
   try {
     const res = await fetch(`${API_BASE}/status?komoditas=${state.komoditas}&periode=${state.periode}&level=${state.level}`);
-    if (!res.ok) throw new Error('API status gagal');
+    if (!res.ok) throw new Error(`HTTP ${res.status}: Gagal memuat data status`);
     const json = await res.json();
 
+    if (!json.data || json.data.length === 0) {
+      if (emptyEl) emptyEl.classList.remove('hidden');
+    }
+
     state.statusData = {};
-    json.data.forEach(d => { state.statusData[d.kode] = d; });
+    (json.data || []).forEach(d => { state.statusData[d.kode] = d; });
 
     // Update Banner dan KPI cards dari data riil ringkasan
     if (json.ringkasan) {
@@ -877,17 +931,22 @@ async function muatStatusData() {
     }
 
     await renderMapLayer();
-    renderTabelData(json.data);
-    buildSearchAutocomplete(json.data);
+    renderTabelData(json.data || []);
+    buildSearchAutocomplete(json.data || []);
 
     // Refresh panel wilayah terpilih
     if (state.selectedKode) {
       updatePanelWilayah(state.selectedKode);
     }
   } catch (err) {
-    console.error(err);
+    console.error('[SIPANGAN] Gagal memuat status data:', err);
+    if (errorEl) {
+      errorEl.classList.remove('hidden');
+      const msgEl = document.getElementById('peta-error-msg');
+      if (msgEl) msgEl.textContent = err.message || 'Terjadi gangguan saat mengambil data status wilayah. Silakan periksa koneksi atau coba muat ulang.';
+    }
   } finally {
-    document.getElementById('peta-loading').classList.add('opacity-0', 'pointer-events-none');
+    if (loadingEl) loadingEl.classList.add('opacity-0', 'pointer-events-none');
   }
 }
 
@@ -965,6 +1024,7 @@ async function fetchGeoJSON(url) {
 
 // ── Render Layer Map Sesuai Level ─────────────────────────────────────────
 async function renderMapLayer() {
+  if (!map || typeof L === 'undefined') return;
   if (state.level === 'provinsi') {
     if (geoLayerKab) map.removeLayer(geoLayerKab);
     if (!geoLayerProv) {
@@ -1062,17 +1122,17 @@ function switchLayerLevel(lvl) {
   state.level = lvl;
   const isProv = lvl === 'provinsi';
   document.getElementById('btn-toggle-prov').className = isProv
-    ? 'flex-1 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs'
-    : 'flex-1 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+    ? 'flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs flex items-center justify-center'
+    : 'flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center';
   document.getElementById('btn-toggle-kab').className = !isProv
-    ? 'flex-1 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs'
-    : 'flex-1 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900';
+    ? 'flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs flex items-center justify-center'
+    : 'flex-1 min-h-[44px] py-2.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center';
 
   muatStatusData();
 }
 
 function resetViewNasional() {
-  map.setView([-2.5, 118.0], 5);
+  if (map) map.setView([-2.5, 118.0], 5);
 }
 
 const BULAN_BERJALAN = '{{ $bulanBerjalan }}';
@@ -1098,6 +1158,7 @@ function pilihBulanBerjalan() {
   sel.value = BULAN_BERJALAN;
   state.periode = BULAN_BERJALAN;
   updateTombolBulanBerjalan();
+  updateMobileFilterSummary();
   muatStatusData();
 }
 
@@ -1216,7 +1277,7 @@ searchInput.addEventListener('input', (e) => {
   ).slice(0, 8);
 
   if (matches.length === 0) {
-    searchDropdown.innerHTML = '<div class="p-3 text-xs text-slate-600 text-center font-medium">Wilayah tidak ditemukan</div>';
+    searchDropdown.innerHTML = '<div class="p-4 text-xs text-slate-600 text-center font-semibold flex items-center justify-center gap-1.5"><svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Wilayah tidak ditemukan</span></div>';
     searchDropdown.classList.remove('hidden');
     return;
   }
@@ -1250,8 +1311,8 @@ async function pilihWilayahHasil(kode, nama) {
   const activeLayer = state.level === 'provinsi' ? geoLayerProv : geoLayerKab;
   if (activeLayer) {
     activeLayer.eachLayer(l => {
-      if (l.feature.properties.kode === kode) {
-        map.fitBounds(l.getBounds(), { padding: [30, 30], maxZoom: 9 });
+      if (l.feature?.properties?.kode === kode) {
+        if (map) map.fitBounds(l.getBounds(), { padding: [30, 30], maxZoom: 9 });
       }
     });
   }
@@ -1280,7 +1341,7 @@ function filterTabel(q) {
   );
   const tbody = document.getElementById('tabel-body');
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-slate-600 font-medium text-xs">Tidak ada data ditemukan</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-600 font-medium text-xs">Tidak ada data untuk periode ini</td></tr>';
     return;
   }
 
@@ -1301,7 +1362,7 @@ function filterTabel(q) {
       <td class="px-4 py-3 text-right text-slate-700">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>
       <td class="px-4 py-3 text-right text-slate-700">${d.demand_formatted ?? d.total_demand_formatted ?? '—'}</td>
       <td class="px-4 py-3 text-center">
-        <a href="/wilayah/${d.kode}?komoditas=${state.komoditas}" class="text-emerald-700 hover:underline font-bold text-xs">Detail &rarr;</a>
+        <a href="/wilayah/${d.kode}?komoditas=${state.komoditas}" aria-label="Lihat detail wilayah ${d.nama}" class="min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3 py-2 text-emerald-700 hover:underline font-bold text-xs">Detail &rarr;</a>
       </td>
     </tr>`;
   }).join('');
@@ -1336,7 +1397,7 @@ function tutupBannerNasional() {
   const banner = document.getElementById('banner-nasional');
   if (banner) {
     banner.style.display = 'none';
-    if (typeof map !== 'undefined' && map.invalidateSize) {
+    if (map && map.invalidateSize) {
       setTimeout(() => map.invalidateSize(), 50);
     }
   }
@@ -1344,12 +1405,12 @@ function tutupBannerNasional() {
 
 // Invalidate size on resize and after initial layout
 window.addEventListener('resize', () => {
-  if (typeof map !== 'undefined' && map.invalidateSize) {
+  if (map && map.invalidateSize) {
     map.invalidateSize();
   }
 });
 setTimeout(() => {
-  if (typeof map !== 'undefined' && map.invalidateSize) {
+  if (map && map.invalidateSize) {
     map.invalidateSize();
   }
 }, 300);
@@ -1360,20 +1421,48 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ── Mobile Filter Accordion Toggle (< md) ────────────────────────────────
+function toggleMobileFilter() {
+  const filterContainer = document.getElementById('filter-container');
+  const chevron = document.getElementById('icon-filter-chevron');
+  if (!filterContainer) return;
+  const isHidden = filterContainer.classList.contains('hidden');
+  if (isHidden) {
+    filterContainer.classList.remove('hidden');
+    if (chevron) chevron.classList.add('rotate-180');
+  } else {
+    filterContainer.classList.add('hidden');
+    if (chevron) chevron.classList.remove('rotate-180');
+  }
+}
+
+function updateMobileFilterSummary() {
+  const summaryEl = document.getElementById('mobile-filter-summary');
+  const selectKom = document.getElementById('select-komoditas');
+  const selectPer = document.getElementById('select-periode');
+  if (!summaryEl) return;
+  const komText = selectKom?.options[selectKom.selectedIndex]?.text?.split(' ')[0] || state.komoditas;
+  const perText = selectPer?.value || state.periode;
+  summaryEl.textContent = `${komText} • ${perText}`;
+}
+
 // ── Event Filters ────────────────────────────────────────────────────────
 document.getElementById('select-komoditas').addEventListener('change', e => {
   state.komoditas = e.target.value;
+  updateMobileFilterSummary();
   muatStatusData();
 });
 
 document.getElementById('select-periode').addEventListener('change', e => {
   state.periode = e.target.value;
   updateTombolBulanBerjalan();
+  updateMobileFilterSummary();
   muatStatusData();
 });
 
 // ── Inisialisasi Awal ────────────────────────────────────────────────────
 updateTombolBulanBerjalan();
+updateMobileFilterSummary();
 muatStatusData();
 </script>
 @endpush
