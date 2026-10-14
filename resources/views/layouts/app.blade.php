@@ -34,9 +34,9 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="font-bold text-lg tracking-tight text-slate-900">SIPANGAN WASPADA</span>
-                                <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase bg-emerald-100 text-emerald-800 rounded">RESMI</span>
+                                <span class="px-2 py-0.5 text-xs font-bold tracking-wider uppercase bg-emerald-100 text-emerald-800 rounded">RESMI</span>
                             </div>
-                            <p class="text-xs text-slate-500 font-medium">Sistem Pemantauan & Early-Warning Surplus Pangan Nasional</p>
+                            <p class="text-xs text-slate-600 font-medium">Sistem Pemantauan &amp; Early-Warning Surplus Pangan Nasional</p>
                         </div>
                     </a>
                 </div>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="text-left hidden sm:block">
                                 <div class="text-xs font-bold text-slate-900 leading-tight">{{ auth()->user()->name }}</div>
-                                <div class="text-[10px] text-slate-500 font-medium leading-none">{{ auth()->user()->role->nama ?? 'Operator' }}</div>
+                                <div class="text-xs text-slate-600 font-medium leading-none">{{ auth()->user()->role->nama ?? 'Operator' }}</div>
                             </div>
                             <form method="POST" action="{{ route('logout') }}" class="inline ml-1">
                                 @csrf
@@ -138,18 +138,18 @@
                     <line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>
                 </svg>
                 <div class="text-xs text-amber-900 leading-relaxed">
-                    <span class="font-bold uppercase tracking-wider block mb-0.5 text-amber-950">Klausul Regulasi & Batasan Sistem</span>
-                    Sistem ini merupakan platform pemantauan & pelacakan dini pasokan pangan, bukan platform transaksi jual-beli komersial. Dikelola sesuai ketentuan dan kerangka tata kelola ketahanan pangan nasional Republik Indonesia.
+                    <span class="font-bold uppercase tracking-wider block mb-0.5 text-amber-950">Klausul Regulasi &amp; Batasan Sistem</span>
+                    Sistem ini merupakan platform pemantauan &amp; pelacakan dini pasokan pangan, bukan platform transaksi jual-beli komersial. Dikelola sesuai ketentuan dan kerangka tata kelola ketahanan pangan nasional Republik Indonesia.
                 </div>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
             <div class="flex items-center gap-2">
                 <span>&copy; {{ date('Y') }} SIPANGAN WASPADA. Tata Kelola Terpadu Ketahanan Pangan RI.</span>
             </div>
-            <div class="text-xs text-slate-400">
-                <span>Platform Pemantauan & Mitigasi Early-Warning Ketahanan Pangan Nasional</span>
+            <div class="text-xs text-slate-600 font-medium">
+                <span>Platform Pemantauan &amp; Mitigasi Early-Warning Ketahanan Pangan Nasional</span>
             </div>
         </div>
     </footer>

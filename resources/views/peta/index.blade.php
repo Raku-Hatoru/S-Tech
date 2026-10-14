@@ -59,13 +59,13 @@
         <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
           Peta Heatmap &amp; Early-Warning Surplus Pangan Nasional
         </h1>
-        <p class="text-xs text-slate-500 mt-0.5 truncate">
+        <p class="text-xs text-slate-600 font-medium mt-0.5 truncate">
           Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan anjloknya harga produsen.
         </p>
       </div>
 
       <div class="flex items-center gap-2 shrink-0 flex-wrap">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[11px] font-bold text-slate-700 shadow-2xs select-none">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs select-none">
           <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Data Resmi: BAPANAS &amp; BPS
         </span>
@@ -84,12 +84,12 @@
     <div class="bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
       <!-- 1. Komoditas Pangan -->
       <div>
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <label for="select-komoditas" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
           Komoditas Pangan
         </label>
         <div class="relative">
-          <select id="select-komoditas" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
+          <select id="select-komoditas" aria-label="Pilih Komoditas Pangan" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
             @foreach($komoditasList as $k)
               <option value="{{ $k->kode }}" {{ $loop->first ? 'selected' : '' }}>
                 {{ $k->kode === 'beras' ? 'Beras Premium & Medium' : ucfirst($k->nama) }}
@@ -103,20 +103,20 @@
       <!-- 2. Periode Proyeksi (12 Bulan ke Depan) -->
       <div>
         <div class="flex items-center justify-between mb-1">
-          <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+          <label for="select-periode" class="block text-xs font-bold text-slate-600 uppercase tracking-wider">
             Periode Waktu
           </label>
-          <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">12 Bulan ke Depan</span>
+          <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">12 Bulan ke Depan</span>
         </div>
         <div class="flex items-center gap-1.5">
-          <select id="select-periode" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none cursor-pointer">
+          <select id="select-periode" aria-label="Pilih Periode Waktu" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none cursor-pointer">
             @foreach($periodes->reverse() as $p)
               <option value="{{ $p }}" {{ $p === $periodeDefault ? 'selected' : '' }}>
                 {{ \Carbon\Carbon::parse($p)->isoFormat('MMMM YYYY') }}
               </option>
             @endforeach
           </select>
-          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-[11px] font-bold hover:bg-emerald-200 transition shrink-0">
+          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0">
             Bulan Ini
           </button>
         </div>
@@ -124,7 +124,7 @@
 
       <!-- 3. Level Agregasi Geografis -->
       <div>
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
           Level Agregasi Geografis
         </label>
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
@@ -139,13 +139,13 @@
 
       <!-- 4. Pencarian Teritorial Cepat -->
       <div class="relative">
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <label for="input-search-wilayah" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           Pencarian Teritorial Cepat
         </label>
         <div class="relative">
           <input type="text" id="input-search-wilayah" placeholder="Ketik Banyumas, Brebes, dll..." autocomplete="off"
-                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:bg-white transition">
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs font-medium text-slate-800 placeholder-slate-500 outline-none focus:border-emerald-600 focus:bg-white transition">
           <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <div id="search-dropdown" class="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto hidden"></div>
         </div>
@@ -160,17 +160,17 @@
         </div>
         <div class="min-w-0 flex items-center gap-1.5 flex-wrap">
           <span class="font-bold text-rose-950">
-            <span class="font-black text-rose-700 uppercase tracking-wide text-[10px] mr-1 px-1.5 py-0.5 rounded bg-rose-200/70">Peringatan</span>
+            <span class="font-black text-rose-800 uppercase tracking-wide text-xs mr-1 px-1.5 py-0.5 rounded bg-rose-200">Peringatan</span>
             Status Nasional: 28 Kabupaten Berstatus PENUH (Risiko Surplus), 42 Kabupaten DEFISIT.
           </span>
-          <span class="hidden md:inline text-rose-800/80 text-[11px] truncate">
+          <span class="hidden md:inline text-rose-900 text-xs truncate">
             &mdash; Distribusi pasokan darurat direkomendasikan segera dialihkan ke lumbung wilayah defisit pangan.
           </span>
         </div>
       </div>
       <div class="flex items-center gap-2 shrink-0">
         @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
-          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-[11px] font-bold shadow-xs transition">
+          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
             Disposisi Logistik
           </a>
@@ -189,15 +189,15 @@
         <div class="relative rounded-xl overflow-hidden flex-1 flex flex-col min-h-[520px]">
           <!-- Floating Header Map Controls -->
           <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
+            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white shadow-xs">
               <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-              <span>Peta: rasio pasokan terhadap kebutuhan</span>
-              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-400 hover:text-white transition" title="Informasi tentang data dan metodologi">
+              <span><span class="font-extrabold text-white">Peta:</span> <span class="font-medium text-slate-200">rasio pasokan terhadap kebutuhan</span></span>
+              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-300 hover:text-white transition" title="Informasi tentang data dan metodologi" aria-label="Informasi tentang data dan metodologi">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
               </button>
             </div>
             <div class="pointer-events-auto flex items-center gap-2">
-              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
+              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-bold text-white hover:bg-slate-800 transition flex items-center gap-1.5 shadow-xs" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                 Reset Nasional
               </button>
@@ -209,56 +209,56 @@
 
           <!-- Floating Footer Map Stats -->
           <div class="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs font-medium text-slate-200">
+            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-medium text-white shadow-xs">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>Proyeksi: model prakiraan (selisih rata-rata ±3,8%)</span>
-              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-400 hover:text-emerald-300 transition underline font-bold" title="Detail model & sumber data">
+              <span><span class="font-bold text-white">Proyeksi:</span> <span class="text-slate-200">model prakiraan (selisih rata-rata ±3,8%)</span></span>
+              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-300 hover:text-emerald-200 transition underline font-bold" title="Detail model & sumber data">
                 Tentang data
               </button>
             </div>
             <div class="pointer-events-auto flex items-center gap-1.5">
-              <button type="button" onclick="map.zoomIn()" aria-label="Perbesar peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
-              <button type="button" onclick="map.zoomOut()" aria-label="Perkecil peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
+              <button type="button" onclick="map.zoomIn()" aria-label="Perbesar peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base shadow-xs">+</button>
+              <button type="button" onclick="map.zoomOut()" aria-label="Perkecil peta" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base shadow-xs">-</button>
             </div>
           </div>
 
           <!-- Loading Overlay -->
           <div id="peta-loading" class="absolute inset-0 bg-[#0b1329]/90 backdrop-blur-xs flex flex-col items-center justify-center z-30 transition-opacity duration-300">
             <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-            <div class="text-xs font-bold text-slate-300 mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
+            <div class="text-xs font-bold text-white mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
           </div>
         </div>
 
         <!-- Docked Compact Legend Strip -->
         <div id="map-legend" class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          <div class="flex items-center gap-1.5 text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
             <span>Legenda Status:</span>
           </div>
           <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
             <div class="flex items-center gap-1.5" title="Rasio pasokan &lt; {{ round(($ambangDefisit ?? 0.70) * 100) }}%">
               <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-defisit);"></span>
-              <span class="font-bold text-rose-400">▼ Defisit</span>
-              <span class="text-[11px] text-slate-400">(&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
+              <span class="font-bold text-rose-300">▼ Defisit</span>
+              <span class="text-xs text-slate-300">(&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
             </div>
             <div class="flex items-center gap-1.5" title="Rasio pasokan {{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt; {{ round(($ambangWaspada ?? 0.90) * 100) }}%">
               <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-seimbang);"></span>
-              <span class="font-bold text-emerald-400">✔ Seimbang</span>
-              <span class="text-[11px] text-slate-400">({{ round(($ambangDefisit ?? 0.70) * 100) }}%–&lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
+              <span class="font-bold text-emerald-300">✔ Seimbang</span>
+              <span class="text-xs text-slate-300">({{ round(($ambangDefisit ?? 0.70) * 100) }}%–&lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
             </div>
             <div class="flex items-center gap-1.5" title="Rasio pasokan {{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt; {{ round(($ambangPenuh ?? 1.00) * 100) }}%">
               <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-waspada);"></span>
-              <span class="font-bold text-amber-400">▲ Waspada</span>
-              <span class="text-[11px] text-slate-400">({{ round(($ambangWaspada ?? 0.90) * 100) }}%–&lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
+              <span class="font-bold text-amber-300">▲ Waspada</span>
+              <span class="text-xs text-slate-300">({{ round(($ambangWaspada ?? 0.90) * 100) }}%–&lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
             </div>
             <div class="flex items-center gap-1.5" title="Rasio pasokan &ge; {{ round(($ambangPenuh ?? 1.00) * 100) }}%">
               <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-penuh);"></span>
-              <span class="font-bold text-purple-300">◆ Penuh / Surplus</span>
-              <span class="text-[11px] text-slate-400">(&ge;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
+              <span class="font-bold text-purple-200">◆ Penuh / Surplus</span>
+              <span class="text-xs text-slate-300">(&ge;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
             </div>
             <div class="flex items-center gap-1.5" title="Wilayah di luar 34 kabupaten/kota percontohan">
               <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-tanpa-data);"></span>
-              <span class="font-medium text-slate-400">— Tanpa Data</span>
+              <span class="font-medium text-slate-300">— Tanpa Data</span>
             </div>
           </div>
         </div>
@@ -269,22 +269,22 @@
         <!-- Header Wilayah Terpilih -->
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div class="flex items-center gap-2">
-            <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+            <span class="text-xs font-black uppercase tracking-wider text-slate-700 bg-slate-200/80 px-2 py-0.5 rounded">
               WILAYAH TERPILIH
             </span>
-            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-xs font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               Stok Terverifikasi
             </span>
           </div>
-          <span id="panel-kode" class="font-mono text-xs font-semibold text-slate-400">33.02</span>
+          <span id="panel-kode" class="font-mono text-xs font-bold text-slate-600">33.02</span>
         </div>
 
         <div>
           <h2 id="panel-nama" class="text-2xl font-black text-slate-900 tracking-tight">
             Kabupaten Banyumas
           </h2>
-          <p id="panel-provinsi" class="text-xs text-slate-500 font-medium mt-0.5">
+          <p id="panel-provinsi" class="text-xs text-slate-600 font-medium mt-0.5">
             Provinsi Jawa Tengah • Kode Wilayah: 33.02
           </p>
         </div>
@@ -292,11 +292,11 @@
         <!-- Status Peringatan Pangan Box -->
         <div id="panel-status-box" class="p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between">
           <div>
-            <div class="text-[10px] font-extrabold uppercase tracking-wider text-purple-900">STATUS PERINGATAN PANGAN</div>
+            <div class="text-xs font-extrabold uppercase tracking-wider text-purple-950">STATUS PERINGATAN PANGAN</div>
             <div id="panel-status-label" class="text-xl font-black text-purple-950 mt-0.5">
               ◆ PENUH / SURPLUS
             </div>
-            <div id="panel-rasio-label" class="text-xs font-bold text-purple-700 mt-0.5">
+            <div id="panel-rasio-label" class="text-xs font-bold text-purple-800 mt-0.5">
               Rasio Pasokan: 105,1% (Batas Aman: 100%)
             </div>
           </div>
@@ -308,7 +308,7 @@
         <!-- Neraca Komoditas (Periode Terpilih) -->
         <div class="space-y-2.5">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold uppercase tracking-wider text-slate-500" id="panel-neraca-title">NERACA KOMODITAS BERAS</span>
+            <span class="font-bold uppercase tracking-wider text-slate-600" id="panel-neraca-title">NERACA KOMODITAS BERAS</span>
             <span class="font-bold text-slate-700" id="panel-neraca-periode">Februari 2026</span>
           </div>
 
@@ -319,7 +319,7 @@
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                 Total Supply (Pasokan)
               </div>
-              <div class="text-[11px] text-slate-400 mt-0.5" id="panel-supply-raw">18.500.000 kg terdata</div>
+              <div class="text-xs font-medium text-slate-600 mt-0.5" id="panel-supply-raw">18.500.000 kg terdata</div>
             </div>
             <div class="text-lg font-black text-slate-900" id="panel-supply-formatted">18.500,0 ton</div>
           </div>
@@ -331,48 +331,48 @@
                 <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                 Total Demand (Kebutuhan)
               </div>
-              <div class="text-[11px] text-slate-400 mt-0.5" id="panel-demand-raw">17.600.000 kg konsumsi</div>
+              <div class="text-xs font-medium text-slate-600 mt-0.5" id="panel-demand-raw">17.600.000 kg konsumsi</div>
             </div>
             <div class="text-lg font-black text-slate-900" id="panel-demand-formatted">17.600,0 ton</div>
           </div>
 
           <!-- Selisih Surplus Bersih Highlight -->
           <div class="flex items-center justify-between text-xs px-2 pt-1 font-bold">
-            <span class="text-slate-600">Selisih Surplus Bersih</span>
+            <span class="text-slate-700">Selisih Surplus Bersih</span>
             <span id="panel-selisih" class="text-rose-700 font-mono">+900,0 ton</span>
           </div>
 
           <!-- 3 Rincian Mini Card -->
           <div class="grid grid-cols-3 gap-2 pt-1">
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[10px] font-semibold text-slate-400">Stok Awal</div>
-              <div id="panel-stok-awal" class="text-xs font-black text-slate-800 mt-0.5">3.100,0 t</div>
-              <div class="text-[9px] text-slate-400">Laporan Jan</div>
+              <div class="text-xs font-bold text-slate-700">Stok Awal</div>
+              <div id="panel-stok-awal" class="text-xs font-black text-slate-900 mt-0.5">3.100,0 t</div>
+              <div class="text-xs font-medium text-slate-600">Laporan Jan</div>
             </div>
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[10px] font-semibold text-slate-400">Panen Aktual</div>
-              <div id="panel-panen" class="text-xs font-black text-slate-800 mt-0.5">15.200,0 t</div>
-              <div class="text-[9px] text-slate-400">Hasil Sawah</div>
+              <div class="text-xs font-bold text-slate-700">Panen Aktual</div>
+              <div id="panel-panen" class="text-xs font-black text-slate-900 mt-0.5">15.200,0 t</div>
+              <div class="text-xs font-medium text-slate-600">Hasil Sawah</div>
             </div>
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[10px] font-semibold text-slate-400">Pasokan Masuk</div>
-              <div id="panel-pasokan-masuk" class="text-xs font-black text-slate-800 mt-0.5">200,0 t</div>
-              <div class="text-[9px] text-slate-400">Distribusi Luar</div>
+              <div class="text-xs font-bold text-slate-700">Pasokan Masuk</div>
+              <div id="panel-pasokan-masuk" class="text-xs font-black text-slate-900 mt-0.5">200,0 t</div>
+              <div class="text-xs font-medium text-slate-600">Distribusi Luar</div>
             </div>
           </div>
         </div>
 
         <!-- Peringatan Dampak Wilayah -->
         <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-1.5 text-xs">
-          <div class="font-extrabold uppercase text-amber-900 flex items-center gap-1.5 text-[11px]">
-            <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <div class="font-extrabold uppercase text-amber-950 flex items-center gap-1.5 text-xs">
+            <svg class="w-3.5 h-3.5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             Peringatan Dampak Wilayah
           </div>
-          <p id="panel-pesan-dampak" class="text-amber-900/90 leading-relaxed text-[11px]">
+          <p id="panel-pesan-dampak" class="text-amber-950 leading-relaxed text-xs">
             Pangan berisiko basi/terbuang dan menghasilkan emisi gas; harga produsen berisiko turun drastis akibat pasokan melimpah di atas kapasitas serap.
           </p>
-          <div class="text-[10px] font-semibold text-amber-700 flex items-center gap-1 pt-0.5">
-            <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
+          <div class="text-xs font-bold text-amber-900 flex items-center gap-1 pt-0.5">
+            <svg class="w-3 h-3 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
             Estimasi Deflasi Produsen: -14.2% dalam 14 hari kerja
           </div>
         </div>
@@ -393,7 +393,7 @@
           @endif
         </div>
 
-        <div class="text-[11px] text-center text-slate-400 pt-1">
+        <div class="text-xs font-medium text-center text-slate-600 pt-1">
           Diperbarui otomatis tiap 15 menit
         </div>
       </div>
@@ -410,22 +410,22 @@
         <!-- KPI 1 -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Total Pasokan Beras Nasional</div>
+            <div class="text-xs font-bold text-slate-600">Total Pasokan Beras Nasional</div>
             <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">3.482.150,0 <span class="text-base font-bold text-slate-500">ton</span></div>
-            <div class="text-xs font-bold text-emerald-600 mt-0.5 flex items-center gap-1">
+            <div class="text-2xl font-black text-slate-900 tracking-tight">3.482.150,0 <span class="text-base font-bold text-slate-600">ton</span></div>
+            <div class="text-xs font-bold text-emerald-700 mt-0.5 flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
               +3.8% di atas demand konsumsi
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Kapasitas Gudang Terisi</span>
-              <span class="text-slate-800 font-bold">82.4%</span>
+              <span class="text-slate-900 font-bold">82.4%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-emerald-600 h-full rounded-full" style="width: 82.4%"></div>
@@ -436,21 +436,21 @@
         <!-- KPI 2 -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Wilayah Terancam Surplus</div>
+            <div class="text-xs font-bold text-slate-600">Wilayah Terancam Surplus</div>
             <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">28 <span class="text-base font-bold text-slate-500">Kabupaten (5.4%)</span></div>
-            <div class="text-xs font-bold text-rose-600 mt-0.5">
+            <div class="text-2xl font-black text-slate-900 tracking-tight">28 <span class="text-base font-bold text-slate-600">Kabupaten (5.4%)</span></div>
+            <div class="text-xs font-bold text-rose-700 mt-0.5">
               ! 18 Kabupaten tanpa Cold Storage
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Rerata Rasio Wilayah Surplus</span>
-              <span class="text-rose-800 font-bold">104.8%</span>
+              <span class="text-rose-900 font-bold">104.8%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-rose-600 h-full rounded-full" style="width: 100%"></div>
@@ -461,21 +461,21 @@
         <!-- KPI 3 -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Wilayah Defisit Prioritas</div>
+            <div class="text-xs font-bold text-slate-600">Wilayah Defisit Prioritas</div>
             <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">42 <span class="text-base font-bold text-slate-500">Kab/Kota (&lt;70%)</span></div>
-            <div class="text-xs font-bold text-amber-700 mt-0.5">
+            <div class="text-2xl font-black text-slate-900 tracking-tight">42 <span class="text-base font-bold text-slate-600">Kab/Kota (&lt;70%)</span></div>
+            <div class="text-xs font-bold text-amber-800 mt-0.5">
               Kebutuhan: 84.200,0 ton relokasi
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Target Pemenuhan Relokasi</span>
-              <span class="text-slate-800 font-bold">61.2%</span>
+              <span class="text-slate-900 font-bold">61.2%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-amber-500 h-full rounded-full" style="width: 61.2%"></div>
@@ -486,22 +486,22 @@
         <!-- KPI 4 -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Total Volume Terpantau (3 Komoditas)</div>
+            <div class="text-xs font-bold text-slate-600">Total Volume Terpantau (3 Komoditas)</div>
             <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">5.820.400,0 <span class="text-base font-bold text-slate-500">ton</span></div>
-            <div class="text-xs font-bold text-emerald-600 mt-0.5 flex items-center gap-1">
+            <div class="text-2xl font-black text-slate-900 tracking-tight">5.820.400,0 <span class="text-base font-bold text-slate-600">ton</span></div>
+            <div class="text-xs font-bold text-emerald-700 mt-0.5 flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               100% Terintegrasi BUMDes & Bulog
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Akurasi Model Machine Learning</span>
-              <span class="text-slate-800 font-bold">96.2%</span>
+              <span class="text-slate-900 font-bold">96.2%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-blue-600 h-full rounded-full" style="width: 96.2%"></div>
@@ -525,14 +525,14 @@
       <div class="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h3 class="text-base font-bold text-slate-900">Tabel Rekapitulasi Status Wilayah</h3>
-          <p class="text-xs text-slate-500">Daftar tabular data neraca pangan per kabupaten/kota</p>
+          <p class="text-xs text-slate-600 font-medium">Daftar tabular data neraca pangan per kabupaten/kota</p>
         </div>
         <input type="text" id="tabel-filter-input" placeholder="Cari kabupaten atau provinsi..."
-               class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 w-64 outline-none">
+               class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 placeholder-slate-500 w-64 outline-none focus:border-emerald-600 focus:bg-white transition">
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs">
-          <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+          <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
             <tr>
               <th class="px-4 py-3">Wilayah</th>
               <th class="px-4 py-3">Status Wilayah</th>
@@ -543,7 +543,7 @@
             </tr>
           </thead>
           <tbody id="tabel-body" class="divide-y divide-slate-100 font-medium text-slate-700">
-            <tr><td colspan="6" class="px-4 py-6 text-center text-slate-400">Memuat data tabel...</td></tr>
+            <tr><td colspan="6" class="px-4 py-6 text-center text-slate-600 font-medium">Memuat data tabel...</td></tr>
           </tbody>
         </table>
       </div>
@@ -561,15 +561,15 @@
               </div>
               <div>
                 <h3 class="text-base font-bold text-white" id="modal-tentang-title">Tentang Data &amp; Metodologi Sistem</h3>
-                <p class="text-xs text-slate-400">Transparansi sumber data, model prakiraan, dan acuan neraca pangan</p>
+                <p class="text-xs text-slate-300">Transparansi sumber data, model prakiraan, dan acuan neraca pangan</p>
               </div>
             </div>
-            <button type="button" onclick="tutupModalTentangData()" class="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition" aria-label="Tutup modal">
+            <button type="button" onclick="tutupModalTentangData()" class="rounded-lg p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 transition" aria-label="Tutup modal">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
 
-          <div class="px-6 py-5 space-y-4 text-xs text-slate-600">
+          <div class="px-6 py-5 space-y-4 text-xs text-slate-700">
             <!-- Spesifikasi Model & Titik Pantau (Dipindahkan dari Header Halaman) -->
             <div class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between text-xs flex-wrap gap-2">
               <div class="flex items-center gap-2">
@@ -577,7 +577,7 @@
                 <span class="font-extrabold uppercase tracking-wider text-emerald-400">SIPANGAN-XGBOOST v1</span>
                 <span class="text-slate-300">• 34 Titik Pantau Terverifikasi (Wilayah Percontohan)</span>
               </div>
-              <span class="text-[11px] text-slate-300 font-semibold bg-slate-800 px-2.5 py-1 rounded-md">Data Resmi: BAPANAS &amp; BPS</span>
+              <span class="text-xs text-slate-200 font-semibold bg-slate-800 px-2.5 py-1 rounded-md">Data Resmi: BAPANAS &amp; BPS</span>
             </div>
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
@@ -659,7 +659,7 @@ const STATUS_CONFIG = {
     border: '#b91c1c',
     symbol: '▼',
     label: 'Defisit',
-    badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+    badgeClass: 'bg-rose-100 text-rose-900 border border-rose-300',
     panelBoxClass: 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between',
     textClass: 'text-rose-950',
     accentClass: 'text-rose-700',
@@ -670,7 +670,7 @@ const STATUS_CONFIG = {
     border: '#15803d',
     symbol: '✔',
     label: 'Seimbang',
-    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    badgeClass: 'bg-emerald-100 text-emerald-900 border border-emerald-300',
     panelBoxClass: 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between',
     textClass: 'text-emerald-950',
     accentClass: 'text-emerald-700',
@@ -681,21 +681,21 @@ const STATUS_CONFIG = {
     border: '#b45309',
     symbol: '▲',
     label: 'Waspada',
-    badgeClass: 'bg-amber-100 text-amber-800 border-amber-200',
+    badgeClass: 'bg-amber-100 text-amber-950 border border-amber-300',
     panelBoxClass: 'p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between',
     textClass: 'text-amber-950',
-    accentClass: 'text-amber-700',
-    iconBgClass: 'bg-amber-200/80 text-amber-800',
+    accentClass: 'text-amber-800',
+    iconBgClass: 'bg-amber-200/80 text-amber-900',
   },
   penuh: {
     color: getCssProp('--status-penuh', '#8b5cf6'),
     border: '#7c3aed',
     symbol: '◆',
     label: 'Penuh / Surplus',
-    badgeClass: 'bg-purple-100 text-purple-800 border-purple-200',
+    badgeClass: 'bg-purple-100 text-purple-900 border border-purple-300',
     panelBoxClass: 'p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between',
     textClass: 'text-purple-950',
-    accentClass: 'text-purple-700',
+    accentClass: 'text-purple-800',
     iconBgClass: 'bg-purple-200/80 text-purple-800',
   },
   tanpa_data: {
@@ -703,11 +703,11 @@ const STATUS_CONFIG = {
     border: '#475569',
     symbol: '—',
     label: 'Tanpa Data',
-    badgeClass: 'bg-slate-100 text-slate-600 border-slate-200',
+    badgeClass: 'bg-slate-100 text-slate-700 border border-slate-300',
     panelBoxClass: 'p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between',
     textClass: 'text-slate-900',
-    accentClass: 'text-slate-500',
-    iconBgClass: 'bg-slate-200/80 text-slate-700',
+    accentClass: 'text-slate-600',
+    iconBgClass: 'bg-slate-200/80 text-slate-800',
   },
 };
 
@@ -924,13 +924,13 @@ function buildTooltip(props, d) {
   const rasio = d?.rasio_persen ?? '—';
   const supply = d?.supply_formatted ?? d?.total_supply_formatted ?? '—';
 
-  return `<div style="background:#0f172a;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;min-width:180px;color:#fff;font-family:inherit;box-shadow:0 10px 25px -5px rgba(0,0,0,.5)">
-    <div style="font-weight:800;font-size:.85rem;color:#f1f5f9;margin-bottom:4px">${nama}</div>
+  return `<div style="background:#0f172a;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:10px 14px;min-width:180px;color:#fff;font-family:inherit;box-shadow:0 10px 25px -5px rgba(0,0,0,.5)">
+    <div style="font-weight:800;font-size:.875rem;color:#f8fafc;margin-bottom:4px">${nama}</div>
     <div style="display:flex;align-items:center;gap:6px">
       <div style="width:10px;height:10px;border-radius:2px;background:${conf.color}"></div>
-      <span style="font-size:.72rem;font-weight:700;color:${conf.color}">${conf.symbol} ${conf.label} (${rasio})</span>
+      <span style="font-size:.75rem;font-weight:700;color:${conf.color}">${conf.symbol} ${conf.label} (${rasio})</span>
     </div>
-    <div style="font-size:.7rem;color:#94a3b8;margin-top:5px">Supply: <span style="color:#e2e8f0;font-weight:600">${supply}</span></div>
+    <div style="font-size:.75rem;color:#cbd5e1;margin-top:5px">Supply: <span style="color:#ffffff;font-weight:600">${supply}</span></div>
   </div>`;
 }
 
@@ -1022,10 +1022,10 @@ async function updatePanelWilayah(kode) {
 
       if (point.stok_estimasi) {
         document.getElementById('panel-stok-badge').innerHTML = '⚠ Stok Estimasi';
-        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded';
+        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded';
       } else {
         document.getElementById('panel-stok-badge').innerHTML = '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Stok Terverifikasi';
-        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded';
+        document.getElementById('panel-stok-badge').className = 'inline-flex items-center gap-1 text-xs font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded';
       }
     }
 
@@ -1070,7 +1070,7 @@ searchInput.addEventListener('input', (e) => {
   ).slice(0, 8);
 
   if (matches.length === 0) {
-    searchDropdown.innerHTML = '<div class="p-3 text-xs text-slate-400 text-center">Wilayah tidak ditemukan</div>';
+    searchDropdown.innerHTML = '<div class="p-3 text-xs text-slate-600 text-center font-medium">Wilayah tidak ditemukan</div>';
     searchDropdown.classList.remove('hidden');
     return;
   }
@@ -1081,10 +1081,10 @@ searchInput.addEventListener('input', (e) => {
     <div onclick="pilihWilayahHasil('${m.kode}', '${m.nama.replace("'", "\\'")}')"
          class="px-3.5 py-2.5 hover:bg-slate-50 cursor-pointer flex items-center justify-between border-b border-slate-100 text-xs">
       <div>
-        <div class="font-bold text-slate-800">${m.nama}</div>
-        <div class="text-[10px] text-slate-400">${m.nama_provinsi ?? ''}</div>
+        <div class="font-bold text-slate-900">${m.nama}</div>
+        <div class="text-xs text-slate-600 font-medium">${m.nama_provinsi ?? ''}</div>
       </div>
-      <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded ${conf.badgeClass}">
+      <span class="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded ${conf.badgeClass}">
         <span>${conf.symbol}</span>
         <span>${conf.label}</span>
       </span>
@@ -1134,7 +1134,7 @@ function filterTabel(q) {
   );
   const tbody = document.getElementById('tabel-body');
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-slate-400">Tidak ada data ditemukan</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-slate-600 font-medium text-xs">Tidak ada data ditemukan</td></tr>';
     return;
   }
 
@@ -1143,17 +1143,17 @@ function filterTabel(q) {
     return `<tr class="hover:bg-slate-50 transition cursor-pointer" onclick="updatePanelWilayah('${d.kode}')">
       <td class="px-4 py-3">
         <div class="font-bold text-slate-900">${d.nama}</div>
-        <div class="text-[11px] text-slate-400">${d.nama_provinsi ?? ''}</div>
+        <div class="text-xs text-slate-600 font-medium">${d.nama_provinsi ?? ''}</div>
       </td>
       <td class="px-4 py-3">
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold ${conf.badgeClass}">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold ${conf.badgeClass}">
           <span>${conf.symbol}</span>
           <span>${conf.label}</span>
         </span>
       </td>
       <td class="px-4 py-3 text-right font-semibold text-slate-900">${d.rasio_persen ?? '—'}</td>
-      <td class="px-4 py-3 text-right text-slate-600">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>
-      <td class="px-4 py-3 text-right text-slate-600">${d.demand_formatted ?? d.total_demand_formatted ?? '—'}</td>
+      <td class="px-4 py-3 text-right text-slate-700">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>
+      <td class="px-4 py-3 text-right text-slate-700">${d.demand_formatted ?? d.total_demand_formatted ?? '—'}</td>
       <td class="px-4 py-3 text-center">
         <a href="/wilayah/${d.kode}?komoditas=${state.komoditas}" class="text-emerald-700 hover:underline font-bold text-xs">Detail &rarr;</a>
       </td>

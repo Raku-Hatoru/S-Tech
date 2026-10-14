@@ -126,6 +126,60 @@ Sesuai rujukan wajib:
 
 ---
 
+## Step 3 — Tipografi Minimal 12px & Rasio Kontras Warna WCAG AA
+
+### 1. Dasar Spesifikasi & Standar Aksesibilitas
+- **WCAG 2.1 Level AA (Success Criterion 1.4.3: Contrast Minimum)**:
+  - Teks normal (< 18pt / < 24px reguler atau < 14pt / < 18.66px tebal) wajib memiliki rasio kontras minimal **4,5:1** terhadap latar belakang efektifnya.
+  - Teks besar ($\ge$ 24px reguler atau $\ge$ 18.66px tebal) wajib memiliki rasio kontras minimal **3,0:1**.
+- **Standar Skala Tipografi Terbaca**:
+  - Teks sekunder/label meta: minimal **12px** (`text-xs` / `0.75rem`).
+  - Teks konten utama/body: minimal **14px** (`text-sm` / `0.875rem`).
+  - Tidak diperkenankan penggunaan kelas ad-hoc arbitrary di bawah 12px (`text-[9px]`, `text-[10px]`, `text-[11px]`).
+- **Aksesibilitas Kontrol Formulir (WCAG SC 4.1.2 & SC 1.3.1)**:
+  - Setiap elemen `<select>` wajib memiliki nama yang dapat diakses (*accessible name*) melalui pasangan `<label for="...">` dan `aria-label`.
+
+### 2. Ringkasan Pengujian Aksesibilitas (Playwright & Axe-Core)
+
+Pengujian dijalankan otomatis secara terprogram menggunakan `@axe-core/playwright` pada engine headless Chromium (`scripts/a11y_scan.mjs`) serta penelusuran computed style seluruh leaf node DOM teks.
+
+| Metrik Audit Aksesibilitas | Sebelum Perbaikan (Before) | Setelah Perbaikan (After) | Status & Peningkatan |
+|:---|:---:|:---:|:---:|
+| **Total Pelanggaran Axe-Core** | **2 aturan** (`serious` & `critical`) | **0 aturan** | **LULUS 100% (0 Pelanggaran)** |
+| **Node Pelanggaran `color-contrast` (Axe)** | **14 node teks** | **0 node teks** | **14 $\rightarrow$ 0 (Selesai)** |
+| **Node Pelanggaran `select-name` (Axe)** | **2 elemen select** | **0 elemen select** | **2 $\rightarrow$ 0 (Selesai)** |
+| **Node Teks DOM dengan Font-Size < 12px** | **38 node teks** | **0 node teks** | **38 $\rightarrow$ 0 (Selesai)** |
+| **Node Teks DOM dengan Rasio Kontras < 4,5:1** | **14 node teks** | **0 node teks** | **14 $\rightarrow$ 0 (Selesai)** |
+
+- **Berkas Hasil Audit Sebelum Perbaikan**: [`docs/ui-review/axe-step3-before.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/axe-step3-before.json)
+- **Berkas Hasil Audit Setelah Perbaikan**: [`docs/ui-review/axe-step3-after.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/axe-step3-after.json)
+
+### 3. Tabel Detail Perbaikan Tipografi & Kontras Warna
+
+| No | Komponen / Lokasi Elemen | Sebelum Perbaikan (Before) | Setelah Perbaikan (After) | Rasio Kontras Terukur | Status |
+|:---|:---|:---|:---|:---:|:---:|
+| 1 | **Badge WILAYAH TERPILIH** (`#side-panel-card`) | `text-[10px] text-slate-400 bg-slate-100` | `text-xs font-black text-slate-700 bg-slate-200/80` | **8,5:1** (sebelumnya ~2,5:1) | **Selesai** |
+| 2 | **Kode Wilayah** (`#panel-kode`) | `text-xs font-semibold text-slate-400` | `font-mono text-xs font-bold text-slate-600` | **5,7:1** (sebelumnya ~2,5:1) | **Selesai** |
+| 3 | **Subline Raw Supply & Demand** (`#panel-supply-raw`, `#panel-demand-raw`) | `text-[11px] text-slate-400` | `text-xs font-medium text-slate-600` | **5,7:1** (sebelumnya ~2,5:1) | **Selesai** |
+| 4 | **3 Mini Card Breakdown Pasokan** (Stok Awal, Laporan Jan, Panen Aktual, Hasil Sawah, Pasokan Masuk, Distribusi Luar) | `text-[10px]` & `text-[9px]` dengan warna pudar `text-slate-400` | Judul: `text-xs font-bold text-slate-700`<br>Nilai: `text-xs font-black text-slate-900`<br>Subline: `text-xs font-medium text-slate-600` | Judul: **7,5:1**<br>Nilai: **16,9:1**<br>Subline: **5,7:1** | **Selesai** |
+| 5 | **Timestamp Update Panel** | `text-[11px] text-center text-slate-400` | `text-xs font-medium text-center text-slate-600` | **5,7:1** (sebelumnya ~2,5:1) | **Selesai** |
+| 6 | **Label Persentase Kartu KPI 1 & KPI 4** | `text-emerald-600` di atas putih (`#ffffff`) | `text-xs font-bold text-emerald-700` | **4,88:1** (sebelumnya 3,65:1) | **Selesai** |
+| 7 | **Subtitle & Footer Halaman** (`layouts/app.blade.php`) | `text-slate-400` di atas putih/slate-50 | `text-xs text-slate-600 font-medium` | **7,0:1** (sebelumnya 2,8:1) | **Selesai** |
+| 8 | **Legenda Peta Spasial Dark** (`#map-legend`) | `text-[11px] text-slate-400` di atas `#0b1329` | Seluruh item `text-xs` minimal 12px; label abu-abu `text-slate-300` (> 9:1 kontras); warna status dipertajam (`text-rose-300`, `text-emerald-300`, `text-amber-300`, `text-purple-200`) | **> 9:1** (semua item legenda) | **Selesai** |
+| 9 | **Overlay Kontrol Peta** (Header & Footer peta) | `<span>Peta: ...</span>`, `text-slate-400`, `text-emerald-400` | Ditegaskan kontras tinggi: `<strong class="font-extrabold text-white">Peta:</strong> <span class="text-slate-200">...</span>`, tombol tautan `text-emerald-300` | **13,2:1** | **Selesai** |
+| 10 | **Leaflet Tooltip JS** (`buildTooltip`) | `font-size:.72rem` (11,5px) dan `.7rem` (11,2px), warna `#94a3b8` | `font-size:.75rem` (12px), teks judul `.875rem` (14px), warna `#cbd5e1` di atas `#0f172a` | **9,8:1** | **Selesai** |
+| 11 | **Dropdown Pencarian Cepat & Fallback Tabel** (`searchDropdown`, `tabel-body`) | Template JS memuat `text-[10px]` dan `text-[11px] text-slate-400` | Seluruh template string distandarisasi ke `text-xs`, warna teks `text-slate-600` dan `text-slate-900` | **5,7:1** & **16,9:1** | **Selesai** |
+| 12 | **Accessible Name Form Select** (`select-komoditas`, `select-periode`) | Tidak memiliki accessible name eksplisit pada inspeksi axe | Menambahkan atribut `aria-label="Pilih Komoditas Pangan"` dan `aria-label="Pilih Periode Waktu"` serta atribut `<label for="...">` | **Axe: 0 issue** | **Selesai** |
+
+### 4. Bukti Rendered Screenshots Step 3
+1. [`docs/ui-review/step3-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step3-1440.png) — Tangkapan layar desktop 1440x900 setelah perbaikan tipografi & kontras.
+2. [`docs/ui-review/step3-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step3-1024.png) — Tangkapan layar desktop/tablet landscape 1024x768.
+3. [`docs/ui-review/step3-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step3-768.png) — Tangkapan layar tablet portrait 768x1024.
+4. [`docs/ui-review/step3-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step3-390.png) — Tangkapan layar mobile iPhone 390x844.
+5. [`docs/ui-review/peta-rendered-step3.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step3.html) — DOM HTML ter-render lengkap (252.067 bytes).
+
+---
+
 ## 2. Tabel Evaluasi Perubahan Antarmuka (Before & After - Historis Awal)
 
 | No | Komponen / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi / Pengukuran | Status |
