@@ -34,7 +34,8 @@ class UiAndInteractiveElementsAuditTest extends TestCase
         $responseLogin->assertStatus(200);
         $responseLogin->assertDontSee('Protokol Keamanan Data');
         $responseLogin->assertDontSee('SOP Verifikasi BUMDes');
-        $responseLogin->assertSee('Sesi Terenkripsi TLS 1.3', false);
+        $responseLogin->assertDontSee('TLS 1.3');
+        $responseLogin->assertSee('Sesi Terenkripsi', false);
     }
 
     /**

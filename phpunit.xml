@@ -32,5 +32,9 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="SEED_DEMO_USERS" value="true"/>
+        <env name="DEMO_PASS_ADMIN" value="Admin1234"/>
+        <env name="DEMO_PASS_BUMDES" value="Bumdes1234"/>
+        <env name="DEMO_PASS_DISTRIBUTOR" value="Distrib1234"/>
     </php>
 </phpunit>

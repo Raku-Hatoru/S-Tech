@@ -596,7 +596,7 @@
         <div class="space-y-1 max-w-2xl">
             <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500 text-slate-950 uppercase">
-                    PRD F-10 • SIMULASI
+                    SIMULASI / DATA CONTOH
                 </span>
                 <h3 class="text-base font-bold text-white">Panduan Rekomendasi Jadwal Tanam untuk Petani</h3>
             </div>

@@ -21,7 +21,7 @@
                 Kembali ke Input Panen
             </a>
             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 text-xs font-extrabold uppercase tracking-wide">
-                PRD F-10 • SIMULASI / DATA CONTOH
+                SIMULASI / DATA CONTOH
             </span>
         </div>
     </div>
@@ -55,7 +55,7 @@
             <div class="space-y-1">
                 <div class="flex items-center gap-2">
                     <span class="px-2 py-0.5 rounded text-[10px] font-black bg-blue-200 text-blue-900 uppercase tracking-wider">
-                        PRD F-10
+                        SIMULASI / DATA CONTOH
                     </span>
                     <h2 class="text-base sm:text-lg font-extrabold text-blue-950 tracking-tight">
                         [SIMULASI / DATA CONTOH] Panduan Jadwal Tanam untuk Disampaikan kepada Petani agar Pasokan Bulanan Seimbang.

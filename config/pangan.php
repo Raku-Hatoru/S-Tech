@@ -9,6 +9,8 @@ return [
     'pesan_dampak_surplus' => 'Pangan berisiko basi/terbuang dan menghasilkan emisi gas ke lingkungan; harga di tingkat petani dapat turun karena pasokan melimpah.',
     'pesan_dampak_defisit' => 'Risiko kekurangan pangan di wilayah ini hingga kelaparan bila tidak dipenuhi.',
 
+    'seed_demo_users' => (bool) env('SEED_DEMO_USERS', false),
+
     // Kata sandi akun demo — wajib diganti di production via .env
     'demo_pass_admin' => env('DEMO_PASS_ADMIN', 'Admin1234'),
     'demo_pass_bumdes' => env('DEMO_PASS_BUMDES', 'Bumdes1234'),

@@ -20,9 +20,26 @@ class DemoUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminPass = config('pangan.demo_pass_admin', 'Admin1234');
-        $bumdesPass = config('pangan.demo_pass_bumdes', 'Bumdes1234');
-        $distributorPass = config('pangan.demo_pass_distributor', 'Distrib1234');
+        // Jalankan seeder hanya bila flag SEED_DEMO_USERS bernilai true (PRD & Audit D-05)
+        if (! filter_var(env('SEED_DEMO_USERS', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->command?->info('DemoUserSeeder dilewati karena flag SEED_DEMO_USERS tidak aktif (false).');
+
+            return;
+        }
+
+        $adminPass = env('DEMO_PASS_ADMIN');
+        $bumdesPass = env('DEMO_PASS_BUMDES');
+        $distributorPass = env('DEMO_PASS_DISTRIBUTOR');
+
+        if (app()->isProduction()) {
+            if (empty($adminPass) || empty($bumdesPass) || empty($distributorPass)) {
+                throw new \RuntimeException('Di lingkungan produksi, password akun demo wajib diset via environment variable DEMO_PASS_ADMIN, DEMO_PASS_BUMDES, dan DEMO_PASS_DISTRIBUTOR tanpa nilai fallback default.');
+            }
+        } else {
+            $adminPass = $adminPass ?: config('pangan.demo_pass_admin', 'Admin1234');
+            $bumdesPass = $bumdesPass ?: config('pangan.demo_pass_bumdes', 'Bumdes1234');
+            $distributorPass = $distributorPass ?: config('pangan.demo_pass_distributor', 'Distrib1234');
+        }
 
         $roleAdmin = Role::where('kode', 'admin')->firstOrFail();
         $roleBumdes = Role::where('kode', 'bumdes')->firstOrFail();

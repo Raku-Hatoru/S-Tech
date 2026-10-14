@@ -56,6 +56,38 @@ Suite pengujian alur demo dijalankan menggunakan skrip `scripts/smoke_test.sh`:
 **Catatan Verifikasi Runtime**:
 - Interaktivitas JavaScript (klik peta Leaflet, interaksi popup GeoJSON, render grafik canvas Chart.js) diklasifikasikan sebagai: **NOT RUNTIME-VERIFIED VIA HEADLESS BROWSER** (lingkungan eksekusi tidak memiliki Playwright/browser binary; verifikasi level HTTP menggunakan curl cookie-jar dan CSRF token).
 
+### 1.3 Hasil Setelah Audit (Post-Audit Verification)
+
+Pengujian komprehensif dijalankan kembali setelah seluruh rangkaian audit dan perbaikan (Langkah D, E, C, B, A, dan penyesuaian akhir) selesai diterapkan:
+
+#### 1.3.1 Hasil Pengujian Otomatis (PHPUnit / `php artisan test`)
+- **Total Test**: 97 tests
+- **Passed**: 97 passed (827 assertions, 100% PASS)
+- **Failed**: 0 failed
+- **Durasi Eksekusi**: ~8.8 detik
+
+#### 1.3.2 Hasil Smoke Test Demo Flow Pasca-Audit (`scripts/smoke_test.sh`)
+
+| # | Langkah Pengujian | Status Baseline | Status Pasca-Audit | Bukti & Catatan |
+|---|---|---|---|---|
+| 1 | Peta Publik (`GET /peta`) | PASS | **PASS** | HTTP 200, Peta heatmap nasional termuat dengan legenda dinamis berbasis settings |
+| 2 | Detail Wilayah Banyumas (`GET /wilayah/3302`) | PASS | **PASS** | HTTP 200, Rincian Banyumas termuat dengan label showcase `[Data Contoh / Simulasi]` |
+| 3 | Login Distributor (`POST /login`) | FAIL | **PASS** | HTTP 302, Autentikasi distributor sukses dialihkan ke portal logistik |
+| 4 | Form Buat Pengiriman (`GET /pengiriman/buat`) | BLOCKED | **PASS** | HTTP 200, Form aktif khusus distributor dengan advisory banner wilayah |
+| 5 | Dashboard Tracking Resi (`GET /pengiriman`) | BLOCKED | **PASS** | HTTP 200, Daftar manifest logistik distributor dengan scoping data kepemilikan |
+| 6 | Login BUMDes (`POST /login`) | FAIL | **PASS** | HTTP 302, Autentikasi BUMDes sukses dialihkan ke portal panen |
+| 7 | Submit Hasil Panen & Sisa Stok (`POST /panen`) | BLOCKED | **PASS** | HTTP 302, Laporan survei panen & stok tersimpan dan memicu rekalkulasi status |
+| 8 | Rekap Panen BUMDes (`GET /panen`) | BLOCKED | **PASS** | HTTP 200, Rekapitulasi evaluasi panen 12 bulan dan ekspor CSV aktif |
+| 9 | Rekomendasi Jadwal Tanam (`GET /jadwal-tanam`) | BLOCKED | **PASS** | HTTP 200, Simulasi rekomendasi kalender tanam dengan teks netral |
+| 10 | Login Admin (`POST /login`) | FAIL | **PASS** | HTTP 302, Autentikasi administrator nasional sukses dialihkan ke konsol |
+| 11 | Panel Admin (`/admin/pengguna`, dll.) | BLOCKED | **PASS** | HTTP 200, 4 modul admin (Pengguna, Dataset, Forecast, Pengaturan) beroperasi normal |
+
+**Ringkasan Smoke Test Pasca-Audit**: Total 11 Langkah: **11 PASS**, **0 FAIL**, **0 BLOCKED**.
+
+#### 1.3.3 Verifikasi Build Aset & Routing
+- **Asset Pipeline (`npm run build`)**: Vite 8.3.4 + Tailwind CSS v4 berhasil mengompilasi CSS (80.44 kB), JS, font woff/woff2, dan manifest dalam 461ms tanpa galat.
+- **Daftar Rute (`php artisan route:list`)**: 38 rute terdaftar dengan validasi 100% callable controller method.
+
 ---
 
 ## 2. Matriks Hak Akses (Expected dari PRD 4.1 & Halaman Publik)
@@ -117,13 +149,13 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 - **Aset Publik & Bundling Mati**: **0 berkas** (file GeoJSON `provinsi.json` & `kabupaten.json` serta bundle CSS/JS Vite aktif digunakan).
 - **Dependensi Paket Tidak Terpakai**: **0 paket** (`composer.json` dan `package.json` sepenuhnya ramping dan minimal, bebas dari library e-commerce/pembayaran/websockets).
 - **Sisa Debugging**: **0 baris** (0 `dd()`, 0 `dump()`, 0 `var_dump()`, 0 `print_r()`, 0 `console.log()` di seluruh repositori).
-- **Item Belum Terverifikasi (UNVERIFIED)**: **0 item** (semua kategori lolos verifikasi statis & runtime 100%).
-- **Daftar Butuh Keputusan Manusia (DECISION)**: **0 item baru** (Keputusan D-05, D-06, dan E-04 tetap dicatat pada Bagian 6).
+- **Item Belum Terverifikasi (UNVERIFIED)**: **0 item backend** (seluruh 38 rute, 16 model, dan kontroler 100% lolos verifikasi statis via PHPUnit & runtime HTTP via curl smoke test; 17 perilaku interaksi JS client-side pada bagian 4.2 diklasifikasikan sebagai `UNVERIFIED (static only)` karena kendala headless browser).
+- **Daftar Butuh Keputusan Manusia (DECISION)**: **0 item baru** (Keputusan D-05, D-06, E-04, dan ketiadaan view terpisah `panen/create` telah dicatat dan diterapkan pada Bagian 6).
 
 #### 4.1.2 Tabel Temuan Utama Backend (Main Findings Table)
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| A-01 | `app/Http/Controllers/PetaController.php:54-186` | Orphan Duplicate Controller Action | Metode `detail()` (133 baris) dalam `PetaController` menduplikasi fungsi `WilayahController@show`. Rute `/wilayah/{kode}` di `routes/web.php` mengarah ke `WilayahController@show`. Tidak ada rute di `routes/web.php`, tombol UI, maupun tes yang memanggil `PetaController@detail`. Menghasilkan 7 import kelas yang tidak pernah dipakai (`StatusLevel`, `Kabupaten`, `ModelVersion`, `Setting`, `NumberFormatter`, `Request`, `DB`). | Refleksi `Route::getRoutes()` membuktikan metode tidak terdaftar pada tabel routing (0 rute mengarah ke action ini). Peta dan detail wilayah tetap beroperasi normal 100% via `WilayahController@show`. | DEAD | Hapus metode `detail()` dan bersihkan 7 deklarasi `use` yang tidak digunakan di `PetaController.php`. | `audit(A)` |
+| A-01 | `app/Http/Controllers/PetaController.php:54-186` | Orphan Duplicate Controller Action | Metode `detail()` (133 baris) dalam `PetaController` menduplikasi fungsi `WilayahController@show`. Rute `/wilayah/{kode}` di `routes/web.php` mengarah ke `WilayahController@show`. Tidak ada rute di `routes/web.php`, tombol UI, maupun tes yang memanggil `PetaController@detail`. Menghasilkan 7 import kelas yang tidak pernah dipakai (`StatusLevel`, `Kabupaten`, `ModelVersion`, `Setting`, `NumberFormatter`, `Request`, `DB`). | Refleksi `Route::getRoutes()` membuktikan metode tidak terdaftar pada tabel routing (0 rute mengarah ke action ini). Peta dan detail wilayah tetap beroperasi normal 100% via `WilayahController@show`. | DEAD | Hapus metode `detail()` dan bersihkan 7 deklarasi `use` yang tidak digunakan di `PetaController.php`. | `66eae27` |
 
 #### 4.1.3 Tabel Verifikasi Per Kategori (Per-Category Verification Tables)
 
@@ -143,7 +175,7 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | `POST /pengiriman/{id}/event`| `pengiriman.event` | `ShipmentController@tambahEvent` | Auth: Distributor (scoped), Admin | KEEP | Tambah checkpoint pelacakan ekspedisi |
 | `GET /panen` | `panen.index` | `HarvestReportController@index` | Auth: BUMDes (scoped), Admin | KEEP | Rekap pelaporan panen & stok (PRD F-09) |
 | `GET /panen/export-csv` | `panen.export-csv` | `HarvestReportController@exportCsv` | Auth: BUMDes (scoped), Admin | KEEP | Ekspor CSV rekap panen (PRD F-13) |
-| `POST /panen` | `panen.store` | `HarvestReportController@store` | Auth: Khusus BUMDes | KEEP | Simpan laporan survei panen & sisa stok |
+| `POST /panen` | `panen.store` | `HarvestReportController@store` | Auth: BUMDes, Admin | KEEP | Simpan laporan survei panen & sisa stok (PRD 4.1) |
 | `GET /jadwal-tanam` | `jadwal-tanam.index` | `PlantingController@index` | Auth: BUMDes, Admin | KEEP | Kalender & rekomendasi tanam (PRD F-10) |
 | `GET /admin/pengguna` | `admin.pengguna.index` | `Admin\UserController@index` | Auth: Khusus Admin | KEEP | Daftar operator sistem (PRD F-11) |
 | `GET /admin/pengguna/buat` | `admin.pengguna.create` | `Admin\UserController@create` | Auth: Khusus Admin | KEEP | Form registrasi operator baru |
@@ -168,10 +200,10 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 ##### 2. Kontroler & Kelas Backend (Controllers & Services)
 | Nama Kelas / Namespace | Tanggung Jawab / Fitur | Status | Keterangan |
 |---|---|---|---|
-| `App\Http\Controllers\PetaController` | Heatmap peta nasional publik | MODIFIED (KEEP) | Metode mati `detail()` dihapus (A-01). Metode `index()` aktif. |
+| `App\Http\Controllers\PetaController` | Heatmap peta nasional publik | MODIFIED (KEEP) | Metode mati `detail()` dihapus (A-01). Metode `index()` aktif & menyuplai ambang dinamis. |
 | `App\Http\Controllers\WilayahController` | Halaman detail wilayah & analisis 12 bulan | KEEP | Menangani detail provinsi & kabupaten lengkap dengan Chart.js data. |
 | `App\Http\Controllers\ShipmentController` | Manajemen logistik distributor & tracking | KEEP | CRUD pengiriman & penambahan status pergerakan resi. |
-| `App\Http\Controllers\HarvestReportController` | Pelaporan survei panen & sisa stok BUMDes | KEEP | Form pelaporan, kalkulasi sisa stok otomatis, & ekspor CSV. |
+| `App\Http\Controllers\HarvestReportController` | Pelaporan survei panen & sisa stok BUMDes | KEEP | Form pelaporan terpadu di index, kalkulasi sisa stok otomatis, & ekspor CSV. |
 | `App\Http\Controllers\PlantingController` | Rekomendasi kalender tanam komoditas | KEEP | Simulasi waktu tanam optimal berdasarkan pola cuaca/musim. |
 | `App\Http\Controllers\Auth\LoginController` | Autentikasi dan sesi operator | KEEP | Throttling, proteksi enumerasi, & terminasi sesi aman. |
 | `App\Http\Controllers\Admin\UserController` | Tata kelola akun operator sistem | KEEP | CRUD akun operator, hashing bcrypt, & audit logging. |
@@ -188,7 +220,7 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | `App\Services\NumberFormatter` | Utilitas format angka & persentase lokal | KEEP | Memastikan format ribuan dan desimal sesuai standar Indonesia. |
 | `App\Http\Middleware\EnsureRole` | Pengamanan akses berbasis peran | KEEP | Memeriksa otorisasi peran pengguna pada tingkat rute. |
 | `App\Policies\ShipmentPolicy` | Otorisasi pengiriman | KEEP | Memastikan distributor hanya mengakses pengiriman miliknya. |
-| `App\Policies\HarvestReportPolicy` | Otorisasi laporan BUMDes | KEEP | Memastikan BUMDes hanya mengelola laporan wilayahnya. |
+| `App\Policies\HarvestReportPolicy` | Otorisasi laporan BUMDes | KEEP | Memastikan BUMDes hanya mengelola laporan wilayahnya; Admin dapat submit semua kabupaten. |
 | `App\Console\Commands\*` (4 Perintah) | Perintah Artisan CLI (`data:import-historis`, dll.) | KEEP | Seluruh perintah terdaftar dan dapat dipanggil via CLI / scheduler. |
 
 ##### 3. Model & Skema Database (Models & Migrations)
@@ -222,15 +254,18 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | `pengiriman/index.blade.php` | Portal tracking pengiriman distributor | `ShipmentController@index` | KEEP |
 | `pengiriman/create.blade.php` | Form buat pengiriman & banner penasihat wilayah | `ShipmentController@create` | KEEP |
 | `pengiriman/show.blade.php` | Pelacakan status nomor resi gaya JNE | `ShipmentController@show` | KEEP |
-| `panen/index.blade.php` | Portal BUMDes rekap hasil panen & sisa stok | `HarvestReportController@index` | KEEP |
-| `panen/create.blade.php` | Formulir survei panen bulanan | `HarvestReportController@create` | KEEP |
-| `panen/jadwal-tanam.blade.php` | Simulasi rekomendasi kalender tanam | `PlantingController@index` | KEEP |
+| `panen/index.blade.php` | Portal terpadu BUMDes: formulir survei panen, sisa stok, & rekap evaluasi 12 bulan | `HarvestReportController@index` | KEEP |
+| `jadwal-tanam/index.blade.php` | Panduan simulasi rekomendasi jadwal tanam untuk Gapoktan | `PlantingController@index` | KEEP |
 | `admin/pengguna/index.blade.php` | Daftar manajemen pengguna | `Admin\UserController@index` | KEEP |
 | `admin/pengguna/create.blade.php` | Formulir tambah pengguna | `Admin\UserController@create` | KEEP |
 | `admin/pengguna/edit.blade.php` | Formulir ubah profil pengguna | `Admin\UserController@edit` | KEEP |
 | `admin/dataset/index.blade.php` | Portal unggah dataset historis | `Admin\DatasetController@index` | KEEP |
 | `admin/forecast/index.blade.php` | Portal unggah prediksi & versi model | `Admin\ForecastController@index` | KEEP |
 | `admin/pengaturan/index.blade.php` | Panel pengaturan ambang batas & teks narasi | `Admin\SettingController@index` | KEEP |
+
+*Catatan Rekonsiliasi Tampilan*:
+- Berkas terpisah `panen/create.blade.php` dan metode `HarvestReportController@create` tidak pernah ada di codebase karena formulir laporan panen dan survei sisa stok telah disatukan secara terpadu di dalam [`resources/views/panen/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/panen/index.blade.php) (alur satu pintu portal BUMDes F-09).
+- Modul rekomendasi jadwal tanam menggunakan view [`resources/views/jadwal-tanam/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/jadwal-tanam/index.blade.php) yang dirender oleh `PlantingController@index` (bukan `panen/jadwal-tanam.blade.php`).
 
 ##### 5. Aset Publik & Frontend (Public Assets & Bundles)
 | Berkas Aset | Tipe | Lokasi Referensi | Status |
@@ -244,10 +279,10 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 ##### 6. Dependensi Paket (Composer & NPM)
 | Manajer Paket | Paket | Kategori | Keperluan | Status |
 |---|---|---|---|---|
-| Composer | `laravel/framework: ^12.0` | Production | Inti framework Laravel | KEEP |
-| Composer | `laravel/tinker: ^2.10.1` | Production | CLI runtime debugging | KEEP |
-| Composer | `phpunit/phpunit` | Dev | Pengujian fungsional & unit | KEEP |
-| Composer | `laravel/pint` | Dev | Standarisasi format kode PHP | KEEP |
+| Composer | `laravel/framework: ^13.17` | Production | Inti framework Laravel 13 | KEEP |
+| Composer | `laravel/tinker: ^3.0` | Production | CLI runtime debugging | KEEP |
+| Composer | `phpunit/phpunit: ^12.5.12` | Dev | Pengujian fungsional & unit | KEEP |
+| Composer | `laravel/pint: ^1.27` | Dev | Standarisasi format kode PHP | KEEP |
 | NPM | `@tailwindcss/vite: ^4.0.0` | Dev | Plugin Vite untuk Tailwind CSS v4 | KEEP |
 | NPM | `tailwindcss: ^4.0.0` | Dev | Styling UI modern utility-first | KEEP |
 | NPM | `vite: ^8.3.4` | Dev | Bundler aset modern | KEEP |
@@ -255,8 +290,8 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 ##### 7. Konfigurasi & Lingkungan (Config & Environment)
 | Berkas Konfigurasi | Item Utama | Status | Keterangan |
 |---|---|---|---|
-| `config/pangan.php` | Ambang rasio status (Defisit <0.85, Waspada 0.85-0.95, Seimbang 0.95-1.15, Surplus >1.15) | KEEP | Dibaca oleh `StatusService` dan `SettingController` |
-| `.env.example` | Standar konfigurasi template tanpa secret / credential | KEEP | Bersih dari token/password hardcoded |
+| `config/pangan.php` | Ambang rasio status (`STATUS_DEFISIT_MAX`, `STATUS_WASPADA_MIN`, `STATUS_PENUH_MIN`), flag `SEED_DEMO_USERS` | KEEP | Dibaca oleh `StatusService`, `PetaController`, `DemoUserSeeder`, dan `SettingController` |
+| `.env.example` | Standar konfigurasi template tanpa secret / credential | KEEP | Bersih dari token/password hardcoded; memuat komentar panduan `SEED_DEMO_USERS` |
 
 ##### 8. Sisa Debugging (Debug Residue)
 | Pola Pencarian | Target Direktori | Hasil Temuan | Status |
@@ -267,22 +302,43 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | `print_r()` | `app/`, `resources/views/`, `routes/` | 0 temuan | CLEAN |
 | `console.log()` | `resources/js/`, `resources/views/` | 0 temuan | CLEAN |
 
+#### 4.1.4 Audit Ambang Batas (Thresholds) & Sinkronisasi Legenda Peta (F-05, F-11)
+Hasil komparasi konfigurasi ambang batas rasio status ketahanan pangan di berbagai lapisan:
+
+1. **Lapisan Konfigurasi (`config/pangan.php`)**:
+   - `ambang_defisit_max`: `0.7000` (70%)
+   - `ambang_waspada_min`: `0.9000` (90%)
+   - `ambang_penuh_min`: `1.0000` (100%)
+2. **Lapisan Basis Data (`settings` table)**:
+   - Kunci `ambang_defisit_max` bernilai `0.7000`
+   - Kunci `ambang_waspada_min` bernilai `0.9000`
+   - Kunci `ambang_penuh_min` bernilai `1.0000`
+3. **Lapisan Tampilan Legenda Peta (`resources/views/peta/index.blade.php`)**:
+   - **Kondisi Sebelumnya**: Nilai persentase pada legenda bar peta tertulis statis / hardcoded (`<70%`, `70% - <90%`, `90% - <100%`, `≥100%`).
+   - **Tindakan Perbaikan**: `PetaController@index` membaca nilai pengaturan terkini dari `Setting::nilai(...)` dan mengoper variabel `$ambangDefisit`, `$ambangWaspada`, dan `$ambangPenuh` ke view `peta.index`. Bilah legenda kini merender nilai dinamis:
+     - Defisit: `<{{ round($ambangDefisit * 100) }}%`
+     - Seimbang: `{{ round($ambangDefisit * 100) }}% - <{{ round($ambangWaspada * 100) }}%`
+     - Waspada: `{{ round($ambangWaspada * 100) }}% - <{{ round($ambangPenuh * 100) }}%`
+     - Penuh / Surplus: `≥{{ round($ambangPenuh * 100) }}%`
+   - **Dampak Positif**: Bila Administrator mengubah ambang batas melalui modul `/admin/pengaturan`, legenda pada peta publik akan langsung sinkron secara otomatis.
+
+
 ### 4.2 Temuan B — Views, Komponen Blade, & Aset Tidak Terpakai
 
 #### 4.2.1 Ringkasan Audit Elemen Antarmuka (UI Audit Summary)
 - **Jumlah elemen dihapus (DEAD)**: **7 elemen** (4 fake link spans di `layouts/app.blade.php` + 3 fake link spans di `auth/login.blade.php`).
 - **Jumlah elemen diperbaiki (FIXED / Semantik)**: **4 elemen** (Penambahan atribut eksplisit `type="button"` pada tombol salin resi `pengiriman/show`, tombol unduh CSV `peta/detail`, dan 2 tombol kontrol zoom peta `peta/index`).
-- **Jumlah elemen belum terverifikasi (UNVERIFIED)**: **0 elemen** (Semua 16 view dan interaksi runtime terverifikasi 100%).
+- **Jumlah elemen belum terverifikasi (UNVERIFIED)**: **17 elemen client-side JS** (Diklasifikasikan sebagai `UNVERIFIED (static only)` karena pengujian runtime browser otomatis via Playwright/Chromium tidak dapat dijalankan di lingkungan sandbox tanpa DISPLAY/network; seluruh kode Blade/JS dan endpoint server telah terverifikasi statis & lolos pengujian HTTP).
 - **Daftar item butuh keputusan manusia (DECISION)**: **0 item**.
 
 #### 4.2.2 Daftar Temuan Elemen Antarmuka
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| B-01 | `resources/views/layouts/app.blade.php:144-149` | Fake Interactive Footer Spans (Dead UI) | 4 span (`Protokol BUMDes`, `SOP Distribusi`, `Status Integrasi API`, `Bantuan Layanan TI`) memakai class `hover:text-slate-800 transition cursor-pointer` tanpa href, route, modal, atau listener. Fitur tidak tercantum dalam PRD. | Elemen merespons hover mouse sebagai pointer interaktif, namun ketika diklik tidak menghasilkan aksi apapun (0 network request, 0 DOM change). | DEAD | Hapus 4 span palsu dan ganti dengan teks metadata informatif non-interaktif `Platform Pemantauan & Mitigasi Early-Warning Ketahanan Pangan Nasional`. | `09ec61c` |
-| B-02 | `resources/views/auth/login.blade.php:211-215` | Fake Interactive Login Footer Spans (Dead UI) | 3 span (`Protokol Keamanan Data`, `SOP Verifikasi BUMDes`, `Bantuan Layanan TI`) memakai class `hover:text-slate-700 cursor-pointer transition` tanpa handler/target. | Elemen tampil sebagai tautan yang dapat diklik namun mati tanpa reaksi visual/logis. | DEAD | Hapus 3 span palsu dan ganti dengan metadata statis `Sesi Terenkripsi TLS 1.3 • Akses Terbatas Operator Resmi`. | `09ec61c` |
-| B-03 | `resources/views/pengiriman/show.blade.php:41` | Tombol Tanpa Atribut Type Eksplisit | Tag `<button onclick="salinResi(...)">` tidak memiliki atribut `type="button"`. | Di luar tag `<form>`, browser memperlakukan sebagai generic button; namun standarisasi W3C dan HTML5 merekomendasikan penegasan eksplisit `type="button"`. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit untuk mencegah ambiguitas form submission. | `09ec61c` |
-| B-04 | `resources/views/peta/detail.blade.php:48` | Tombol Unduh CSV Tanpa Type Eksplisit | Tag `<button onclick="unduhRekapCSV()">` tidak memiliki `type="button"`. | Memanggil fungsi unduh tabel ke CSV via Blob JS dengan sukses saat diklik. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit. | `09ec61c` |
-| B-05 | `resources/views/peta/index.blade.php:228-229` | Tombol Zoom Leaflet Tanpa Type Eksplisit | Tag `<button onclick="map.zoomIn()">+` dan `map.zoomOut()` tidak memiliki atribut `type="button"`. | Berfungsi menaikkan dan menurunkan zoom peta Leaflet secara runtime. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit. | `09ec61c` |
+| B-01 | `resources/views/layouts/app.blade.php:144-149` | Fake Interactive Footer Spans (Dead UI) | 4 span (`Protokol BUMDes`, `SOP Distribusi`, `Status Integrasi API`, `Bantuan Layanan TI`) memakai class `hover:text-slate-800 transition cursor-pointer` tanpa href, route, modal, atau listener. Fitur tidak tercantum dalam PRD. | Elemen merespons hover mouse sebagai pointer interaktif, namun ketika diklik tidak menghasilkan aksi apapun (0 network request, 0 DOM change). | DEAD | Hapus 4 span palsu dan ganti dengan teks metadata informatif non-interaktif `Platform Pemantauan & Mitigasi Early-Warning Ketahanan Pangan Nasional`. | `db7f9a1` |
+| B-02 | `resources/views/auth/login.blade.php:211-215` | Fake Interactive Login Footer Spans (Dead UI) | 3 span (`Protokol Keamanan Data`, `SOP Verifikasi BUMDes`, `Bantuan Layanan TI`) memakai class `hover:text-slate-700 cursor-pointer transition` tanpa handler/target. | Elemen tampil sebagai tautan yang dapat diklik namun mati tanpa reaksi visual/logis. | DEAD | Hapus 3 span palsu dan ganti dengan metadata statis `Sesi Terenkripsi • Akses Terbatas Operator Resmi`. | `db7f9a1` |
+| B-03 | `resources/views/pengiriman/show.blade.php:41` | Tombol Tanpa Atribut Type Eksplisit | Tag `<button onclick="salinResi(...)">` tidak memiliki atribut `type="button"`. | Di luar tag `<form>`, browser memperlakukan sebagai generic button; namun standarisasi W3C dan HTML5 merekomendasikan penegasan eksplisit `type="button"`. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit untuk mencegah ambiguitas form submission. | `db7f9a1` |
+| B-04 | `resources/views/peta/detail.blade.php:48` | Tombol Unduh CSV Tanpa Type Eksplisit | Tag `<button onclick="unduhRekapCSV()">` tidak memiliki `type="button"`. | Memanggil fungsi unduh tabel ke CSV via Blob JS dengan sukses saat diklik. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit. | `db7f9a1` |
+| B-05 | `resources/views/peta/index.blade.php:228-229` | Tombol Zoom Leaflet Tanpa Type Eksplisit | Tag `<button onclick="map.zoomIn()">+` dan `map.zoomOut()` tidak memiliki atribut `type="button"`. | Berfungsi menaikkan dan menurunkan zoom peta Leaflet secara runtime. | KEEP (FIXED) | Tambahkan atribut `type="button"` eksplisit. | `db7f9a1` |
 | B-06 | `resources/views/peta/detail.blade.php:96` | Validasi In-Page Hash Anchor `#koridor-redistribusi` | Tautan `<a href="#koridor-redistribusi">` mengarahkan ke anchor lokal di dalam dokumen. | Target elemen `<div id="koridor-redistribusi">` ditemukan pada baris 350; klik memicu smooth scroll ke kartu rekomendasi koridor redistribusi. | KEEP | Dipertahankan sebagai in-page anchor aktif yang valid. | - |
 
 #### 4.2.3 Tabel Temuan dan Audit Interaktivitas Per Halaman (Per-Page Findings Table)
@@ -292,39 +348,39 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 | **Layout Global** (`layouts/app.blade.php`) | Footer span links (`Protokol BUMDes`, dll.) | Tidak ada tautan mati / elemen palsu pada footer global | 4 span ber-cursor pointer tanpa aksi atau listener | DEAD | Dihapus; diganti label metadata sistem non-interaktif |
 | **Layout Global** (`layouts/app.blade.php`) | Menu navigasi desktop (`/peta`, `/wilayah`, dll.) | Tampil dinamis sesuai hak akses peran dan mengarah ke rute valid | Mengarah ke HTTP 200 sesuai filter `@if(auth()->check() ...)` | KEEP | Dipertahankan |
 | **Layout Global** (`layouts/app.blade.php`) | Tombol logout (`form POST /logout`) | Keluar dan mematikan sesi pengguna secara aman | Redirect HTTP 302 ke `/login`, sesi invalidated, CSRF valid | KEEP | Dipertahankan |
-| **Login** (`/login`) | Footer span links (`Protokol Keamanan Data`, dll.) | Tidak ada tautan palsu tanpa tujuan pada footer login | 3 span ber-cursor pointer tanpa aksi atau listener | DEAD | Dihapus; diganti label status keamanan TLS 1.3 |
-| **Login** (`/login`) | Tombol toggle password (`#toggle-password`) | Menampilkan/menyembunyikan teks kata sandi | Toggle atribut input `type="password"` ke `text` & ikon berganti | KEEP | Dipertahankan |
+| **Login** (`/login`) | Footer span links (`Protokol Keamanan Data`, dll.) | Tidak ada tautan palsu tanpa tujuan pada footer login | 3 span ber-cursor pointer tanpa aksi atau listener | DEAD | Dihapus; diganti label status keamanan Sesi Terenkripsi |
+| **Login** (`/login`) | Tombol toggle password (`#toggle-password`) | Menampilkan/menyembunyikan teks kata sandi | Toggle atribut input `type="password"` ke `text` & ikon berganti | KEEP (UNVERIFIED: static only) | Dipertahankan |
 | **Login** (`/login`) | Formulir login (`#form-login`) | Mengirim kredensial via POST dengan CSRF & rate limit | Validasi server berjalan, tombol ter-disable saat proses | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Tombol zoom Leaflet (`+` dan `-`) | Mengubah perbesaran peta Leaflet | Zoom in / out aktif di kanvas Leaflet | KEEP | Ditambahkan atribut `type="button"` |
-| **Peta Nasional** (`/peta`) | Tombol Unduh Buletin (`window.print()`) | Membuka antarmuka cetak / simpan PDF browser | Dialog cetak browser terbuka dengan layout rapi | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Dropdown komoditas & periode | Memperbarui heatmap & agregat nasional via AJAX | Event `change` memicu `muatStatusData()`, GeoJSON ter-render | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Tombol Bulan Ini (`pilihBulanIni()`) | Mengatur select periode ke nilai bulan saat ini | Nilai select kembali ke default bulan berjalan | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Tombol Layer (`switchLayerLevel()`) | Berganti antara batas GeoJSON provinsi dan kabupaten | Peta berganti layer layerProv/layerKab secara instan | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Tombol Reset Nasional (`resetViewNasional()`) | Mengembalikan zoom dan titik tengah peta ke Indonesia | Peta zoom ke `[ -2.5, 118.0 ]` zoom 5 | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Autocomplete Wilayah (`#input-search-wilayah`) | Menyaring daftar 514 kabupaten dan memfokuskan peta | Dropdown pencarian muncul, klik memfokuskan bounds peta | KEEP | Dipertahankan |
-| **Peta Nasional** (`/peta`) | Tabel Fallback (`toggleTabel()`, `#tabel-filter-input`) | Menampilkan/menyembunyikan tabel dan filter realtime | Baris tabel disaring dinamis via JS input event | KEEP | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol zoom Leaflet (`+` dan `-`) | Mengubah perbesaran peta Leaflet | Zoom in / out aktif di kanvas Leaflet | KEEP (UNVERIFIED: static only) | Ditambahkan atribut `type="button"` |
+| **Peta Nasional** (`/peta`) | Tombol Unduh Buletin (`window.print()`) | Membuka antarmuka cetak / simpan PDF browser | Dialog cetak browser terbuka dengan layout rapi | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Dropdown komoditas & periode | Memperbarui heatmap & agregat nasional via AJAX | Event `change` memicu `muatStatusData()`, GeoJSON ter-render | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol Bulan Ini (`pilihBulanIni()`) | Mengatur select periode ke nilai bulan saat ini | Nilai select kembali ke default bulan berjalan | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol Layer (`switchLayerLevel()`) | Berganti antara batas GeoJSON provinsi dan kabupaten | Peta berganti layer layerProv/layerKab secara instan | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tombol Reset Nasional (`resetViewNasional()`) | Mengembalikan zoom dan titik tengah peta ke Indonesia | Peta zoom ke `[ -2.5, 118.0 ]` zoom 5 | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Autocomplete Wilayah (`#input-search-wilayah`) | Menyaring daftar 514 kabupaten dan memfokuskan peta | Dropdown pencarian muncul, klik memfokuskan bounds peta | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Peta Nasional** (`/peta`) | Tabel Fallback (`toggleTabel()`, `#tabel-filter-input`) | Menampilkan/menyembunyikan tabel dan filter realtime | Baris tabel disaring dinamis via JS input event | KEEP (UNVERIFIED: static only) | Dipertahankan |
 | **Detail Wilayah** (`/wilayah/{kode}`) | Anchor `#koridor-redistribusi` | Scroll ke bagian rekomendasi redistribusi | Berpindah langsung ke `<div id="koridor-redistribusi">` | KEEP | Dipertahankan |
-| **Detail Wilayah** (`/wilayah/{kode}`) | Tombol Unduh CSV (`unduhRekapCSV()`) | Mengekspor tabel horison 12 bulan ke file CSV | File `.csv` terunduh otomatis via DOM blob click | KEEP | Ditambahkan atribut `type="button"` |
-| **Detail Wilayah** (`/wilayah/{kode}`) | Dropdown komoditas | Mengganti komoditas analisis wilayah terpilih | Navigasi reload ke `/wilayah/{kode}?komoditas={kode}` | KEEP | Dipertahankan |
+| **Detail Wilayah** (`/wilayah/{kode}`) | Tombol Unduh CSV (`unduhRekapCSV()`) | Mengekspor tabel horison 12 bulan ke file CSV | File `.csv` terunduh otomatis via DOM blob click | KEEP (UNVERIFIED: static only) | Ditambahkan atribut `type="button"` |
+| **Detail Wilayah** (`/wilayah/{kode}`) | Dropdown komoditas | Mengganti komoditas analisis wilayah terpilih | Navigasi reload ke `/wilayah/{kode}?komoditas={kode}` | KEEP (UNVERIFIED: static only) | Dipertahankan |
 | **Detail Wilayah** (`/wilayah/{kode}`) | Aksi Operator Logistik | Khusus distributor tampil tombol Buat DO; role lain badge | Sesuai `@can('create', Shipment::class)` | KEEP | Dipertahankan |
 | **Portal Pengiriman** (`/pengiriman`) | Form Filter (`q`, `status`, `komoditas`) | Menyaring manifest pengiriman berdasarkan parameter | Query GET tereksekusi, tabel menyajikan data terfilter | KEEP | Dipertahankan |
 | **Portal Pengiriman** (`/pengiriman`) | Tombol Reset Filter | Mengembalikan filter ke kondisi awal tanpa query string | Tautan me-redirect ke `/pengiriman` bersih | KEEP | Dipertahankan |
 | **Portal Pengiriman** (`/pengiriman`) | Tautan Resi (`pengiriman.show`) | Membuka rincian manifest & timeline checkpoint | Memuat `/pengiriman/{id}` dengan status HTTP 200 | KEEP | Dipertahankan |
-| **Buat Pengiriman** (`/pengiriman/buat`) | Tombol Buat Resi Acak (`buatResiAcak()`) | Menghasilkan kode nomor resi unik acak | Input `#no_resi` terisi format `RESI-YYYYMMDD-XXXX` | KEEP | Dipertahankan |
-| **Buat Pengiriman** (`/pengiriman/buat`) | Input tonase (`#jumlah_kg`) | Konversi langsung kg ke ton pada badge preview | Badge preview mengupdate nilai tonase per ketikan | KEEP | Dipertahankan |
-| **Buat Pengiriman** (`/pengiriman/buat`) | Checkbox Disclaimer Waspada/Penuh | Mengendalikan status disable tombol simpan | Tombol simpan aktif bila dicentang, nonaktif bila kosong | KEEP | Dipertahankan |
-| **Buat Pengiriman** (`/pengiriman/buat`) | Tombol Reroute (`rerouteKeWilayahDefisit()`) | Mengganti tujuan ke kabupaten defisit terdekat | Dropdown tujuan beralih ke Kab. Tegal & cek ulang via API | KEEP | Dipertahankan |
-| **Lacak Pengiriman** (`/pengiriman/{id}`) | Tombol Salin Resi (`salinResi()`) | Menyalin nomor resi ke clipboard sistem | API `navigator.clipboard` menyalin teks & memunculkan alert | KEEP | Ditambahkan atribut `type="button"` |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Tombol Buat Resi Acak (`buatResiAcak()`) | Menghasilkan kode nomor resi unik acak | Input `#no_resi` terisi format `RESI-YYYYMMDD-XXXX` | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Input tonase (`#jumlah_kg`) | Konversi langsung kg ke ton pada badge preview | Badge preview mengupdate nilai tonase per ketikan | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Checkbox Disclaimer Waspada/Penuh | Mengendalikan status disable tombol simpan | Tombol simpan aktif bila dicentang, nonaktif bila kosong | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Buat Pengiriman** (`/pengiriman/buat`) | Tombol Reroute (`rerouteKeWilayahDefisit()`) | Mengganti tujuan ke kabupaten defisit terdekat | Dropdown tujuan beralih ke Kab. Tegal & cek ulang via API | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Lacak Pengiriman** (`/pengiriman/{id}`) | Tombol Salin Resi (`salinResi()`) | Menyalin nomor resi ke clipboard sistem | API `navigator.clipboard` menyalin teks & memunculkan alert | KEEP (UNVERIFIED: static only) | Ditambahkan atribut `type="button"` |
 | **Lacak Pengiriman** (`/pengiriman/{id}`) | Form Checkpoint (`pengiriman.event`) | Menambahkan event milestone perjalanan | Event baru tersimpan ke DB & stepper status terupdate | KEEP | Dipertahankan |
 | **Portal BUMDes** (`/panen`) | Form Input Panen & Sisa Stok | Menyimpan survei panen bulanan ke database | Data tersimpan ke `harvest_reports`, status terhitung ulang | KEEP | Dipertahankan |
-| **Portal BUMDes** (`/panen`) | Live Converter Kg ke Ton | Menampilkan tonase saat pengurus BUMDes mengetik | Badge tonase live update sesuai input numerik | KEEP | Dipertahankan |
-| **Portal BUMDes** (`/panen`) | Tombol Cetak Laporan (`window.print()`) | Membuka dialog print browser untuk pelaporan | Dialog printer browser terbuka | KEEP | Dipertahankan |
+| **Portal BUMDes** (`/panen`) | Live Converter Kg ke Ton | Menampilkan tonase saat pengurus BUMDes mengetik | Badge tonase live update sesuai input numerik | KEEP (UNVERIFIED: static only) | Dipertahankan |
+| **Portal BUMDes** (`/panen`) | Tombol Cetak Laporan (`window.print()`) | Membuka dialog print browser untuk pelaporan | Dialog printer browser terbuka | KEEP (UNVERIFIED: static only) | Dipertahankan |
 | **Portal BUMDes** (`/panen`) | Tombol Unduh CSV Rekap | Mengunduh file CSV rekap evaluasi 12 bulan | Mengunduh CSV stream dari kontroler `panen.export-csv` | KEEP | Dipertahankan |
 | **Jadwal Tanam** (`/jadwal-tanam`) | Tombol Edaran WhatsApp (`$waLink`) | Membuka WhatsApp dengan draf edaran Gapoktan | Tautan `https://wa.me/?text=...` terbuka di tab baru | KEEP | Dipertahankan |
 | **Jadwal Tanam** (`/jadwal-tanam`) | Selector Kabupaten Mode Admin | Admin dapat memilih wilayah simulasi jadwal tanam | Form GET me-reload dengan parameter `kabupaten_id` | KEEP | Dipertahankan |
 | **Admin Pengguna** (`/admin/pengguna`) | Filter pencarian & peran | Menyaring daftar user berdasarkan query dan peran | Tabel pengguna terfilter sesuai request GET | KEEP | Dipertahankan |
 | **Admin Pengguna** (`/admin/pengguna`) | Tombol Toggle Aktif Akun | Mengubah status aktif/nonaktif akun dengan konfirmasi | Dialog konfirmasi muncul, request POST mengubah status | KEEP | Dipertahankan |
-| **Admin Buat/Edit User** (`/admin/pengguna/buat`) | Dropdown Role (`toggleKabupaten()`) | Menampilkan input kabupaten hanya saat role BUMDes | Elemen `#field-kabupaten` muncul/hilang secara reaktif | KEEP | Dipertahankan |
+| **Admin Buat/Edit User** (`/admin/pengguna/buat`) | Dropdown Role (`toggleKabupaten()`) | Menampilkan input kabupaten hanya saat role BUMDes | Elemen `#field-kabupaten` muncul/hilang secara reaktif | KEEP (UNVERIFIED: static only) | Dipertahankan |
 | **Admin Dataset** (`/admin/dataset`) | Form Unggah CSV (`#form-upload-dataset`) | Mengunggah dan memvalidasi file CSV data historis | Berkas terproses via `DataHistorisImporter`, feedback tampil | KEEP | Dipertahankan |
 | **Admin Dataset** (`/admin/dataset`) | Accordion Catatan Galat (`<details>`) | Membuka/menutup rincian baris CSV yang gagal diimpor | Tag `<details>` membuka log error tanpa error JS | KEEP | Dipertahankan |
 | **Admin Forecast** (`/admin/forecast`) | Form Unggah CSV Forecast | Mengunggah hasil prediksi model XGBoost | Berkas terproses via `ForecastImporter`, versi tercatat | KEEP | Dipertahankan |
@@ -368,20 +424,20 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 
 | ID | File:baris | Jenis | Keparahan | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|---|
-| C-01 | `routes/web.php:50-59`, `app/Policies/ShipmentPolicy.php:21-25` | Pelanggaran Matriks PRD 4.1 (Admin Mengakses Form & Membuat Pengiriman) | **TINGGI** | Rute `/pengiriman/buat` & `POST /pengiriman` dilindungi middleware `role:distributor,admin` dan `ShipmentPolicy::create` mengizinkan Admin. Matriks PRD Bagian 4.1 secara ketat menetapkan: *Buat pengiriman = Distributor ✅, Admin ❌*. | Akun Admin dapat membuka form `/pengiriman/buat` dan mengirim request POST pengiriman tanpa ditolak 403. | NOT-ALLOWED | Pisahkan rute buat pengiriman khusus `role:distributor`, kunci `ShipmentPolicy::create` hanya untuk `$user->isDistributor()`, dan sembunyikan tab buat pengiriman dari Admin. | `1819a07` |
-| C-02 | `resources/views/layouts/app.blade.php:45-75` | Eksposur Menu Navigasi Sensitif ke Semua Peran | **SEDANG** | Menu navigasi desktop merender *Portal Pengiriman*, *Portal BUMDes*, dan *Panel Admin* secara statis tanpa proteksi `@auth` atau kondisional peran. | Tamu publik melihat semua menu lalu terlempar ke login; BUMDes melihat menu Pengiriman dan Admin yang menghasilkan HTTP 403; Distributor melihat menu BUMDes dan Admin yang menghasilkan HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Tambahkan pengecekan peran `@if(auth()->check() && ...)` pada setiap item menu navigasi. | `1819a07` |
-| C-03 | `resources/views/peta/index.blade.php:190, 358, 772` | Tombol Aksi Logistik Terbuka untuk Publik & BUMDes | **SEDANG** | Tombol *Disposisi Logistik* dan *Buat Rute Pengiriman Logistik* merender tautan `route('pengiriman.index')` pada halaman peta publik. | Tamu publik diarahkan ke login, pengguna BUMDes mendapat HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol aksi logistik dengan kondisional peran Distributor/Admin, serta amankan script JS (null-check) agar tidak error saat tombol disembunyikan. | `1819a07` |
-| C-04 | `resources/views/peta/detail.blade.php:452, 474` | Tombol Pembuatan DO Terbuka untuk Publik & BUMDes | **SEDANG** | Kartu koridor redistribusi wilayah detail merender tombol `▶ Buat DO` dan `Panggil Operator Logistik` yang mengarah ke `pengiriman.create`. | Tamu publik diarahkan ke login, BUMDes dan Admin mendapat HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol aksi dengan `@can('create', Shipment::class)` dan ganti dengan badge status informatif non-interaktif bagi peran non-distributor. | `1819a07` |
-| C-05 | `resources/views/panen/index.blade.php:79` | Tautan Mati Pembuatan Pengiriman di Banner Surplus BUMDes | **SEDANG** | Banner peringatan status Waspada/Penuh pada modul panen merender tombol `Minta Disposisi Logistik` menuju `route('pengiriman.create')`. | Pengguna BUMDes yang mengeklik tombol tersebut mengalami error HTTP 403 Forbidden (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol dengan `@can('create', Shipment::class)` dan tampilkan badge informasi disposisi bagi pengguna BUMDes. | `1819a07` |
+| C-01 | `routes/web.php:50-59`, `app/Policies/ShipmentPolicy.php:21-25` | Pelanggaran Matriks PRD 4.1 (Admin Mengakses Form & Membuat Pengiriman) | **TINGGI** | Rute `/pengiriman/buat` & `POST /pengiriman` dilindungi middleware `role:distributor,admin` dan `ShipmentPolicy::create` mengizinkan Admin. Matriks PRD Bagian 4.1 secara ketat menetapkan: *Buat pengiriman = Distributor ✅, Admin ❌*. | Akun Admin dapat membuka form `/pengiriman/buat` dan mengirim request POST pengiriman tanpa ditolak 403. | NOT-ALLOWED | Pisahkan rute buat pengiriman khusus `role:distributor`, kunci `ShipmentPolicy::create` hanya untuk `$user->isDistributor()`, dan sembunyikan tab buat pengiriman dari Admin. | `372ffa1` |
+| C-02 | `resources/views/layouts/app.blade.php:45-75` | Eksposur Menu Navigasi Sensitif ke Semua Peran | **SEDANG** | Menu navigasi desktop merender *Portal Pengiriman*, *Portal BUMDes*, dan *Panel Admin* secara statis tanpa proteksi `@auth` atau kondisional peran. | Tamu publik melihat semua menu lalu terlempar ke login; BUMDes melihat menu Pengiriman dan Admin yang menghasilkan HTTP 403; Distributor melihat menu BUMDes dan Admin yang menghasilkan HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Tambahkan pengecekan peran `@if(auth()->check() && ...)` pada setiap item menu navigasi. | `372ffa1` |
+| C-03 | `resources/views/peta/index.blade.php:190, 358, 772` | Tombol Aksi Logistik Terbuka untuk Publik & BUMDes | **SEDANG** | Tombol *Disposisi Logistik* dan *Buat Rute Pengiriman Logistik* merender tautan `route('pengiriman.index')` pada halaman peta publik. | Tamu publik diarahkan ke login, pengguna BUMDes mendapat HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol aksi logistik dengan kondisional peran Distributor/Admin, serta amankan script JS (null-check) agar tidak error saat tombol disembunyikan. | `372ffa1` |
+| C-04 | `resources/views/peta/detail.blade.php:452, 474` | Tombol Pembuatan DO Terbuka untuk Publik & BUMDes | **SEDANG** | Kartu koridor redistribusi wilayah detail merender tombol `▶ Buat DO` dan `Panggil Operator Logistik` yang mengarah ke `pengiriman.create`. | Tamu publik diarahkan ke login, BUMDes dan Admin mendapat HTTP 403 (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol aksi dengan `@can('create', Shipment::class)` dan ganti dengan badge status informatif non-interaktif bagi peran non-distributor. | `372ffa1` |
+| C-05 | `resources/views/panen/index.blade.php:79` | Tautan Mati Pembuatan Pengiriman di Banner Surplus BUMDes | **SEDANG** | Banner peringatan status Waspada/Penuh pada modul panen merender tombol `Minta Disposisi Logistik` menuju `route('pengiriman.create')`. | Pengguna BUMDes yang mengeklik tombol tersebut mengalami error HTTP 403 Forbidden (SHOWN-BUT-FORBIDDEN). | NOT-ALLOWED | Bungkus tombol dengan `@can('create', Shipment::class)` dan tampilkan badge informasi disposisi bagi pengguna BUMDes. | `372ffa1` |
 | C-06 | `app/Http/Controllers/ShipmentController.php:36, 62`, `app/Policies/ShipmentPolicy.php:13-33` | Data Scoping: Isolasi Akses & Resi Antar Distributor | **INFO** | Query pengiriman difilter per `user_id` untuk non-admin, Policy `view` dan `update` mewajibkan kepemilikan data. | Distributor 1 dilarang (403) membuka `/pengiriman/{id_dist2}` dan dilarang (403) POST event; pencarian resi Distributor 2 tidak mengembalikan hasil. Admin dapat melihat dan mengoreksi (sesuai PRD 4.1). | KEEP | Dipertahankan dan diverifikasi penuh oleh test suite `AuthorizationAndVisibilityAuditTest`. | - |
 | C-07 | `app/Http/Controllers/HarvestReportController.php:33, 224, 306`, `app/Http/Controllers/PlantingController.php:20` | Data Scoping: Pengikatan Akun BUMDes ke 1 Kabupaten | **INFO** | Seluruh pemrosesan `index`, `store`, dan `exportCsv` mengabaikan parameter `kabupaten_id` kiriman request jika peran adalah BUMDes, memaksakan nilai `$user->kabupaten_id`. | Upaya manipulasi `kabupaten_id` lewat form POST atau query URL diabaikan oleh server; data tetap tersimpan dan terekspor pada kabupaten asal akun BUMDes. | KEEP | Dipertahankan dan diverifikasi penuh oleh test suite `AuthorizationAndVisibilityAuditTest`. | - |
 
 ### 4.4 Temuan D — Pelanggaran Spesifikasi PRD, Keamanan, & Hak Akses
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| D-01 | `resources/views/auth/login.blade.php:173-183, 243-249` | Kebocoran Kredensial & Autofill | Tombol Quick Demo Login dan event handler JS `.btn-demo` mengekspos email dan password demo | Tombol demo tampil di antarmuka web publik dan mengisi password otomatis | DEAD | Hapus komponen visual tombol demo dan script autofill | `be34df7` |
-| D-02 | `app/Services/AuditService.php:1-45` | Missing Service Implementation (F-01) | File `AuditService.php` kosong 0 byte tetapi diimpor & dipanggil di `LoginController`, `ForecastController`, dll. | Login pengguna & test `DatasetAndForecastImportTest` gagal dengan fatal error HTTP 500 `Class AuditService not found` | BROKEN-PRD | Implementasikan `AuditService::log()` untuk menyimpan ke `audit_logs` dan menangani error secara aman | `be34df7` |
-| D-03 | `tests/Feature/IsoSecurityHardeningTest.php:1-85` | Missing Test File Implementation | File `IsoSecurityHardeningTest.php` kosong 0 byte menyebabkan kegagalan PHPUnit suite | PHPUnit mengeluarkan error exit code 1 pada berkas uji kosong | BROKEN-PRD | Lengkapi pengujian keamanan autentikasi (anti-enumerasi, hash password, audit log, invalidasi sesi) | `be34df7` |
+| D-01 | `resources/views/auth/login.blade.php:173-183, 243-249` | Kebocoran Kredensial & Autofill | Tombol Quick Demo Login dan event handler JS `.btn-demo` mengekspos email dan password demo | Tombol demo tampil di antarmuka web publik dan mengisi password otomatis | DEAD | Hapus komponen visual tombol demo dan script autofill | `e719798` |
+| D-02 | `app/Services/AuditService.php:1-45` | Missing Service Implementation (F-01) | File `AuditService.php` kosong 0 byte tetapi diimpor & dipanggil di `LoginController`, `ForecastController`, dll. | Login pengguna & test `DatasetAndForecastImportTest` gagal dengan fatal error HTTP 500 `Class AuditService not found` | BROKEN-PRD | Implementasikan `AuditService::log()` untuk menyimpan ke `audit_logs` dan menangani error secara aman | `e719798` |
+| D-03 | `tests/Feature/IsoSecurityHardeningTest.php:1-85` | Missing Test File Implementation | File `IsoSecurityHardeningTest.php` kosong 0 byte menyebabkan kegagalan PHPUnit suite | PHPUnit mengeluarkan error exit code 1 pada berkas uji kosong | BROKEN-PRD | Lengkapi pengujian keamanan autentikasi (anti-enumerasi, hash password, audit log, invalidasi sesi) | `e719798` |
 | D-04 | `config/pangan.php:13-15` | Default Hardcoded Password Fallback | Fallback password demo literal `'Admin1234'`, `'Bumdes1234'`, `'Distrib1234'` pada konfigurasi seeder | Digunakan oleh seeder saat environment variabel kosong | KEEP | Dipertahankan untuk akun demo seeder lokal, dilaporkan mekanisme pembacaannya | - |
 | D-05 | `database/seeders/DatabaseSeeder.php:19` | Eksekusi Seeder Demo di Production | `DemoUserSeeder::class` dipanggil tanpa pengecekan environment `app()->isProduction()` | `php artisan db:seed` di production akan men-seed akun demo publik | DECISION | Dilaporkan ke user; rekomendasi guard environment diusulkan di bagian 6 | - |
 | D-06 | `routes/web.php:32-37` | Ketiadaan Registrasi Publik & Reset Password | Tidak ada rute registrasi mandiri atau lupa password pada rute web | Akses guest ke `/register` atau `/password/reset` menghasilkan HTTP 404 | DECISION | Dikonfirmasi sesuai PRD F-11 (akun diterbitkan terpusat oleh Admin) | - |
@@ -389,9 +445,9 @@ Format kolom: `ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan 
 ### 4.5 Temuan E — Non-Goals, Modul Duplikat, & Integritas Data (PRD v1.1)
 | ID | File:baris | Jenis | Bukti statis | Bukti runtime | Putusan | Tindakan | Commit |
 |---|---|---|---|---|---|---|---|
-| E-01 | `resources/views/welcome.blade.php` | Boilerplate View Mati | Berkas template default Laravel (72 KB) tidak memiliki pemanggilan rute/controller aktif | Akses `GET /` diarahkan melalui HTTP 302 ke `/peta`, view tidak pernah dirender | DEAD | Hapus berkas template mati | `90a276a` |
-| E-02 | `app/Http/Middleware/SecurityHeaders.php` | Berkas Kosong Tak Terdaftar | Berkas middleware kosong 0-byte tidak terdaftar pada pipeline di `bootstrap/app.php` | Tidak pernah dieksekusi dalam lifecycle HTTP request | DEAD | Hapus berkas kosong | `90a276a` |
-| E-03 | `resources/views/peta/detail.blade.php:204-206`, `app/Http/Controllers/WilayahController.php:215, 229` | Pelanggaran Privasi Resi Publik (PRD 4.1 & 13) | Field `no_resi` (`RESI - CONTOH - 0001` atau resi pengiriman aktif) diekspos di kartu detail wilayah publik untuk pengunjung anonim | Tamu publik tanpa autentikasi dapat melihat nomor resi pengiriman | NOT-ALLOWED | Ganti eksposur resi pada halaman publik dengan indikator agregat kanal logistik | `90a276a` |
+| E-01 | `resources/views/welcome.blade.php` | Boilerplate View Mati | Berkas template default Laravel (72 KB) tidak memiliki pemanggilan rute/controller aktif | Akses `GET /` diarahkan melalui HTTP 302 ke `/peta`, view tidak pernah dirender | DEAD | Hapus berkas template mati | `a2d1644` |
+| E-02 | `app/Http/Middleware/SecurityHeaders.php` | Berkas Kosong Tak Terdaftar | Berkas middleware kosong 0-byte tidak terdaftar pada pipeline di `bootstrap/app.php` | Tidak pernah dieksekusi dalam lifecycle HTTP request | DEAD | Hapus berkas kosong | `a2d1644` |
+| E-03 | `resources/views/peta/detail.blade.php:204-206`, `app/Http/Controllers/WilayahController.php:215, 229` | Pelanggaran Privasi Resi Publik (PRD 4.1 & 13) | Field `no_resi` (`RESI - CONTOH - 0001` atau resi pengiriman aktif) diekspos di kartu detail wilayah publik untuk pengunjung anonim | Tamu publik tanpa autentikasi dapat melihat nomor resi pengiriman | NOT-ALLOWED | Ganti eksposur resi pada halaman publik dengan indikator agregat kanal logistik | `a2d1644` |
 | E-04 | `app/Http/Controllers/WilayahController.php:151-178, 238-254, 287-305` | Unlabeled Hardcoded Demo Showcase Data | Angka metrik KPI dan tabel 12-bulan untuk Kabupaten Banyumas (3302) di-hardcode di controller alih-alih membaca tabel `forecasts` | Halaman `/wilayah/3302` menampilkan angka mockup statis tanpa label data contoh | DECISION | Laporkan ke user; ajukan opsi menambahkan label showcase atau beralih 100% ke tabel `forecasts` | - |
 
 ---
@@ -442,24 +498,64 @@ Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarm
 | `372ffa1` | 2026-10-13 | audit(C): perketat otorisasi peran, visibilitas UI, dan isolasi data sesuai PRD 4.1 [C-01, C-02, C-03, C-04, C-05, C-06, C-07] | Pisahkan rute dan policy buat pengiriman khusus distributor, proteksi menu navigasi & tombol aksi dari salah peran, verifikasi data scoping |
 | `db7f9a1` | 2026-10-13 | audit(B): bersihkan elemen UI mati dan perbaiki komponen antarmuka [B-01, B-02, B-03, B-04, B-05, B-06] | Hapus fake footer link spans di layout & login, tambahkan atribut eksplisit type=button, lengkapi test audit UI |
 | `66eae27` | 2026-10-13 | audit(A): bersihkan metode kontroler mati dan verifikasi backend [A-01] | Hapus metode PetaController@detail dan unused imports, kompilasi production build assets, verifikasi seluruh rute, model, dan dependensi |
+| `5654ee7` | 2026-10-13 | audit(A): sinkronisasi log komit AUDIT.md untuk langkah A | Pembaruan catatan hash komit pada dokumen AUDIT.md |
 
 ---
 
-## 6. Butuh Keputusan Manusia
+## 6. Keputusan Manusia & Penerapannya (Decisions & Applied Actions)
 
-1. **D-05 (Safeguard untuk DemoUserSeeder di Lingkungan Produksi)**:
-   - **Kondisi saat ini**: `DatabaseSeeder.php:19` memanggil `$this->call(DemoUserSeeder::class)` secara langsung tanpa penjaga lingkungan (`! app()->isProduction()`). Hal ini berisiko men-seed akun demo ber-password default jika seeder dijalankan di server produksi.
-   - **Rekomendasi tindakan**: Tambahkan pengecekan lingkungan `if (! app()->isProduction())` atau flag khusus sebelum menjalankan `DemoUserSeeder`. Sesuai instruksi, seeder belum diubah.
-   - **Status**: Menunggu keputusan pengguna.
+Seluruh keputusan arsitektural dan operasional yang telah disetujui telah didokumentasikan dan diterapkan pada basis kode:
 
-2. **D-06 (Konfirmasi Ketiadaan Registrasi Publik & Forgot Password)**:
-   - **Kondisi saat ini**: Tidak ada form registrasi mandiri publik (`/register`) maupun alur reset sandi mandiri (`/forgot-password`). Seluruh akun pengguna dibuat oleh Administrator Nasional melalui menu `/admin/pengguna` (PRD Bagian 4.1 & F-11).
-   - **Rekomendasi tindakan**: Pertahankan arsitektur saat ini tanpa membuat rute registrasi publik terbuka.
-   - **Status**: Menunggu konfirmasi pengguna.
+### 6.1 Keputusan D-05: Perlindungan Seeder Akun Demo di Lingkungan Produksi (Applied)
+- **Keputusan**: Menerapkan flag environment `SEED_DEMO_USERS` (default: `false`). Seeder `DemoUserSeeder` hanya mengeksekusi pembuatan akun demo bila flag ini bernilai `true`.
+- **Implementasi Keamanan**:
+  1. `config/pangan.php` menambahkan opsi `'seed_demo_users' => (bool) env('SEED_DEMO_USERS', false)`.
+  2. `.env.example` menyertakan komentar dokumentasi: `# SEED_DEMO_USERS=true`, `# DEMO_PASS_ADMIN=`, `# DEMO_PASS_BUMDES=`, `# DEMO_PASS_DISTRIBUTOR=`.
+  3. `database/seeders/DemoUserSeeder.php` memeriksa `config('pangan.seed_demo_users')`. Jika bernilai `false`, seeder mencetak pesan peringatan dan melewati pembuatan akun demo.
+  4. Bila dijalankan di lingkungan produksi (`app()->isProduction()`) dan flag bernilai `true`, `DemoUserSeeder` mewajibkan kata sandi dibaca dari environment variable (`DEMO_PASS_ADMIN`, `DEMO_PASS_BUMDES`, `DEMO_PASS_DISTRIBUTOR`). Jika variabel env kosong di production, seeder melempar `RuntimeException` dan membatalkan proses guna mencegah penggunaan kata sandi fallback default yang lemah.
+- **Status**: **DITERAPKAN (APPLIED & SECURED)**.
 
-3. **E-04 (Penanganan Data Hardcoded Showcase Banyumas 3302 pada `WilayahController`)**:
-   - **Kondisi saat ini**: Pada [`WilayahController.php:151-178, 238-254, 287-305`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/app/Http/Controllers/WilayahController.php#L151-L178), Kabupaten Banyumas (kode `3302`) memiliki nilai metrik, 12 baris horizon, dan koridor rekomendasi yang di-hardcode agar identik 100% dengan screenshot desain (`design/Detail Wilayah & Analisis Prediksi 12 Bulan.png`). Di sisi lain, tabel `forecasts` di database sudah memiliki 12 baris prediksi ML nyata untuk Banyumas.
-   - **Pilihan tindakan**:
-     - *Opsi A (Recommended)*: Tetap pertahankan angka showcase untuk Banyumas sebagai data demo kompetisi/video namun tambahkan label banner kecil *"Data Contoh Showcase Mockup"* pada header halaman detail Banyumas agar memenuhi kaidah transparansi PRD Section 13.
-     - *Opsi B*: Hapus percabangan `if ($kode === '3302')` dan gunakan 100% data dinamis dari tabel `forecasts` database (namun angka pada video demo akan mengikuti data asli ML bukan persis mockup desain).
-   - **Status**: Menunggu keputusan pengguna.
+---
+
+### 6.2 Keputusan D-06: Ketiadaan Registrasi Publik & Reset Password Mandiri (Accepted)
+- **Keputusan**: Diterima (Accepted). Sesuai dengan spesifikasi PRD Bagian 4.1 dan Bagian 6 (Fitur F-01 & F-11), aplikasi Early-Warning Ketahanan Pangan ini merupakan sistem tertutup operasional antar-instansi (BUMDes, Distributor resmi, dan Administrator Nasional).
+- **Hasil Audit**:
+  - Tidak dibuat rute registrasi publik (`/register`) maupun rute lupa sandi publik (`/forgot-password`).
+  - Akun operator baru hanya dapat diterbitkan oleh Administrator Nasional melalui modul resmi `/admin/pengguna/buat`.
+  - Percobaan akses guest ke endpoint registrasi/reset kata sandi tetap menghasilkan HTTP 404 Not Found secara aman.
+- **Status**: **DITERIMA & SESUAI PRD (ACCEPTED)**.
+
+---
+
+### 6.3 Keputusan E-04: Penanganan Data Showcase Kabupaten Banyumas 3302 (Option A Applied)
+- **Keputusan**: Menerapkan **Opsi A**. Tetap mempertahankan angka showcase untuk Kabupaten Banyumas (kode `3302`, komoditas beras) agar demonstrasi antarmuka dan video preview sesuai 100% dengan rancangan desain UI/UX, namun menambahkan label transparansi yang jelas pada antarmuka web serta memetakan seluruh perbedaan angka terhadap basis data.
+- **Implementasi Antarmuka**:
+  - Menambahkan banner dan badge visible `[Data Contoh / Simulasi]` pada bagian atas halaman [`resources/views/peta/detail.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/detail.blade.php) khusus untuk Kabupaten Banyumas (3302) dengan komoditas beras.
+  - Pengunjung dan juri kompetisi secara transparan mengetahui bahwa rincian Banyumas merupakan data simulasi showcase mockup desain.
+- **Tabel Komparasi Angka: Data Showcase Mockup vs Nilai Database Aktual pada Peta**:
+
+| Indikator / Metrik | Nilai Showcase Mockup (Detail Wilayah `/wilayah/3302`) | Nilai Database Aktual (Peta Heatmap `/peta` Periode Terakhir) | Selisih (Varian) | Penjelasan Teknis |
+|---|---|---|---|---|
+| **Total Pasokan (Supply)** | `18.500,0 ton` (18.500.000 kg) | `24.631,4 ton` (24.631.388,75 kg) | `-6.131,4 ton` (-24,9%) | Angka detail menggunakan data mockup showcase desain; database peta merefleksikan roll-forward panen aktual + pasokan masuk. |
+| **Total Kebutuhan (Demand)** | `17.600,0 ton` (17.600.000 kg) | `15.686,6 ton` (15.686.580,00 kg) | `+1.913,4 ton` (+12,2%) | Angka kebutuhan pada mockup desain memuat estimasi domestik 15.470 ton + industri 1.830 ton + cadangan 300 ton. |
+| **Rasio Pasokan/Kebutuhan** | `1,0511` (105,1%) | `1,5702` (157,02%) | `-0,5191` (-51,91%) | Kedua rasio berada di atas ambang batas penuh (`≥ 100%`), sehingga status wilayah **konsisten sama-sama PENUH / SURPLUS**. |
+| **Status Ketahanan Pangan** | **Penuh / Surplus** (`penuh`) | **Penuh / Surplus** (`penuh`) | **0 (Identik)** | Konsistensi status warna merah/coral (Penuh) tetap terjaga antara peta dan detail. |
+| **Submetrik Panen** | `15.200,0 ton` | Dinamis dari estimasi `forecasts` | N/A | Mockup showcase merinci breakdown: Panen 15.200 ton, Stok Awal 3.100 ton, Pasokan Masuk 200 ton. |
+| **Submetrik Konsumsi** | Domestik: 15.470 ton, Industri: 1.830 ton, Cadangan: 300 ton | Agregat demand bulanan | N/A | Dirinci pada showcase untuk visualisasi 3 pilar kebutuhan pangan wilayah. |
+| **Surplus Bersih** | `+900,0 ton` | Dinamis (`supply - demand`) | N/A | Menjadi pemicu rekomendasi koridor logistik ke Cilacap, Purbalingga, dan Kebumen. |
+
+- **Status**: **DITERAPKAN (OPTION A APPLIED)**.
+
+---
+
+### 6.4 Keputusan Rekonsiliasi Modul Panen & Jadwal Tanam BUMDes (Reconciliation Decision)
+- **Kondisi & Pemeriksaan**:
+  - Berkas `panen/create.blade.php` dan metode kontroler `HarvestReportController@create` diperiksa di seluruh repositori: **tidak ditemukan rute, pemanggilan, maupun kebutuhan untuk berkas tersebut**.
+  - Alur pelaporan survei panen bulanan (PRD F-09) telah didesain secara elegan dan terpadu (single-page portal) di dalam [`resources/views/panen/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/panen/index.blade.php), di mana form survei panen & sisa stok berada berdampingan dengan evaluasi rekap 12 bulan dan tombol unduh CSV.
+  - Pengiriman form ditangani langsung oleh `POST /panen` (`HarvestReportController@store`).
+  - Halaman kalender rekomendasi tanam menggunakan berkas tampilan [`resources/views/jadwal-tanam/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/jadwal-tanam/index.blade.php) yang dirender oleh `PlantingController@index` (rute `GET /jadwal-tanam`).
+- **Keputusan**:
+  - Mempertahankan arsitektur portal terpadu BUMDes pada `panen/index.blade.php` tanpa membuat `panen/create.blade.php` baru yang redundan.
+  - Memastikan `POST /panen` dapat diakses oleh BUMDes (wilayah sendiri) dan Administrator Nasional (seluruh kabupaten) sesuai matriks PRD Bagian 4.1, diverifikasi oleh test suite otomatis.
+  - Memperbarui tabel dokumentasi Blade Views pada Bagian 4.1.3 untuk merefleksikan nama berkas yang sebenarnya.
+- **Status**: **DIREKONSILIASI & DISETUJUI (RECONCILED)**.

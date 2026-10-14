@@ -38,7 +38,7 @@
                     </a>
                     <span class="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                        Sesi Enkripsi TLS 1.3
+                        Sesi Terenkripsi
                     </span>
                 </div>
             </div>
@@ -209,7 +209,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
                 <span>&copy; {{ date('Y') }} SIPANGAN WASPADA. Tata Kelola Terpadu Ketahanan Pangan RI.</span>
                 <div class="text-xs text-slate-400">
-                    <span>Sesi Terenkripsi TLS 1.3 • Akses Terbatas Operator Resmi</span>
+                    <span>Sesi Terenkripsi • Akses Terbatas Operator Resmi</span>
                 </div>
             </div>
         </footer>

@@ -54,6 +54,21 @@
       </div>
     </div>
 
+    @if ($kode === '3302' && $komoditas->kode === 'beras')
+      <!-- Banner Showcase Mockup Desain Banyumas (E-04 Opsi A) -->
+      <div class="rounded-2xl p-4 bg-amber-50/90 border border-amber-300 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-1 rounded-lg text-[10px] font-black bg-amber-200 text-amber-950 uppercase tracking-wide border border-amber-300">
+            Data Contoh / Simulasi
+          </span>
+          <span class="font-medium text-slate-700">
+            Angka metrik dan horizon 12 bulan pada halaman ini disajikan sebagai data contoh / simulasi showcase kompetisi sesuai spesifikasi desain mockup.
+          </span>
+        </div>
+        <span class="text-[11px] text-amber-800 shrink-0 font-semibold">Banyumas (3302) • Beras</span>
+      </div>
+    @endif
+
     <!-- Alert Banner (Coral / Red Early Warning Banner) -->
     @php
       $isPenuh = ($statusTerbaru['status'] ?? '') === 'penuh';

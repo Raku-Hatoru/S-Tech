@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Komoditas;
 use App\Models\Provinsi;
+use App\Models\Setting;
 use App\Models\StatusWilayah;
 use App\Services\StatusService;
 use Carbon\Carbon;
@@ -37,11 +38,19 @@ class PetaController extends Controller
         // Daftar provinsi untuk panel fallback tabel dan pencarian
         $provinsiList = Provinsi::orderBy('nama')->get(['kode', 'nama']);
 
+        // Ambang batas rasio status dibaca dinamis dari settings
+        $ambangDefisit = (float) Setting::nilai('ambang_defisit_max', 0.70);
+        $ambangWaspada = (float) Setting::nilai('ambang_waspada_min', 0.90);
+        $ambangPenuh = (float) Setting::nilai('ambang_penuh_min', 1.00);
+
         return view('peta.index', [
             'komoditasList' => $komoditasList,
             'periodes' => $periodes,
             'periodeDefault' => $periodeDefault,
             'provinsiList' => $provinsiList,
+            'ambangDefisit' => $ambangDefisit,
+            'ambangWaspada' => $ambangWaspada,
+            'ambangPenuh' => $ambangPenuh,
         ]);
     }
 }

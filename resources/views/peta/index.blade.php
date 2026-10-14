@@ -145,22 +145,22 @@
         <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span>
-            <span class="font-bold text-slate-800">Defisit (&lt;70%)</span>
+            <span class="font-bold text-slate-800">Defisit (&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
             <span class="text-[11px] text-slate-400">Kekurangan Pasokan</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
-            <span class="font-bold text-slate-800">Seimbang (70% - &lt;90%)</span>
+            <span class="font-bold text-slate-800">Seimbang ({{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
             <span class="text-[11px] text-slate-400">Pasokan Aman</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-[#eab308]"></span>
-            <span class="font-bold text-slate-800">Waspada (90% - &lt;100%)</span>
+            <span class="font-bold text-slate-800">Waspada ({{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
             <span class="text-[11px] text-slate-400">Mendekati Jenuh</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-[#991b1b]"></span>
-            <span class="font-bold text-slate-800">Penuh / Surplus (≥100%)</span>
+            <span class="font-bold text-slate-800">Penuh / Surplus (≥{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
             <span class="text-[11px] text-slate-400">Risiko Pembusukan & Emisi</span>
           </div>
           <div class="flex items-center gap-2">
