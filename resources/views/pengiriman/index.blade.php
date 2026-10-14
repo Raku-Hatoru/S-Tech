@@ -12,7 +12,7 @@
             MODUL DISTRIBUTOR LOGISTIK
           </span>
           <span class="text-slate-400">•</span>
-          <span class="font-bold text-slate-500">PRD F-07 • F-08 Compliant</span>
+          <span class="font-bold text-slate-500">Standar Logistik Pangan</span>
         </div>
         <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5 tracking-tight">
           Portal Manajemen Distribusi Pangan Logistik

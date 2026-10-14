@@ -61,7 +61,7 @@
             <div class="border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-2 mb-1">
                     <span class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-900 text-white uppercase tracking-wider">
-                        PRD 8.3 & 8.4
+                        STANDAR STATUS
                     </span>
                     <h2 class="text-lg font-bold text-slate-900">Parameter Logika Status Wilayah</h2>
                 </div>
@@ -147,7 +147,7 @@
                 {{-- Pesan Dampak Surplus --}}
                 <div>
                     <label for="pesan_dampak_surplus" class="block text-xs font-bold text-slate-800 mb-1.5">
-                        Pesan Dampak Surplus Berisiko (PRD 8.4)
+                        Pesan Dampak Surplus Berisiko
                     </label>
                     <textarea name="pesan_dampak_surplus" id="pesan_dampak_surplus" rows="2" required
                               class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 shadow-2xs">{{ old('pesan_dampak_surplus', $settings['pesan_dampak_surplus']) }}</textarea>
@@ -156,7 +156,7 @@
                 {{-- Pesan Dampak Defisit --}}
                 <div>
                     <label for="pesan_dampak_defisit" class="block text-xs font-bold text-slate-800 mb-1.5">
-                        Pesan Dampak Defisit Pasokan (PRD 8.4)
+                        Pesan Dampak Defisit Pasokan
                     </label>
                     <textarea name="pesan_dampak_defisit" id="pesan_dampak_defisit" rows="2" required
                               class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 shadow-2xs">{{ old('pesan_dampak_defisit', $settings['pesan_dampak_defisit']) }}</textarea>

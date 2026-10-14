@@ -304,7 +304,7 @@
                             <label for="sisa_stok_kg" class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                                 <span>Field 2: Sisa Stok Akhir Survei</span>
                                 <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-200 text-amber-900 uppercase">
-                                    PRD KRITIS
+                                    PENTING
                                 </span>
                             </label>
                             <span class="text-[10px] font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
@@ -330,13 +330,13 @@
                     </div>
                 </div>
 
-                {{-- Box Penjelasan Logika Sistem (PRD F-09 & UML 8.3) --}}
+                {{-- Box Penjelasan Logika Sistem --}}
                 <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-900 flex items-start gap-3">
                     <svg class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <p class="font-bold text-blue-950 mb-0.5">Ketentuan Arsitektur Logika Sistem (PRD F-09 & UML 8.3):</p>
+                        <p class="font-bold text-blue-950 mb-0.5">Ketentuan Arsitektur Logika Sistem:</p>
                         <p class="text-blue-800 leading-relaxed text-[11px]">
                             "Sisa stok survei ini akan otomatis menjadi <strong>STOK AWAL</strong> bulan berikutnya dan menggantikan hitungan estimasi matematis. Jika tidak diisi, sistem menggunakan stok estimasi cadangan <code>max(0, supply - demand)</code>."
                         </p>
@@ -462,7 +462,7 @@
             <div>
                 <div class="flex items-center gap-2 mb-1">
                     <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black bg-blue-900 text-white uppercase tracking-wider">
-                        MODUL 2 • UML 9.5
+                        MODUL 2 • REKAPITULASI
                     </span>
                     <h2 class="text-lg font-bold text-slate-900 tracking-tight">Rekapitulasi Laporan Panen Bulanan & Evaluasi Prediksi</h2>
                 </div>

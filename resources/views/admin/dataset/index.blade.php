@@ -94,7 +94,7 @@
                     <h2 class="text-base font-bold text-slate-900">Unggah Dataset CSV</h2>
                 </div>
                 <p class="text-xs text-slate-500 mb-5 leading-relaxed">
-                    Unggah berkas CSV dataset bulanan riil (format PRD 9.2). Nilai sel kosong akan diatur sebagai <code>NULL</code> dan <code>pasokan_masuk_kg</code> otomatis <code>0</code> bila kosong.
+                    Unggah berkas CSV dataset bulanan riil (format data historis). Nilai sel kosong akan diatur sebagai <code>NULL</code> dan <code>pasokan_masuk_kg</code> otomatis <code>0</code> bila kosong.
                 </p>
 
                 <form action="{{ route('admin.dataset.store') }}" method="POST" enctype="multipart/form-data" id="form-upload-dataset">

@@ -12,7 +12,7 @@
             MODUL DISTRIBUTOR LOGISTIK
           </span>
           <span class="text-slate-400">•</span>
-          <span class="font-bold text-slate-500">PRD F-07 • F-08 Compliant</span>
+          <span class="font-bold text-slate-500">Standar Logistik Pangan</span>
         </div>
         <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5 tracking-tight">
           Portal Manajemen Distribusi Pangan Logistik
@@ -255,11 +255,11 @@
               </div>
             </div>
 
-            <!-- Disclaimer Wajib PRD -->
+            {{-- Disclaimer Resmi --}}
             <div class="p-3.5 rounded-lg bg-white border border-amber-300 flex items-start gap-2.5 text-xs text-slate-700">
               <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
               <div>
-                <b class="text-slate-900">Disclaimer Wajib PRD:</b> Sistem ini bukan layanan penjualan komersial, melainkan platform pemantauan, tracing, dan mitigasi kelebihan suplai logistik pangan nasional.
+                <b class="text-slate-900">Perhatian:</b> Sistem ini bukan layanan penjualan komersial, melainkan platform pemantauan, tracing, dan mitigasi kelebihan suplai logistik pangan nasional.
               </div>
             </div>
 
@@ -358,11 +358,11 @@
             </div>
           </div>
 
-          <!-- Rekomendasi Rerouting Otomatis (PRD 9.3) -->
+          {{-- Rekomendasi Rerouting Otomatis --}}
           <div class="p-4 rounded-xl bg-sky-50 border border-sky-200 space-y-2">
             <div class="flex items-center gap-2 text-xs font-bold text-sky-950">
               <svg class="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Rekomendasi Rerouting Otomatis (PRD 9.3)</span>
+              <span>Rekomendasi Pengalihan Rute Otomatis</span>
             </div>
             <p id="reroute-desc" class="text-xs text-sky-900 leading-relaxed">
               <b>Kab. Tegal (3328)</b> mengalami defisit beras sebanyak <b class="text-rose-700">-340 ton</b>. Insentif subsidi ongkos angkut pangan provinsi tersedia jika armada dialihkan.

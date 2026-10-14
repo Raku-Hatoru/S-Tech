@@ -41,7 +41,7 @@
                     </a>
                 </div>
 
-                <!-- Nav Menu Desktop — Sesuai Design Mockup & Matriks PRD 4.1 -->
+                {{-- Nav Menu Desktop --}}
                 <nav class="hidden md:flex items-center space-x-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80">
                     {{-- 1. Peta Heatmap Nasional (Semua Role & Guest) --}}
                     <a href="{{ route('peta.index') }}"
@@ -122,7 +122,7 @@
 
     <!-- Footer Resmi -->
     <footer class="mt-auto bg-white border-t border-slate-200">
-        <!-- Klausul & Regulasi PRD Banner -->
+        {{-- Klausul & Regulasi Banner --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
             <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-3">
                 <svg class="w-5 h-5 text-amber-700 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@
                 </svg>
                 <div class="text-xs text-amber-900 leading-relaxed">
                     <span class="font-bold uppercase tracking-wider block mb-0.5 text-amber-950">Klausul Regulasi & Batasan Sistem</span>
-                    Sistem ini merupakan platform pemantauan & tracking early-warning pasokan pangan. Bukan platform transaksi jual-beli komersial. Mengacu pada PRD & Dokumen Arsitektur Ketahanan Pangan Nasional Republik Indonesia.
+                    Sistem ini merupakan platform pemantauan & pelacakan dini pasokan pangan, bukan platform transaksi jual-beli komersial. Dikelola sesuai ketentuan dan kerangka tata kelola ketahanan pangan nasional Republik Indonesia.
                 </div>
             </div>
         </div>

@@ -99,7 +99,7 @@
                     <h2 class="text-base font-bold text-slate-900">Unggah Hasil Prediksi CSV</h2>
                 </div>
                 <p class="text-xs text-slate-500 mb-5 leading-relaxed">
-                    Unggah berkas CSV hasil pipeline model XGBoost (format PRD 9.2b). Prediksi baru tidak menghapus histori bulan sebelumnya untuk evaluasi akurasi model.
+                    Unggah berkas CSV hasil pipeline model XGBoost (format data proyeksi model). Prediksi baru tidak menghapus histori bulan sebelumnya untuk evaluasi akurasi model.
                 </p>
 
                 <form action="{{ route('admin.forecast.store') }}" method="POST" enctype="multipart/form-data" id="form-upload-forecast">

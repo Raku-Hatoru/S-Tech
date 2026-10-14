@@ -48,7 +48,7 @@
           Peta Heatmap & Early-Warning Surplus Pangan Nasional
         </h1>
         <p class="text-xs sm:text-sm text-slate-500 mt-1">
-          Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan anjloknya harga produsen (PRD v1.1).
+          Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan anjloknya harga produsen.
         </p>
       </div>
 
@@ -136,11 +136,11 @@
       </div>
     </div>
 
-    <!-- Kategori Indikator PRD (Bar Legenda Sesuai Mockup) -->
+    <!-- Kategori Indikator Status (Bar Legenda Sesuai Mockup) -->
     <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs">
       <div class="flex items-center justify-between flex-wrap gap-3">
         <span class="text-[11px] font-black uppercase tracking-wider text-slate-500">
-          Kategori Indikator PRD:
+          Legenda Status Wilayah:
         </span>
         <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
           <div class="flex items-center gap-2">
@@ -335,11 +335,11 @@
           </div>
         </div>
 
-        <!-- Peringatan Dampak Riil (PRD 8.4) -->
+        <!-- Peringatan Dampak Wilayah -->
         <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-1.5 text-xs">
           <div class="font-extrabold uppercase text-amber-900 flex items-center gap-1.5 text-[11px]">
             <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            Peringatan Dampak Riil (PRD 8.4)
+            Peringatan Dampak Wilayah
           </div>
           <p id="panel-pesan-dampak" class="text-amber-900/90 leading-relaxed text-[11px]">
             Pangan berisiko basi/terbuang dan menghasilkan emisi gas; harga produsen berisiko turun drastis akibat pasokan melimpah di atas kapasitas serap.
@@ -508,7 +508,7 @@
           <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
             <tr>
               <th class="px-4 py-3">Wilayah</th>
-              <th class="px-4 py-3">Status PRD</th>
+              <th class="px-4 py-3">Status Wilayah</th>
               <th class="px-4 py-3 text-right">Rasio</th>
               <th class="px-4 py-3 text-right">Pasokan (Supply)</th>
               <th class="px-4 py-3 text-right">Kebutuhan (Demand)</th>
