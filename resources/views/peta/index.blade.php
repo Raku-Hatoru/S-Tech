@@ -41,7 +41,7 @@
             SIPANGAN-XGBOOST
           </span>
           <span class="text-xs font-semibold text-slate-500">
-            • Telemetry Pipeline Aktif: 514 Titik Pantau Terverifikasi
+            • 34 titik pantau terverifikasi (wilayah percontohan)
           </span>
         </div>
         <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -53,13 +53,17 @@
       </div>
 
       <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-        <div class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200/90 text-xs font-bold text-slate-700 shadow-2xs">
+        <div class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200/90 text-xs font-bold text-slate-700 shadow-2xs select-none">
           <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Data Teruji: BAPANAS & BPS
+          Data Resmi: BAPANAS & BPS
         </div>
+        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi dan sumber data">
+          <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+          Tentang Data
+        </button>
         <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          Unduh Buletin Mingguan (.PDF)
+          Unduh Buletin (.PDF)
         </button>
       </div>
     </div>
@@ -203,12 +207,15 @@
       <div class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md relative">
         <!-- Floating Header Map Controls -->
         <div class="absolute top-7 left-7 right-7 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-[11px] font-bold text-slate-200">
+          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
             <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-            Layer: Indeks Keseimbangan Lumbung (IKL) • WGS84 Georeferenced
+            <span>Peta: rasio pasokan terhadap kebutuhan</span>
+            <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-400 hover:text-white transition" title="Informasi tentang data dan metodologi">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+            </button>
           </div>
           <div class="pointer-events-auto flex items-center gap-2">
-            <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-[11px] font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
+            <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
               Reset Nasional
             </button>
@@ -220,9 +227,12 @@
 
         <!-- Floating Footer Map Stats -->
         <div class="absolute bottom-7 left-7 right-7 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-[11px] font-semibold text-slate-300">
+          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs font-medium text-slate-200">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            Model Proyeksi: <b class="text-white">Autoregressive XGBoost v1</b> | MAE: ±3.8%
+            <span>Proyeksi: model prakiraan (selisih rata-rata ±3,8%)</span>
+            <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-400 hover:text-emerald-300 transition underline font-bold" title="Detail model & sumber data">
+              Tentang data
+            </button>
           </div>
           <div class="pointer-events-auto flex items-center gap-1.5">
             <button type="button" onclick="map.zoomIn()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
@@ -270,7 +280,7 @@
               PENUH / SURPLUS
             </div>
             <div id="panel-rasio-label" class="text-xs font-bold text-rose-700 mt-0.5">
-              Rasio Pasokan: 105.1% (Threshold: 100%)
+              Rasio Pasokan: 105,1% (Batas Aman: 100%)
             </div>
           </div>
           <div class="w-10 h-10 rounded-xl bg-rose-200/80 text-rose-800 flex items-center justify-center shrink-0">
@@ -366,8 +376,8 @@
           @endif
         </div>
 
-        <div class="text-[10px] text-center text-slate-400 pt-1">
-          Update Otomatis: Sinkronisasi 15 Menit Sekali
+        <div class="text-[11px] text-center text-slate-400 pt-1">
+          Diperbarui otomatis tiap 15 menit
         </div>
       </div>
     </div>
@@ -519,6 +529,87 @@
             <tr><td colspan="6" class="px-4 py-6 text-center text-slate-400">Memuat data tabel...</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Modal Tentang Data -->
+    <div id="modal-tentang-data" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-tentang-title" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" onclick="tutupModalTentangData()"></div>
+      <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+          <div class="bg-slate-900 px-6 py-4 flex items-center justify-between text-white">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white" id="modal-tentang-title">Tentang Data &amp; Metodologi Sistem</h3>
+                <p class="text-xs text-slate-400">Transparansi sumber data, model prakiraan, dan acuan neraca pangan</p>
+              </div>
+            </div>
+            <button type="button" onclick="tutupModalTentangData()" class="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition" aria-label="Tutup modal">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="px-6 py-5 space-y-4 text-xs text-slate-600">
+            <!-- Sumber Data -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+              <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Sumber Data Resmi
+              </div>
+              <p class="leading-relaxed">
+                Data dihimpun dari <strong>Badan Pangan Nasional (BAPANAS)</strong> dan <strong>Badan Pusat Statistik (BPS)</strong> untuk data konsumsi, neraca regional, dan iklim dasar. Data realisasi panen dikonsolidasikan langsung dari laporan mitra BUMDes dan penyuluh pertanian lapangan terverifikasi.
+              </p>
+            </div>
+
+            <!-- Cakupan Wilayah -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+              <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Cakupan Wilayah Percontohan (Pilot Project)
+              </div>
+              <p class="leading-relaxed">
+                Sistem saat ini memantau <strong>34 kabupaten/kota percontohan</strong> di 10 provinsi sentra pangan nasional. Peta georeferensi WGS84 menampilkan batas seluruh wilayah Indonesia, di mana wilayah yang belum masuk percontohan ditandai dengan status <em>Tanpa Data</em> berwarna abu-abu.
+              </p>
+            </div>
+
+            <!-- Metodologi Rasio & Status -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+              <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Metodologi Indeks Rasio Pasokan
+              </div>
+              <p class="leading-relaxed">
+                Rasio pasokan dihitung dari perbandingan antara total pasokan tersedia (stok awal + panen riil/proyeksi + pasokan masuk) terhadap estimasi total kebutuhan konsumsi penduduk per bulan:
+              </p>
+              <ul class="list-disc list-inside space-y-1 pl-1 text-slate-700">
+                <li><strong>Defisit Kritis:</strong> Rasio &lt; 95% (kebutuhan melebihi pasokan).</li>
+                <li><strong>Seimbang / Aman:</strong> Rasio 95% &ndash; 105% (cadangan pangan terjaga ideal).</li>
+                <li><strong>Waspada Surplus:</strong> Rasio 105% &ndash; 120% (pasokan mulai melebihi daya serap).</li>
+                <li><strong>Penuh / Surplus Berlebih:</strong> Rasio &gt; 120% (risiko kelebihan stok dan harga jatuh).</li>
+              </ul>
+            </div>
+
+            <!-- Model Prakiraan -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+              <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Model Prakiraan (Forecast Horizon 12 Bulan)
+              </div>
+              <p class="leading-relaxed">
+                Proyeksi menggunakan model <strong>Autoregressive XGBoost v1</strong> yang dilatih dengan deret waktu historis panen, anomali iklim BMKG, dan tren konsumsi. Model menghasilkan proyeksi horizon 12 bulan ke depan dengan deviasi rata-rata (MAE: ±3,8%, WAPE: ±14,2%).
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end">
+            <button type="button" onclick="tutupModalTentangData()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
+              Tutup
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -738,7 +829,7 @@ async function updatePanelWilayah(kode) {
         : (point.status === 'defisit' ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between' : 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between');
 
       document.getElementById('panel-status-label').textContent = point.label.toUpperCase();
-      document.getElementById('panel-rasio-label').textContent = `Rasio Pasokan: ${point.rasio_persen} (Threshold: 100%)`;
+      document.getElementById('panel-rasio-label').textContent = `Rasio Pasokan: ${point.rasio_persen} (Batas Aman: 100%)`;
 
       // Neraca Supply & Demand
       document.getElementById('panel-neraca-periode').textContent = point.periode;
@@ -897,6 +988,29 @@ function toggleTabel() {
 }
 
 document.getElementById('tabel-filter-input').addEventListener('input', e => filterTabel(e.target.value));
+
+// ── Modal Tentang Data ───────────────────────────────────────────────────
+function bukaModalTentangData() {
+  const modal = document.getElementById('modal-tentang-data');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+}
+
+function tutupModalTentangData() {
+  const modal = document.getElementById('modal-tentang-data');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    tutupModalTentangData();
+  }
+});
 
 // ── Event Filters ────────────────────────────────────────────────────────
 document.getElementById('select-komoditas').addEventListener('change', e => {
