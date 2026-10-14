@@ -43,14 +43,22 @@ class PetaController extends Controller
         $ambangWaspada = (float) Setting::nilai('ambang_waspada_min', 0.90);
         $ambangPenuh = (float) Setting::nilai('ambang_penuh_min', 1.00);
 
+        // Komoditas default (beras atau komoditas pertama)
+        $komoditasDefault = Komoditas::where('kode', 'beras')->first() ?? Komoditas::orderBy('nama')->first();
+        $ringkasan = $komoditasDefault
+            ? $statusService->ringkasanWilayah($komoditasDefault->id, $periodeDefault)
+            : [];
+
         return view('peta.index', [
             'komoditasList' => $komoditasList,
+            'komoditasDefault' => $komoditasDefault,
             'periodes' => $periodes,
             'periodeDefault' => $periodeDefault,
             'provinsiList' => $provinsiList,
             'ambangDefisit' => $ambangDefisit,
             'ambangWaspada' => $ambangWaspada,
             'ambangPenuh' => $ambangPenuh,
+            'ringkasan' => $ringkasan,
         ]);
     }
 }

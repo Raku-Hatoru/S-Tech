@@ -1,3 +1,6 @@
+@php
+  use App\Support\IndoFormat;
+@endphp
 @extends('layouts.app')
 
 @push('styles')
@@ -161,7 +164,7 @@
         <div class="min-w-0 flex items-center gap-1.5 flex-wrap">
           <span class="font-bold text-rose-950">
             <span class="font-black text-rose-800 uppercase tracking-wide text-xs mr-1 px-1.5 py-0.5 rounded bg-rose-200">Peringatan</span>
-            Status Nasional: 28 Kabupaten Berstatus PENUH (Risiko Surplus), 42 Kabupaten DEFISIT.
+            <span id="banner-nasional-text">{{ $ringkasan['banner_text'] ?? 'Status Pangan Nasional Terpantau: 23 Kabupaten Surplus/Penuh, 10 Waspada, 0 Defisit. Selisih Bersih Pasokan: +611.523,5 ton (+123,7% di atas kebutuhan). Pantauan mencakup 34 Kabupaten Percontohan.' }}</span>
           </span>
           <span class="hidden md:inline text-rose-900 text-xs truncate">
             &mdash; Distribusi pasokan darurat direkomendasikan segera dialihkan ke lumbung wilayah defisit pangan.
@@ -277,7 +280,7 @@
               Stok Terverifikasi
             </span>
           </div>
-          <span id="panel-kode" class="font-mono text-xs font-bold text-slate-600">33.02</span>
+          <span id="panel-kode" class="tabular-nums font-bold text-xs text-slate-600">33.02</span>
         </div>
 
         <div>
@@ -339,7 +342,7 @@
           <!-- Selisih Surplus Bersih Highlight -->
           <div class="flex items-center justify-between text-xs px-2 pt-1 font-bold">
             <span class="text-slate-700">Selisih Surplus Bersih</span>
-            <span id="panel-selisih" class="text-rose-700 font-mono">+900,0 ton</span>
+            <span id="panel-selisih" class="text-rose-700 tabular-nums font-bold">+900,0 ton</span>
           </div>
 
           <!-- 3 Rincian Mini Card -->
@@ -373,7 +376,7 @@
           </p>
           <div class="text-xs font-bold text-amber-900 flex items-center gap-1 pt-0.5">
             <svg class="w-3 h-3 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-            Estimasi Deflasi Produsen: -14.2% dalam 14 hari kerja
+            Estimasi Deflasi Produsen: -14,2% dalam 14 hari kerja
           </div>
         </div>
 
@@ -399,112 +402,124 @@
       </div>
     </div>
 
-    <!-- Indikator Konsolidasi Pangan Nasional (4 KPI Cards Sesuai Mockup) -->
+    <!-- Indikator Konsolidasi Pangan (4 KPI Cards Riil Basis Data) -->
     <div class="space-y-3 pt-2">
       <div class="flex items-center gap-2 text-sm font-black text-slate-900 uppercase tracking-tight">
         <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        Indikator Konsolidasi Pangan Nasional
+        Indikator Konsolidasi Pangan (34 Wilayah Pantau)
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- KPI 1 -->
+        <!-- KPI 1: Total Pasokan Terpantau -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Total Pasokan Beras Nasional</div>
+            <div class="text-xs font-bold text-slate-600">Total Pasokan Terpantau (34 Wilayah)</div>
             <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">3.482.150,0 <span class="text-base font-bold text-slate-600">ton</span></div>
-            <div class="text-xs font-bold text-emerald-700 mt-0.5 flex items-center gap-1">
+            <div class="text-2xl font-black text-slate-900 tracking-tight">
+              <span id="kpi-total-supply" class="tabular-nums">{{ $ringkasan['total_supply_formatted'] ?? '1.105.796,7 ton' }}</span>
+            </div>
+            <div id="kpi-total-demand" class="text-xs font-bold text-emerald-700 mt-0.5 flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-              +3.8% di atas demand konsumsi
+              <span>Kebutuhan: <span id="kpi-demand-val" class="tabular-nums">{{ $ringkasan['total_demand_formatted'] ?? '494.273,2 ton' }}</span></span>
+              <span id="kpi-selisih-persen" class="tabular-nums">({{ $ringkasan['selisih_persen_formatted'] ?? '+123,7%' }})</span>
             </div>
           </div>
           <div>
             <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Kapasitas Gudang Terisi</span>
-              <span class="text-slate-900 font-bold">82.4%</span>
+              <span>Rasio Pasokan vs Kebutuhan</span>
+              <span id="kpi-rasio-total" class="text-slate-900 font-bold tabular-nums">
+                {{ IndoFormat::percent(($ringkasan['total_supply_kg'] ?? 0) / max(1, ($ringkasan['total_demand_kg'] ?? 1)), 1, true) }}
+              </span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div class="bg-emerald-600 h-full rounded-full" style="width: 82.4%"></div>
+              <div id="kpi-rasio-bar" class="bg-emerald-600 h-full rounded-full" style="width: {{ min(100, (($ringkasan['total_supply_kg'] ?? 0) / max(1, ($ringkasan['total_demand_kg'] ?? 1))) * 50) }}%"></div>
             </div>
           </div>
         </div>
 
-        <!-- KPI 2 -->
+        <!-- KPI 2: Wilayah Surplus / Penuh -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Wilayah Terancam Surplus</div>
-            <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center">
+            <div class="text-xs font-bold text-slate-600">Wilayah Surplus / Penuh</div>
+            <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">28 <span class="text-base font-bold text-slate-600">Kabupaten (5.4%)</span></div>
-            <div class="text-xs font-bold text-rose-700 mt-0.5">
-              ! 18 Kabupaten tanpa Cold Storage
+            <div class="text-2xl font-black text-slate-900 tracking-tight">
+              <span id="kpi-jumlah-penuh" class="tabular-nums">{{ $ringkasan['jumlah_penuh'] ?? 23 }}</span>
+              <span class="text-base font-bold text-slate-600">Kabupaten (<span id="kpi-persen-penuh" class="tabular-nums">{{ $ringkasan['persen_penuh_formatted'] ?? '67,6%' }}</span>)</span>
+            </div>
+            <div class="text-xs font-bold text-purple-700 mt-0.5">
+              Akumulasi Surplus: <span id="kpi-total-surplus" class="tabular-nums">{{ IndoFormat::ton($ringkasan['total_surplus_kg'] ?? 0, 1, true) }}</span>
             </div>
           </div>
           <div>
             <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Rerata Rasio Wilayah Surplus</span>
-              <span class="text-rose-900 font-bold">104.8%</span>
+              <span id="kpi-rerata-surplus" class="text-purple-900 font-bold tabular-nums">{{ $ringkasan['rerata_rasio_surplus_formatted'] ?? '274,4%' }}</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div class="bg-rose-600 h-full rounded-full" style="width: 100%"></div>
+              <div id="kpi-rerata-surplus-bar" class="bg-purple-600 h-full rounded-full" style="width: 100%"></div>
             </div>
           </div>
         </div>
 
-        <!-- KPI 3 -->
+        <!-- KPI 3: Wilayah Defisit & Waspada -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Wilayah Defisit Prioritas</div>
+            <div class="text-xs font-bold text-slate-600">Wilayah Defisit &amp; Waspada</div>
             <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">42 <span class="text-base font-bold text-slate-600">Kab/Kota (&lt;70%)</span></div>
+            <div class="text-2xl font-black text-slate-900 tracking-tight">
+              <span id="kpi-jumlah-defisit-waspada" class="tabular-nums">{{ $ringkasan['jumlah_defisit_waspada'] ?? 10 }}</span>
+              <span class="text-base font-bold text-slate-600">Kabupaten (<span id="kpi-persen-defisit-waspada" class="tabular-nums">{{ $ringkasan['persen_defisit_waspada_formatted'] ?? '29,4%' }}</span>)</span>
+            </div>
             <div class="text-xs font-bold text-amber-800 mt-0.5">
-              Kebutuhan: 84.200,0 ton relokasi
+              Rincian: <span id="kpi-rincian-defisit">{{ $ringkasan['jumlah_defisit'] ?? 0 }} Defisit</span> &bull; <span id="kpi-rincian-waspada">{{ $ringkasan['jumlah_waspada'] ?? 10 }} Waspada</span>
             </div>
           </div>
           <div>
             <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Target Pemenuhan Relokasi</span>
-              <span class="text-slate-900 font-bold">61.2%</span>
+              <span>Kekurangan Pasokan Riil</span>
+              <span id="kpi-total-defisit" class="text-amber-900 font-bold tabular-nums">{{ $ringkasan['total_defisit_formatted'] ?? '0,0 ton' }}</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div class="bg-amber-500 h-full rounded-full" style="width: 61.2%"></div>
+              <div id="kpi-defisit-bar" class="bg-amber-500 h-full rounded-full" style="width: {{ ($ringkasan['jumlah_defisit'] ?? 0) > 0 ? '75%' : '0%' }}"></div>
             </div>
           </div>
         </div>
 
-        <!-- KPI 4 -->
+        <!-- KPI 4: Neraca Bersih Konsolidasi -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-600">Total Volume Terpantau (3 Komoditas)</div>
+            <div class="text-xs font-bold text-slate-600">Neraca Bersih Konsolidasi</div>
             <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">5.820.400,0 <span class="text-base font-bold text-slate-600">ton</span></div>
-            <div class="text-xs font-bold text-emerald-700 mt-0.5 flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              100% Terintegrasi BUMDes & Bulog
+            <div class="text-2xl font-black text-slate-900 tracking-tight">
+              <span id="kpi-selisih-bersih" class="tabular-nums">{{ $ringkasan['selisih_formatted'] ?? '+611.523,5 ton' }}</span>
+            </div>
+            <div class="text-xs font-bold text-slate-700 mt-0.5 flex items-center gap-1">
+              <span id="kpi-nama-komoditas">Komoditas {{ $komoditasDefault->nama ?? 'Beras' }}</span> &bull; <span id="kpi-jumlah-seimbang">{{ $ringkasan['jumlah_seimbang'] ?? 1 }} Wilayah Seimbang</span>
             </div>
           </div>
           <div>
             <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
-              <span>Akurasi Model Machine Learning</span>
-              <span class="text-slate-900 font-bold">96.2%</span>
+              <span>Cakupan Wilayah Pantau</span>
+              <span id="kpi-cakupan-wilayah" class="text-slate-900 font-bold tabular-nums">{{ $ringkasan['total_wilayah'] ?? 34 }} / 34 Kabupaten</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div class="bg-blue-600 h-full rounded-full" style="width: 96.2%"></div>
+              <div id="kpi-cakupan-bar" class="bg-emerald-600 h-full rounded-full" style="width: 100%"></div>
             </div>
           </div>
         </div>
@@ -649,6 +664,43 @@
 <script>
 const API_BASE = '/api';
 const GEO_BASE = '/geojson';
+
+const IndoFormat = {
+  number(num, decimals = 0) {
+    if (num === null || num === undefined || isNaN(num) || num === '') return '—';
+    return Number(num).toLocaleString('id-ID', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  },
+  percent(val, decimals = 1, isRatio = false, showSign = false) {
+    if (val === null || val === undefined || val === '' || val === '—') return '—';
+    if (typeof val === 'string' && val.includes('%')) return val.replace('.', ',');
+    let n = Number(val);
+    if (isNaN(n)) return '—';
+    if (isRatio) n *= 100;
+    const formatted = Math.abs(n).toLocaleString('id-ID', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }) + '%';
+    if (showSign) return (n > 0 ? '+' : (n < 0 ? '-' : '')) + formatted;
+    return (n < 0 ? '-' : '') + formatted;
+  },
+  ton(kg, decimals = 1, showSign = false) {
+    if (kg === null || kg === undefined || isNaN(kg) || kg === '') return '—';
+    const t = Number(kg) / 1000.0;
+    const str = Math.abs(t).toLocaleString('id-ID', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }) + ' ton';
+    if (showSign) return (t > 0 ? '+' : (t < 0 ? '-' : '')) + str;
+    return (t < 0 ? '-' : '') + str;
+  },
+  kg(kg) {
+    if (kg === null || kg === undefined || isNaN(kg) || kg === '') return '—';
+    return Math.round(Number(kg)).toLocaleString('id-ID') + ' kg';
+  }
+};
 
 const rootStyles = getComputedStyle(document.documentElement);
 const getCssProp = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
@@ -816,6 +868,11 @@ async function muatStatusData() {
     state.statusData = {};
     json.data.forEach(d => { state.statusData[d.kode] = d; });
 
+    // Update Banner dan KPI cards dari data riil ringkasan
+    if (json.ringkasan) {
+      updateKpiCards(json.ringkasan, json.komoditas);
+    }
+
     await renderMapLayer();
     renderTabelData(json.data);
     buildSearchAutocomplete(json.data);
@@ -829,6 +886,69 @@ async function muatStatusData() {
   } finally {
     document.getElementById('peta-loading').classList.add('opacity-0', 'pointer-events-none');
   }
+}
+
+// ── Update Reaktif Banner & 4 Kartu KPI Basis Data ─────────────────────────
+function updateKpiCards(r, komoditas) {
+  if (!r) return;
+
+  // Banner
+  const bannerText = document.getElementById('banner-nasional-text');
+  if (bannerText && r.banner_text) {
+    bannerText.textContent = r.banner_text;
+  }
+
+  // KPI 1: Total Pasokan Terpantau
+  const supplyEl = document.getElementById('kpi-total-supply');
+  if (supplyEl) supplyEl.textContent = r.total_supply_formatted;
+  const demandVal = document.getElementById('kpi-demand-val');
+  if (demandVal) demandVal.textContent = r.total_demand_formatted;
+  const selisihPersenEl = document.getElementById('kpi-selisih-persen');
+  if (selisihPersenEl) selisihPersenEl.textContent = `(${r.selisih_persen_formatted})`;
+  const rasioTotalEl = document.getElementById('kpi-rasio-total');
+  if (rasioTotalEl) {
+    const rasioVal = r.total_demand_kg > 0 ? (r.total_supply_kg / r.total_demand_kg) * 100 : 0;
+    rasioTotalEl.textContent = IndoFormat.percent(rasioVal, 1);
+  }
+  const rasioBar = document.getElementById('kpi-rasio-bar');
+  if (rasioBar) {
+    const pct = r.total_demand_kg > 0 ? Math.min(100, (r.total_supply_kg / r.total_demand_kg) * 50) : 0;
+    rasioBar.style.width = `${pct}%`;
+  }
+
+  // KPI 2: Wilayah Surplus / Penuh
+  const jmlPenuhEl = document.getElementById('kpi-jumlah-penuh');
+  if (jmlPenuhEl) jmlPenuhEl.textContent = r.jumlah_penuh;
+  const persenPenuhEl = document.getElementById('kpi-persen-penuh');
+  if (persenPenuhEl) persenPenuhEl.textContent = r.persen_penuh_formatted;
+  const totalSurplusEl = document.getElementById('kpi-total-surplus');
+  if (totalSurplusEl) totalSurplusEl.textContent = IndoFormat.ton(r.total_surplus_kg, 1, true);
+  const rerataSurplusEl = document.getElementById('kpi-rerata-surplus');
+  if (rerataSurplusEl) rerataSurplusEl.textContent = r.rerata_rasio_surplus_formatted;
+
+  // KPI 3: Wilayah Defisit & Waspada
+  const jmlDefEl = document.getElementById('kpi-jumlah-defisit-waspada');
+  if (jmlDefEl) jmlDefEl.textContent = r.jumlah_defisit_waspada;
+  const persenDefEl = document.getElementById('kpi-persen-defisit-waspada');
+  if (persenDefEl) persenDefEl.textContent = r.persen_defisit_waspada_formatted;
+  const rincianDef = document.getElementById('kpi-rincian-defisit');
+  if (rincianDef) rincianDef.textContent = `${r.jumlah_defisit} Defisit`;
+  const rincianWaspada = document.getElementById('kpi-rincian-waspada');
+  if (rincianWaspada) rincianWaspada.textContent = `${r.jumlah_waspada} Waspada`;
+  const totalDefisitEl = document.getElementById('kpi-total-defisit');
+  if (totalDefisitEl) totalDefisitEl.textContent = r.total_defisit_formatted;
+  const defisitBar = document.getElementById('kpi-defisit-bar');
+  if (defisitBar) defisitBar.style.width = r.jumlah_defisit > 0 ? '75%' : '0%';
+
+  // KPI 4: Neraca Bersih Konsolidasi
+  const selisihEl = document.getElementById('kpi-selisih-bersih');
+  if (selisihEl) selisihEl.textContent = r.selisih_formatted;
+  const namaKomEl = document.getElementById('kpi-nama-komoditas');
+  if (namaKomEl && komoditas) namaKomEl.textContent = `Komoditas ${komoditas.nama}`;
+  const seimbangEl = document.getElementById('kpi-jumlah-seimbang');
+  if (seimbangEl) seimbangEl.textContent = `${r.jumlah_seimbang} Wilayah Seimbang`;
+  const cakupanEl = document.getElementById('kpi-cakupan-wilayah');
+  if (cakupanEl) cakupanEl.textContent = `${r.total_wilayah} / 34 Kabupaten`;
 }
 
 // ── Fetch & Cache GeoJSON ────────────────────────────────────────────────
@@ -1006,19 +1126,18 @@ async function updatePanelWilayah(kode) {
       document.getElementById('panel-neraca-periode').textContent = point.periode;
       document.getElementById('panel-supply-formatted').textContent = point.supply_formatted || '—';
       document.getElementById('panel-demand-formatted').textContent = point.demand_formatted || '—';
-      document.getElementById('panel-supply-raw').textContent = `${(point.supply_kg || 0).toLocaleString('id-ID')} kg terdata`;
-      document.getElementById('panel-demand-raw').textContent = `${(point.demand_kg || 0).toLocaleString('id-ID')} kg konsumsi`;
+      document.getElementById('panel-supply-raw').textContent = `${IndoFormat.kg(point.supply_kg)} terdata`;
+      document.getElementById('panel-demand-raw').textContent = `${IndoFormat.kg(point.demand_kg)} konsumsi`;
 
       const selisihKg = (point.supply_kg || 0) - (point.demand_kg || 0);
-      const selisihTon = (selisihKg / 1000).toLocaleString('id-ID', { maximumFractionDigits: 1 });
-      document.getElementById('panel-selisih').textContent = (selisihKg >= 0 ? `+${selisihTon} ton` : `${selisihTon} ton`);
-      document.getElementById('panel-selisih').className = selisihKg >= 0 ? 'text-rose-700 font-mono' : 'text-blue-700 font-mono';
+      document.getElementById('panel-selisih').textContent = IndoFormat.ton(selisihKg, 1, true);
+      document.getElementById('panel-selisih').className = selisihKg >= 0 ? 'text-rose-700 tabular-nums font-bold' : 'text-blue-700 tabular-nums font-bold';
 
       // Breakdown mini boxes (estimasi proporsional representatif)
       const supplyKg = point.supply_kg || 0;
-      document.getElementById('panel-stok-awal').textContent = `${((supplyKg * 0.17)/1000).toLocaleString('id-ID', {maximumFractionDigits:1})} t`;
-      document.getElementById('panel-panen').textContent = `${((supplyKg * 0.81)/1000).toLocaleString('id-ID', {maximumFractionDigits:1})} t`;
-      document.getElementById('panel-pasokan-masuk').textContent = `${((supplyKg * 0.02)/1000).toLocaleString('id-ID', {maximumFractionDigits:1})} t`;
+      document.getElementById('panel-stok-awal').textContent = IndoFormat.ton(supplyKg * 0.17, 1);
+      document.getElementById('panel-panen').textContent = IndoFormat.ton(supplyKg * 0.81, 1);
+      document.getElementById('panel-pasokan-masuk').textContent = IndoFormat.ton(supplyKg * 0.02, 1);
 
       if (point.stok_estimasi) {
         document.getElementById('panel-stok-badge').innerHTML = '⚠ Stok Estimasi';

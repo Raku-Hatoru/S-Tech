@@ -88,8 +88,8 @@ async function run() {
 
       // Wait for Leaflet map canvas and tiles/polygons to settle
       try {
-        await page.locator('#peta-map svg path.leaflet-interactive').first().waitFor({ state: 'attached', timeout: 15000 });
-        await page.waitForTimeout(1500);
+        await page.locator('#peta-map .leaflet-pane').first().waitFor({ timeout: 10000 });
+        await page.waitForTimeout(2000);
       } catch (e) {
         console.warn(`[WARN] Leaflet selector wait timed out: ${e.message}`);
       }

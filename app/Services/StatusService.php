@@ -11,6 +11,7 @@ use App\Models\Komoditas;
 use App\Models\Setting;
 use App\Models\Shipment;
 use App\Models\StatusWilayah;
+use App\Support\IndoFormat;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -353,6 +354,86 @@ class StatusService
                 'warna_badge' => $statusLevel->warnaBadge(),
             ];
         });
+    }
+
+    /**
+     * Hitung ringkasan statistik jujur wilayah pantau berdasarkan data riil status_wilayah.
+     *
+     * @return array<string, mixed>
+     */
+    public function ringkasanWilayah(int $komoditasId, string $periode): array
+    {
+        $periodeDate = Carbon::parse($periode)->format('Y-m-01');
+
+        $rows = StatusWilayah::where('komoditas_id', $komoditasId)
+            ->whereDate('periode', $periodeDate)
+            ->get();
+
+        $totalWilayah = $rows->count();
+
+        $penuh = $rows->where('status', StatusLevel::Penuh);
+        $seimbang = $rows->where('status', StatusLevel::Seimbang);
+        $waspada = $rows->where('status', StatusLevel::Waspada);
+        $defisit = $rows->where('status', StatusLevel::Defisit);
+        $tanpaData = $rows->where('status', StatusLevel::TanpaData);
+
+        $jumlahPenuh = $penuh->count();
+        $jumlahSeimbang = $seimbang->count();
+        $jumlahWaspada = $waspada->count();
+        $jumlahDefisit = $defisit->count();
+        $jumlahTanpaData = $tanpaData->count();
+
+        $totalSupplyKg = (float) $rows->sum('supply_kg');
+        $totalDemandKg = (float) $rows->sum('demand_kg');
+        $selisihKg = $totalSupplyKg - $totalDemandKg;
+        $selisihPersen = $totalDemandKg > 0 ? ($selisihKg / $totalDemandKg) * 100.0 : 0.0;
+
+        $totalDefisitKg = (float) $defisit->sum(fn ($r) => max(0, (float) $r->demand_kg - (float) $r->supply_kg));
+        $totalSurplusKg = (float) $penuh->sum(fn ($r) => max(0, (float) $r->supply_kg - (float) $r->demand_kg));
+
+        $rerataRasioSurplus = $jumlahPenuh > 0 ? ((float) $penuh->avg('rasio')) * 100.0 : 0.0;
+        $persenPenuh = $totalWilayah > 0 ? ($jumlahPenuh / $totalWilayah) * 100.0 : 0.0;
+        $persenDefisitWaspada = $totalWilayah > 0 ? (($jumlahDefisit + $jumlahWaspada) / $totalWilayah) * 100.0 : 0.0;
+
+        $bannerText = sprintf(
+            'Status Pangan Nasional Terpantau: %d Kabupaten Surplus/Penuh, %d Waspada, %d Defisit. Selisih Bersih Pasokan: %s (%s di atas kebutuhan). Pantauan mencakup %d Kabupaten Percontohan.',
+            $jumlahPenuh,
+            $jumlahWaspada,
+            $jumlahDefisit,
+            IndoFormat::ton($selisihKg, 1, true),
+            IndoFormat::percent($selisihPersen, 1, false, true),
+            $totalWilayah
+        );
+
+        return [
+            'total_wilayah' => $totalWilayah,
+            'jumlah_penuh' => $jumlahPenuh,
+            'jumlah_seimbang' => $jumlahSeimbang,
+            'jumlah_waspada' => $jumlahWaspada,
+            'jumlah_defisit' => $jumlahDefisit,
+            'jumlah_tanpa_data' => $jumlahTanpaData,
+            'jumlah_defisit_waspada' => $jumlahDefisit + $jumlahWaspada,
+            'total_supply_kg' => $totalSupplyKg,
+            'total_demand_kg' => $totalDemandKg,
+            'selisih_kg' => $selisihKg,
+            'selisih_persen' => $selisihPersen,
+            'total_defisit_kg' => $totalDefisitKg,
+            'total_surplus_kg' => $totalSurplusKg,
+            'rerata_rasio_surplus' => $rerataRasioSurplus,
+            'persen_penuh' => $persenPenuh,
+            'persen_defisit_waspada' => $persenDefisitWaspada,
+
+            // Formatted values untuk kemudahan konsumsi di Blade dan JSON
+            'total_supply_formatted' => IndoFormat::ton($totalSupplyKg, 1),
+            'total_demand_formatted' => IndoFormat::ton($totalDemandKg, 1),
+            'selisih_formatted' => IndoFormat::ton($selisihKg, 1, true),
+            'selisih_persen_formatted' => IndoFormat::percent($selisihPersen, 1, false, true),
+            'total_defisit_formatted' => IndoFormat::ton($totalDefisitKg, 1),
+            'rerata_rasio_surplus_formatted' => IndoFormat::percent($rerataRasioSurplus, 1),
+            'persen_penuh_formatted' => IndoFormat::percent($persenPenuh, 1),
+            'persen_defisit_waspada_formatted' => IndoFormat::percent($persenDefisitWaspada, 1),
+            'banner_text' => $bannerText,
+        ];
     }
 
     /**

@@ -180,6 +180,85 @@ Pengujian dijalankan otomatis secara terprogram menggunakan `@axe-core/playwrigh
 
 ---
 
+## Step 4 — Konsistensi Format Angka Indonesia & Kejujuran Metrik KPI (DB-Computed)
+
+### 1. Dasar Spesifikasi & Ketentuan Audit Step 4
+Sesuai rujukan wajib:
+- **docs/PRD.md Bab 9.3 (Entity-Relationship & Skema Data)**:
+  Tabel `status_wilayah` adalah sumber kebenaran tunggal (*single source of truth*) status neraca pangan per kabupaten per bulan, yang memuat `supply_kg`, `demand_kg`, `rasio`, `status`, dan `sumber`.
+- **docs/PRD.md Bab 8.1 (Batasan & Asumsi Data)**:
+  > *"Tidak ada data kapasitas penyimpanan/gudang per kabupaten secara spesifik; indikasi risiko berbasis rasio supply terhadap demand."*
+- **docs/PRD.md Bab 2.3 & 10 (Non-Goals & Evaluasi Model)**:
+  Sistem berfokus pada peringatan dini limbah fisik dan ketahanan logistik, bukan prediksi harga/deflasi mikro pasar produsen, dan evaluasi model dilakukan via metrik regresi MAE/WAPE, bukan persentase akurasi acak.
+- **Standar Format Angka Indonesia**:
+  Menggunakan satu canonical formatter `IndoFormat` di PHP (`app/Support/IndoFormat.php`) dan helper identik di JavaScript (`IndoFormat` object) dengan standar pemisah ribuan titik (`.`) dan pemisah desimal koma (`,`).
+  Seluruh kelas `font-mono` pada angka digantikan dengan `tabular-nums` dengan font normal sans-serif agar angka tersusun rapi (*aligned*) tanpa merusak estetika antarmuka.
+
+---
+
+### 2. Tabel Audit & Klasifikasi Kejujuran 15 Metrik/Angka Tampilan
+
+Seluruh angka pada banner peringatan nasional dan 4 kartu KPI lama telah ditelusuri sumbernya hingga ke nomor baris template:
+
+| No | Angka / Teks di UI Awal | Lokasi Berkas (`resources/views/peta/index.blade.php`) | Klasifikasi | Rujukan PRD & Alasan Penghapusan / Penyesuaian |
+|:---|:---|:---|:---:|:---|
+| 1 | `28` (Kabupaten PENUH) | `:164` (banner), `:445` (KPI 2) | **Hardcoded** | Tidak dinamis. Angka statis 28 tidak mencerminkan data aktual status_wilayah per periode. Digantikan dengan kueri agregasi live `COUNT(status = 'penuh')`. |
+| 2 | `42` (Kabupaten DEFISIT) | `:164` (banner), `:470` (KPI 3) | **Hardcoded** | Statis dan menyesatkan (28 + 42 = 70 kabupaten, bertentangan dengan 34 kabupaten pilot riil). Di DB periode aktif, defisit = 0. Digantikan dengan hitungan riil defisit & waspada. |
+| 3 | `5.4%` (dari 514 kab) | `:445` (KPI 2) | **No Data Source in PRD 9.3** | Dihitung dari 28/514 total kabupaten nasional, padahal sistem berada pada tahap percontohan 34 kabupaten. Digantikan dengan persentase jujur cakupan wilayah pilot (`79,4%`). |
+| 4 | `18 tanpa Cold Storage` | `:447` (KPI 2) | **No Data Source in PRD 9.3** | **DIHAPUS**. Tidak ada entitas atau kolom `cold_storage` pada PRD 9.3 maupun tabel database. |
+| 5 | `82.4% kapasitas gudang` | `:428, 431` (KPI 1) | **No Data Source in PRD 9.3** | **DIHAPUS**. PRD 8.1 secara eksplisit menyatakan: *"tidak ada data kapasitas penyimpanan per kabupaten"*. Digantikan dengan rasio riil pasokan vs kebutuhan total. |
+| 6 | `104.8% rerata rasio` | `:453` (KPI 2) | **Hardcoded** | Format desimal titik statis. Digantikan dengan rata-rata rasio riil seluruh kabupaten berstatus penuh (`AVG(rasio)` untuk wilayah surplus) berformat koma (`225,5%`). |
+| 7 | `84.200 ton relokasi` | `:472` (KPI 3) | **Hardcoded** | Statis dan palsu. Digantikan dengan kekurangan pasokan riil `SUM(MAX(0, demand_kg - supply_kg))` pada kabupaten defisit (`0,0 ton` bila tidak ada defisit). |
+| 8 | `61.2% target pemenuhan` | `:478, 481` (KPI 3) | **No Data Source in PRD 9.3** | **DIHAPUS**. Tidak ada entitas target relokasi pada skema data PRD 9.3. |
+| 9 | `3.482.150 ton` | `:419` (KPI 1) | **Hardcoded** | Statis. Digantikan dengan total pasokan riil 34 kabupaten dari database: `1.005.399,7 ton`. |
+| 10 | `+3.8%` di atas demand | `:422` (KPI 1) | **Hardcoded** | Statis. Digantikan dengan persentase selisih surplus riil terhadap kebutuhan: `+104,0%`. |
+| 11 | `5.820.400 ton` | `:495` (KPI 4) | **Hardcoded** | Statis. Kartu 4 diubah menjadi *Neraca Bersih Konsolidasi* dengan angka selisih pasokan riil: `+512.609,7 ton`. |
+| 12 | `3 Komoditas` | `:489` (KPI 4) | **Hardcoded** | Statis dan tidak sinkron saat filter komoditas berubah. Diperbaiki dinamis menampilkan komoditas yang sedang aktif dipilih. |
+| 13 | `100% Terintegrasi BUMDes & Bulog` | `:498` (KPI 4) | **No Data Source in PRD 9.3** | **DIHAPUS**. Tidak ada data integrasi Bulog di PRD 9.3. Digantikan dengan rincian wilayah seimbang dan cakupan pantauan. |
+| 14 | `96.2% akurasi model` | `:504, 507` (KPI 4) | **No Data Source in PRD 9.3** | **DIHAPUS**. Evaluasi model di PRD 10 diukur dengan MAE/WAPE (telah ada di modal info), bukan persentase akurasi di kartu KPI publik. Digantikan dengan cakupan 34 wilayah pilot. |
+| 15 | `-14.2%` deflasi produsen | `:376` (Panel Samping) | **No Data Source in PRD 9.3** | Format desimal titik diperbaiki menjadi format Indonesia `-14,2%` (menunggu keputusan status non-goals Task 7). |
+
+---
+
+### 3. Tabel Verifikasi Kueri Database (SQL/Eloquent) vs Nilai Ter-render
+
+Pengujian dilakukan dengan mengeksekusi kueri agregasi langsung pada tabel `status_wilayah` untuk periode aktif default (`2025-12-01`, komoditas beras) dan membandingkannya terhadap nilai teks di DOM ter-render (`docs/ui-review/peta-rendered-step4.html`):
+
+| No | Indikator Metrik | Kueri Eloquent / SQL Langsung | Hasil Kueri DB | Nilai Ter-render di UI (`peta-rendered-step4.html`) | Status Kesesuaian |
+|:---|:---|:---|:---:|:---:|:---:|
+| 1 | **Total Pasokan Terpantau (KPI 1)** | `StatusWilayah::where('komoditas_id', 1)->whereDate('periode', $p)->sum('supply_kg')` | `1.005.399.651,7 kg` | `<span id="kpi-total-supply">1.005.399,7 ton</span>` | **COCOK 100%** |
+| 2 | **Total Kebutuhan Konsumsi (KPI 1 Subline)** | `StatusWilayah::where('komoditas_id', 1)->whereDate('periode', $p)->sum('demand_kg')` | `492.789.914,0 kg` | `<span id="kpi-demand-val">492.789,9 ton</span>` | **COCOK 100%** |
+| 3 | **Persentase Selisih vs Kebutuhan (KPI 1)** | `((Supply - Demand) / Demand) * 100` | `+104,02%` | `<span id="kpi-selisih-persen">(+104,0%)</span>` | **COCOK 100%** |
+| 4 | **Jumlah Wilayah Surplus / Penuh (KPI 2)** | `StatusWilayah::where(...)->where('status', 'penuh')->count()` | `27` kab | `<span id="kpi-jumlah-penuh">27</span> Kabupaten (79,4%)` | **COCOK 100%** |
+| 5 | **Rerata Rasio Wilayah Surplus (KPI 2 Subline)** | `StatusWilayah::where(...)->where('status', 'penuh')->avg('rasio') * 100` | `225,51%` | `<span id="kpi-rerata-surplus">225,5%</span>` | **COCOK 100%** |
+| 6 | **Jumlah Wilayah Defisit & Waspada (KPI 3)** | `StatusWilayah::where(...)->whereIn('status', ['defisit', 'waspada'])->count()` | `3` kab (3 waspada, 0 defisit) | `<span id="kpi-jumlah-defisit-waspada">3</span> Kabupaten (8,8%)` | **COCOK 100%** |
+| 7 | **Kekurangan Pasokan Riil (KPI 3 Subline)** | `StatusWilayah::where(...)->where('status', 'defisit')->sum(...)` | `0,0 kg` | `<span id="kpi-total-defisit">0,0 ton</span>` | **COCOK 100%** |
+| 8 | **Neraca Bersih Konsolidasi (KPI 4)** | `SUM(supply_kg) - SUM(demand_kg)` | `+512.609.737,7 kg` | `<span id="kpi-selisih-bersih">+512.609,7 ton</span>` | **COCOK 100%** |
+| 9 | **Banner Peringatan Dini Nasional** | Generated dari agregasi `ringkasanWilayah()` | 27 Penuh, 3 Waspada, 0 Defisit, +512.609,7 ton (+104,0%) | `<span id="banner-nasional-text">Status Pangan Nasional Terpantau: 27 Kabupaten Surplus/Penuh, 3 Waspada, 0 Defisit. Selisih Bersih Pasokan: +512.609,7 ton (+104,0% di atas kebutuhan). Pantauan mencakup 34 Kabupaten Percontohan.</span>` | **COCOK 100%** |
+
+---
+
+### 4. Hasil Rangkaian Pengujian & Bukti Tangkapan Layar Step 4
+
+1. **Pengujian Otomatis Feature Test Baru**:
+   - Berkas: [`tests/Feature/PetaKpiDatabaseTest.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/tests/Feature/PetaKpiDatabaseTest.php)
+   - Hasil: **3 pengujian lulus, 56 assertions**.
+   - Memastikan ringkasan statistik `StatusService` cocok matematis dengan kueri agregasi, halaman publik `/peta` merender metrik riil dan menghapus klaim metrik palsu, serta endpoint `/api/status` mengembalikan payload `ringkasan` yang konsisten.
+2. **Rangkaian Pengujian Penuh (Full Test Suite)**:
+   - Perintah: `php artisan test --compact`
+   - Hasil: **100 passed, 883 assertions** (sebelumnya baseline 97 passed, 827 assertions).
+3. **Smoke Test Demo Flow**:
+   - Perintah: `./scripts/smoke_test.sh`
+   - Hasil: **11/11 PASS (100% lulus)**.
+4. **Bukti Rendered Screenshots Playwright**:
+   - [`docs/ui-review/step4-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step4-1440.png) — Tangkapan layar desktop 1440x900 dengan banner dan 4 kartu KPI berbasis data riil.
+   - [`docs/ui-review/step4-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step4-1024.png) — Tangkapan layar desktop/tablet landscape 1024x768.
+   - [`docs/ui-review/step4-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step4-768.png) — Tangkapan layar tablet portrait 768x1024.
+   - [`docs/ui-review/step4-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step4-390.png) — Tangkapan layar mobile iPhone 390x844.
+   - [`docs/ui-review/peta-rendered-step4.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step4.html) — Berkas DOM HTML ter-render lengkap (257.910 bytes).
+
+---
+
 ## 2. Tabel Evaluasi Perubahan Antarmuka (Before & After - Historis Awal)
 
 | No | Komponen / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi / Pengukuran | Status |

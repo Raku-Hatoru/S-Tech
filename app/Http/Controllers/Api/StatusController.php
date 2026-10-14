@@ -115,6 +115,7 @@ class StatusController extends Controller
                 'periode' => $periodeInput,
                 'level' => $level,
                 'total_wilayah' => count($data),
+                'ringkasan' => $statusService->ringkasanWilayah($komoditas->id, $periodeDate),
                 'data' => $data,
                 'meta' => [
                     'dihitung_pada' => Carbon::now()->toIso8601String(),
