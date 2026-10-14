@@ -80,8 +80,8 @@
     <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
       <!-- 1. Komoditas Pangan -->
       <div>
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
           Komoditas Pangan
         </label>
         <div class="relative">
@@ -92,17 +92,17 @@
               </option>
             @endforeach
           </select>
-          <svg class="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          <svg class="w-4 h-4 text-slate-500 absolute right-3 top-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
       </div>
 
       <!-- 2. Periode Waktu & Horizon Proyeksi -->
       <div>
         <div class="flex items-center justify-between mb-1.5">
-          <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
             Periode Waktu
           </label>
-          <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80" title="Horizon proyeksi model prakiraan hingga 12 bulan ke depan">
+          <span class="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80" title="Horizon proyeksi model prakiraan hingga 12 bulan ke depan">
             Horizon Proyeksi: 12 Bulan
           </span>
         </div>
@@ -122,7 +122,7 @@
             $btnText = $isRealCurrentMonth ? 'Bulan Ini' : 'Data Terakhir';
             $btnTitle = $isRealCurrentMonth ? 'Pilih bulan berjalan saat ini' : 'Pilih periode data aktual terakhir (' . \Carbon\Carbon::parse($periodeDefault)->isoFormat('MMMM YYYY') . ')';
           @endphp
-          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-[11px] font-bold hover:bg-emerald-200 transition shrink-0" title="{{ $btnTitle }}">
+          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold hover:bg-emerald-200 transition shrink-0" title="{{ $btnTitle }}">
             {{ $btnText }}
           </button>
         </div>
@@ -130,7 +130,7 @@
 
       <!-- 3. Level Agregasi Geografis -->
       <div>
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
           Level Agregasi Geografis
         </label>
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
@@ -145,8 +145,8 @@
 
       <!-- 4. Pencarian Teritorial Cepat -->
       <div class="relative">
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           Pencarian Teritorial Cepat
         </label>
         <div class="relative">
@@ -268,38 +268,38 @@
         <!-- Header Wilayah Terpilih -->
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div class="flex items-center gap-2">
-            <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded">
               WILAYAH TERPILIH
             </span>
-            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+            <span id="panel-stok-badge" class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               Stok Terverifikasi
             </span>
           </div>
-          <span id="panel-kode" class="font-mono text-xs font-semibold text-slate-400">33.02</span>
+          <span id="panel-kode" class="font-mono text-xs font-semibold text-slate-500">33.02</span>
         </div>
 
         <div>
           <h2 id="panel-nama" class="text-2xl font-black text-slate-900 tracking-tight">
             Kabupaten Banyumas
           </h2>
-          <p id="panel-provinsi" class="text-xs text-slate-500 font-medium mt-0.5">
+          <p id="panel-provinsi" class="text-xs text-slate-600 font-medium mt-0.5">
             Provinsi Jawa Tengah • Kode Wilayah: 33.02
           </p>
         </div>
 
         <!-- Status Peringatan Pangan Box -->
-        <div id="panel-status-box" class="p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
+        <div id="panel-status-box" class="p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between">
           <div>
-            <div class="text-[10px] font-extrabold uppercase tracking-wider text-rose-800">STATUS PERINGATAN PANGAN</div>
-            <div id="panel-status-label" class="text-xl font-black text-rose-950 mt-0.5">
-              PENUH / SURPLUS
+            <div class="text-xs font-bold uppercase tracking-wider text-purple-900">STATUS PERINGATAN PANGAN</div>
+            <div id="panel-status-label" class="text-xl font-black text-purple-950 mt-0.5">
+              ◆ PENUH / SURPLUS
             </div>
-            <div id="panel-rasio-label" class="text-xs font-bold text-rose-700 mt-0.5">
+            <div id="panel-rasio-label" class="text-xs font-bold text-purple-800 mt-0.5">
               Rasio Pasokan: 105,1% (Batas Aman: 100%)
             </div>
           </div>
-          <div class="w-10 h-10 rounded-xl bg-rose-200/80 text-rose-800 flex items-center justify-center shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-purple-200/80 text-purple-800 flex items-center justify-center shrink-0">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
           </div>
         </div>
@@ -307,8 +307,8 @@
         <!-- Neraca Komoditas (Periode Terpilih) -->
         <div class="space-y-2.5">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold uppercase tracking-wider text-slate-500" id="panel-neraca-title">NERACA KOMODITAS BERAS</span>
-            <span class="font-bold text-slate-700" id="panel-neraca-periode">Februari 2026</span>
+            <span class="font-bold uppercase tracking-wider text-slate-600" id="panel-neraca-title">NERACA KOMODITAS BERAS</span>
+            <span class="font-bold text-slate-800" id="panel-neraca-periode">Februari 2026</span>
           </div>
 
           <!-- Total Supply Card -->
@@ -318,7 +318,7 @@
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                 Total Supply (Pasokan)
               </div>
-              <div class="text-[11px] text-slate-400 mt-0.5" id="panel-supply-raw">18.500.000 kg terdata</div>
+              <div class="text-xs text-slate-500 mt-0.5" id="panel-supply-raw">18.500.000 kg terdata</div>
             </div>
             <div class="text-lg font-black text-slate-900 tabular-nums" id="panel-supply-formatted">18.500,0 ton</div>
           </div>
@@ -330,47 +330,47 @@
                 <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                 Total Demand (Kebutuhan)
               </div>
-              <div class="text-[11px] text-slate-400 mt-0.5" id="panel-demand-raw">17.600.000 kg konsumsi</div>
+              <div class="text-xs text-slate-500 mt-0.5" id="panel-demand-raw">17.600.000 kg konsumsi</div>
             </div>
             <div class="text-lg font-black text-slate-900 tabular-nums" id="panel-demand-formatted">17.600,0 ton</div>
           </div>
 
           <!-- Selisih Surplus Bersih Highlight -->
           <div class="flex items-center justify-between text-xs px-2 pt-1 font-bold">
-            <span class="text-slate-600">Selisih Surplus Bersih</span>
+            <span class="text-slate-700">Selisih Surplus Bersih</span>
             <span id="panel-selisih" class="text-rose-700 font-bold tabular-nums">+900,0 ton</span>
           </div>
 
           <!-- 3 Rincian Mini Card -->
           <div class="grid grid-cols-3 gap-2 pt-1">
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[10px] font-semibold text-slate-400">Stok Awal</div>
+              <div class="text-xs font-semibold text-slate-700">Stok Awal</div>
               <div id="panel-stok-awal" class="text-xs font-black text-slate-800 mt-0.5 tabular-nums">3.100,0 t</div>
-              <div class="text-[9px] text-slate-400">Laporan Jan</div>
+              <div class="text-xs text-slate-500">Laporan Jan</div>
             </div>
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[10px] font-semibold text-slate-400">Panen Aktual</div>
+              <div class="text-xs font-semibold text-slate-700">Panen Aktual</div>
               <div id="panel-panen" class="text-xs font-black text-slate-800 mt-0.5 tabular-nums">15.200,0 t</div>
-              <div class="text-[9px] text-slate-400">Hasil Sawah</div>
+              <div class="text-xs text-slate-500">Hasil Sawah</div>
             </div>
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
-              <div class="text-[10px] font-semibold text-slate-400">Pasokan Masuk</div>
+              <div class="text-xs font-semibold text-slate-700">Pasokan Masuk</div>
               <div id="panel-pasokan-masuk" class="text-xs font-black text-slate-800 mt-0.5 tabular-nums">200,0 t</div>
-              <div class="text-[9px] text-slate-400">Distribusi Luar</div>
+              <div class="text-xs text-slate-500">Distribusi Luar</div>
             </div>
           </div>
         </div>
 
         <!-- Peringatan Dampak Wilayah -->
         <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-1.5 text-xs">
-          <div class="font-extrabold uppercase text-amber-900 flex items-center gap-1.5 text-[11px]">
-            <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <div class="font-extrabold uppercase text-amber-950 flex items-center gap-1.5 text-xs">
+            <svg class="w-3.5 h-3.5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             Peringatan Dampak Wilayah
           </div>
-          <p id="panel-pesan-dampak" class="text-amber-900/90 leading-relaxed text-[11px]">
+          <p id="panel-pesan-dampak" class="text-amber-950/90 leading-relaxed text-xs">
             Pangan berisiko basi/terbuang dan menghasilkan emisi gas; harga produsen berisiko turun drastis akibat pasokan melimpah di atas kapasitas serap.
           </p>
-          <div class="text-[10px] font-semibold text-amber-700 flex items-center gap-1 pt-0.5">
+          <div class="text-xs font-semibold text-amber-800 flex items-center gap-1 pt-0.5">
             <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
             Estimasi Deflasi Produsen: -14,2% dalam 14 hari kerja
           </div>
@@ -392,7 +392,7 @@
           @endif
         </div>
 
-        <div class="text-[11px] text-center text-slate-400 pt-1">
+        <div class="text-xs text-center text-slate-500 pt-1">
           Diperbarui otomatis tiap 15 menit
         </div>
       </div>
@@ -407,9 +407,9 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- KPI 1 -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs flex flex-col justify-between h-full space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500" id="kpi-komoditas-title">Total Pasokan Beras Nasional</div>
+            <div class="text-xs font-bold text-slate-600" id="kpi-komoditas-title">Total Pasokan Beras Nasional</div>
             <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
@@ -422,7 +422,7 @@
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Kapasitas Gudang Terisi</span>
               <span class="text-slate-800 font-bold tabular-nums">82,4%</span>
             </div>
@@ -433,9 +433,9 @@
         </div>
 
         <!-- KPI 2 -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs flex flex-col justify-between h-full space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Wilayah Terancam Surplus</div>
+            <div class="text-xs font-bold text-slate-600">Wilayah Terancam Surplus</div>
             <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             </div>
@@ -447,7 +447,7 @@
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Rerata Rasio Wilayah Surplus</span>
               <span class="text-rose-800 font-bold tabular-nums">104,8%</span>
             </div>
@@ -458,9 +458,9 @@
         </div>
 
         <!-- KPI 3 -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs flex flex-col justify-between h-full space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Wilayah Defisit Prioritas</div>
+            <div class="text-xs font-bold text-slate-600">Wilayah Defisit Prioritas</div>
             <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             </div>
@@ -472,7 +472,7 @@
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Target Pemenuhan Relokasi</span>
               <span class="text-slate-800 font-bold tabular-nums">61,2%</span>
             </div>
@@ -483,9 +483,9 @@
         </div>
 
         <!-- KPI 4 -->
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs flex flex-col justify-between h-full space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Total Volume Terpantau (3 Komoditas)</div>
+            <div class="text-xs font-bold text-slate-600">Total Volume Terpantau (3 Komoditas)</div>
             <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
@@ -498,7 +498,7 @@
             </div>
           </div>
           <div>
-            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
               <span>Akurasi Model Machine Learning</span>
               <span class="text-slate-800 font-bold tabular-nums">96,2%</span>
             </div>
@@ -987,9 +987,12 @@ searchInput.addEventListener('input', (e) => {
          class="px-3.5 py-2.5 hover:bg-slate-50 cursor-pointer flex items-center justify-between border-b border-slate-100 text-xs">
       <div>
         <div class="font-bold text-slate-800">${m.nama}</div>
-        <div class="text-[10px] text-slate-400">${m.nama_provinsi ?? ''}</div>
+        <div class="text-xs text-slate-500">${m.nama_provinsi ?? ''}</div>
       </div>
-      <span class="text-[10px] font-bold px-2 py-0.5 rounded ${getStatusColor(m.status).badge}">${getStatusColor(m.status).label}</span>
+      <span class="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded ${getStatusColor(m.status).badge}">
+        <span>${getStatusColor(m.status).symbol}</span>
+        <span>${getStatusColor(m.status).label}</span>
+      </span>
     </div>
   `).join('');
   searchDropdown.classList.remove('hidden');
@@ -1046,7 +1049,7 @@ function filterTabel(q) {
     return `<tr class="hover:bg-slate-50 transition cursor-pointer" onclick="updatePanelWilayah('${d.kode}')">
       <td class="px-4 py-3">
         <div class="font-bold text-slate-900">${d.nama}</div>
-        <div class="text-[11px] text-slate-400">${d.nama_provinsi ?? ''}</div>
+        <div class="text-xs text-slate-500">${d.nama_provinsi ?? ''}</div>
       </td>
       <td class="px-4 py-3">
         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold ${col.badge}">
