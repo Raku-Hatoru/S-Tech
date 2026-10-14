@@ -24,11 +24,7 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-base tracking-tight text-slate-900">SIPANGAN WASPADA</span>
-                            <span class="px-2 py-0.5 text-xs font-bold tracking-wider uppercase bg-emerald-100 text-emerald-800 rounded-md">RESMI</span>
-                        </div>
-                        <p class="text-xs text-slate-500 font-medium leading-none">Pemantauan & Peringatan Dini Pasokan Pangan</p>
+                        <span class="font-bold text-base tracking-tight text-slate-900">SIPANGAN WASPADA</span>
                     </div>
                 </a>
                 <div class="flex items-center gap-4 text-xs font-medium text-slate-600">
@@ -36,10 +32,6 @@
                         <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <span>Peta Heatmap Publik</span>
                     </a>
-                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
-                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                        <span>Sesi Terenkripsi</span>
-                    </span>
                 </div>
             </div>
         </header>
@@ -49,15 +41,9 @@
             <div class="w-full max-w-md">
                 <div class="bg-white rounded-2xl border border-slate-200/90 shadow-2xs p-6 sm:p-8 space-y-6">
                     <div class="space-y-1.5">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold mb-3">
-                            <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        </div>
                         <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                             Masuk ke Akun Anda
                         </h1>
-                        <p class="text-xs text-slate-500 font-medium">
-                            Masukkan kredensial resmi instansi Anda untuk mengakses konsol
-                        </p>
                     </div>
 
                     {{-- Error Alert --}}

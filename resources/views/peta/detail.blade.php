@@ -65,55 +65,35 @@
 
     @if ($kode === '3302' && $komoditas->kode === 'beras')
       <!-- Banner Showcase Mockup Desain Banyumas (E-04) -->
-      <div class="rounded-xl p-3 bg-amber-50/90 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs shadow-2xs">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="px-2 py-0.5 rounded-md text-xs font-black bg-amber-200 text-amber-950 uppercase tracking-wide border border-amber-300">
-            [Data Contoh / Simulasi]
-          </span>
-          <span class="font-medium text-slate-700">
-            Data showcase Kabupaten Banyumas disajikan sebagai simulasi pemantauan rantai pasok pangan.
-          </span>
-        </div>
-        <span class="text-xs text-amber-800 shrink-0 font-bold">Banyumas (3302) • Beras</span>
+      <div class="rounded-xl p-3 bg-amber-50/90 border border-amber-200 text-amber-900 flex items-center gap-2 text-xs shadow-2xs">
+        <span class="px-2 py-0.5 rounded-md text-xs font-black bg-amber-200 text-amber-950 uppercase tracking-wide border border-amber-300 shrink-0">
+          [Data Contoh / Simulasi]
+        </span>
+        <span class="font-medium text-slate-700">
+          Data showcase Kabupaten Banyumas disajikan sebagai simulasi pemantauan rantai pasok pangan.
+        </span>
       </div>
     @endif
 
-    <!-- Alert Banner Status Wilayah (Warna Status Ungu untuk Penuh / Surplus) -->
+    <!-- Alert Banner Status Wilayah -->
     @php
       $isPenuh = ($statusTerbaru['status'] ?? '') === 'penuh';
       $isWaspada = ($statusTerbaru['status'] ?? '') === 'waspada';
       $isDefisit = ($statusTerbaru['status'] ?? '') === 'defisit';
-      $rasioDisplay = $statusTerbaru['rasio'] !== null ? number_format($statusTerbaru['rasio'], 4, '.', '') . ' (' . ($statusTerbaru['rasio_persen'] ?? '—') . ')' : '—';
     @endphp
 
     <div class="rounded-2xl p-4 sm:p-5 border flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-2xs {{ $isPenuh ? 'bg-purple-50/90 border-purple-200' : ($isDefisit ? 'bg-rose-50 border-rose-200' : ($isWaspada ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200')) }}">
-      <div class="flex items-start gap-3.5">
+      <div class="flex items-center gap-3.5">
         <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-black text-lg {{ $isPenuh ? 'bg-purple-600 text-white' : ($isDefisit ? 'bg-rose-600 text-white' : ($isWaspada ? 'bg-amber-500 text-white' : 'bg-emerald-600 text-white')) }}">
           {{ $isPenuh ? '◆' : ($isDefisit ? '▼' : ($isWaspada ? '▲' : '✔')) }}
         </div>
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="px-2.5 py-0.5 rounded text-xs font-extrabold uppercase tracking-wide {{ $isPenuh ? 'bg-purple-600 text-white' : ($isDefisit ? 'bg-rose-600 text-white' : ($isWaspada ? 'bg-amber-600 text-white' : 'bg-emerald-600 text-white')) }}">
-              STATUS: {{ strtoupper($statusTerbaru['label'] ?? 'Penuh / Surplus') }}
-            </span>
-            <span class="text-xs font-bold text-slate-800">
-              Rasio Pasokan: {{ $rasioDisplay }}
-            </span>
-            <span class="text-xs font-semibold {{ $isPenuh ? 'text-purple-800' : ($isDefisit ? 'text-rose-800' : 'text-slate-600') }}">
-              Batas Aman: 100%
-            </span>
-          </div>
-          <p class="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed">
-            @if ($isPenuh)
-              <b>Peringatan Kelebihan Pasokan:</b> Akumulasi pasokan melebihi kapasitas serap di {{ $tipeWilayah }} {{ $namaWilayah }}.
-            @elseif ($isDefisit)
-              <b>Peringatan Defisit Pasokan:</b> Pasokan pangan di {{ $tipeWilayah }} {{ $namaWilayah }} di bawah batas aman (&lt;70%). Dibutuhkan pasokan segera.
-            @elseif ($isWaspada)
-              <b>Peringatan Waspada:</b> Kapasitas pasokan di {{ $tipeWilayah }} {{ $namaWilayah }} mendekati titik jenuh (90%–100%).
-            @else
-              <b>Status Terpantau Aman:</b> Neraca pasokan dan kebutuhan konsumsi di {{ $tipeWilayah }} {{ $namaWilayah }} dalam kondisi seimbang.
-            @endif
-          </p>
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <span class="px-2.5 py-0.5 rounded text-xs font-extrabold uppercase tracking-wide {{ $isPenuh ? 'bg-purple-600 text-white' : ($isDefisit ? 'bg-rose-600 text-white' : ($isWaspada ? 'bg-amber-600 text-white' : 'bg-emerald-600 text-white')) }}">
+            STATUS: {{ strtoupper($statusTerbaru['label'] ?? 'Penuh / Surplus') }}
+          </span>
+          <span class="text-xs font-bold text-slate-800">
+            Rasio: {{ $statusTerbaru['rasio_persen'] ?? '105,1%' }}
+          </span>
         </div>
       </div>
 
@@ -129,93 +109,105 @@
     <!-- 3 Kotak Metrik KPI Utama Bersih & Lega -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Card 1: Total Pasokan (Supply) -->
-      <div class="bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between">
+      <div class="bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600">
-            <span>Total Supply Aktif</span>
-            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Total Supply Aktif
           </div>
           <div class="mt-2 text-2xl font-black text-slate-900 tracking-tight tabular-nums">
             {{ $cardSupply['total_formatted'] }}
           </div>
-          <div class="mt-3 pt-2.5 border-t border-slate-100 text-xs text-slate-600 flex items-center justify-between flex-wrap gap-1">
-            <span>Panen: <b class="text-slate-800 font-bold tabular-nums">{{ $cardSupply['panen_formatted'] }}</b></span>
-            <span class="text-slate-300">·</span>
-            <span>Stok Awal: <b class="text-slate-800 font-bold tabular-nums">{{ $cardSupply['stok_awal_formatted'] }}</b></span>
-            <span class="text-slate-300">·</span>
-            <span>Pengiriman Aktif Masuk: <b class="text-slate-800 font-bold tabular-nums">{{ $cardSupply['pasokan_masuk_formatted'] }}</b></span>
+          <div class="mt-1 text-xs text-slate-500">
+            Akumulasi pasokan berjalan
           </div>
         </div>
-        <div class="mt-3.5 -mx-5 -mb-5 h-1.5 bg-purple-600"></div>
       </div>
 
       <!-- Card 2: Total Kebutuhan (Demand) -->
-      <div class="bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between">
+      <div class="bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600">
-            <span>Demand Terproyeksi</span>
-            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Demand Terproyeksi
           </div>
           <div class="mt-2 text-2xl font-black text-slate-900 tracking-tight tabular-nums">
             {{ $cardDemand['total_formatted'] }}
           </div>
-          <div class="mt-3 pt-2.5 border-t border-slate-100 text-xs text-slate-600 flex items-center justify-between flex-wrap gap-1">
-            <span>Konsumsi Domestik: <b class="text-slate-800 font-bold tabular-nums">{{ $cardDemand['domestik_formatted'] }}</b></span>
-            <span class="text-slate-300">·</span>
-            <span>Industri & Cadangan: <b class="text-slate-800 font-bold tabular-nums">{{ $cardDemand['industri_formatted'] }}</b></span>
+          <div class="mt-1 text-xs text-slate-500">
+            Kebutuhan konsumsi &amp; industri
           </div>
         </div>
-        <div class="mt-3.5 -mx-5 -mb-5 h-1.5 bg-emerald-600"></div>
       </div>
 
       <!-- Card 3: Selisih Neraca (Surplus / Defisit) -->
-      <div class="bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between">
+      <div class="bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600">
-            <span>{{ $cardSurplus['is_surplus'] ? 'Surplus Bersih Kritis' : 'Defisit Bersih Kritis' }}</span>
-            <div class="w-6 h-6 rounded-lg {{ $cardSurplus['is_surplus'] ? 'bg-purple-100 text-purple-800' : 'bg-rose-100 text-rose-800' }} flex items-center justify-center font-bold text-xs">
-              {{ $cardSurplus['is_surplus'] ? '◆' : '▼' }}
-            </div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {{ $cardSurplus['is_surplus'] ? 'Surplus Bersih Kritis' : 'Defisit Bersih' }}
           </div>
           <div class="mt-2 text-2xl font-black {{ $cardSurplus['is_surplus'] ? 'text-purple-700' : 'text-rose-700' }} tracking-tight tabular-nums">
             {{ $cardSurplus['selisih_formatted'] }}
           </div>
-          <div class="mt-3 pt-2.5 border-t border-slate-100 text-xs text-slate-600 flex items-center justify-between flex-wrap gap-1">
-            <span>Rasio Pasokan: <b class="{{ $cardSurplus['is_surplus'] ? 'text-purple-800' : 'text-rose-800' }} font-bold tabular-nums">{{ $statusTerbaru['rasio_persen'] ?? '105,1%' }}</b></span>
-            <span class="text-slate-300">·</span>
-            <span>Batas Aman: <b class="text-slate-700 font-bold">100%</b></span>
+          <div class="mt-1 text-xs text-slate-500">
+            {{ $cardSurplus['is_surplus'] ? 'Kelebihan pasokan terhitung' : 'Kekurangan pasokan' }}
           </div>
         </div>
-        <div class="mt-3.5 -mx-5 -mb-5 h-1.5 {{ $cardSurplus['is_surplus'] ? 'bg-purple-600' : 'bg-rose-600' }}"></div>
       </div>
     </div>
 
-    <!-- Chart Deret Waktu 12 Bulan (Bersih & Ramping) -->
+    <!-- Accordion Rincian Komponen KPI -->
+    <details class="group bg-white rounded-xl border border-slate-200 p-3.5 shadow-2xs">
+      <summary class="cursor-pointer text-xs font-bold text-slate-700 hover:text-emerald-700 flex items-center justify-between select-none">
+        <span>Rincian Komponen Pasokan &amp; Kebutuhan</span>
+        <svg class="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="mt-3 pt-3 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+        <div>
+          <div class="text-slate-500">Panen</div>
+          <div class="font-bold text-slate-900 tabular-nums">{{ $cardSupply['panen_formatted'] }}</div>
+        </div>
+        <div>
+          <div class="text-slate-500">Stok Awal</div>
+          <div class="font-bold text-slate-900 tabular-nums">{{ $cardSupply['stok_awal_formatted'] }}</div>
+        </div>
+        <div>
+          <div class="text-slate-500">Pengiriman Aktif Masuk</div>
+          <div class="font-bold text-slate-900 tabular-nums">{{ $cardSupply['pasokan_masuk_formatted'] }}</div>
+        </div>
+        <div>
+          <div class="text-slate-500">Konsumsi Domestik</div>
+          <div class="font-bold text-slate-900 tabular-nums">{{ $cardDemand['domestik_formatted'] }}</div>
+        </div>
+        <div>
+          <div class="text-slate-500">Industri &amp; Cadangan</div>
+          <div class="font-bold text-slate-900 tabular-nums">{{ $cardDemand['industri_formatted'] }}</div>
+        </div>
+        <div>
+          <div class="text-slate-500">Rasio Pasokan</div>
+          <div class="font-bold text-slate-900 tabular-nums">{{ $statusTerbaru['rasio_persen'] ?? '105,1%' }}</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Chart Deret Waktu 12 Bulan -->
     <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-2xs border border-slate-200/90 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3.5">
-        <div>
-          <h2 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-            <span>Grafik Deret Waktu 12 Bulan (Model Prakiraan Multi-Horizon)</span>
-          </h2>
-        </div>
+        <h2 class="text-base font-bold text-slate-900 tracking-tight">
+          Grafik Deret Waktu 12 Bulan (Model Prakiraan)
+        </h2>
 
-        <div class="flex items-center gap-3 flex-wrap text-xs">
-          <div class="flex items-center gap-1.5 font-medium text-slate-700">
+        <div class="flex items-center gap-3.5 flex-wrap text-xs text-slate-600 font-medium">
+          <div class="flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-full bg-purple-600 inline-block"></span>
             <span>Supply Bergulir</span>
           </div>
-          <div class="flex items-center gap-1.5 font-medium text-slate-700">
+          <div class="flex items-center gap-1.5">
             <span class="w-4 h-0.5 bg-emerald-700 inline-block"></span>
-            <span>Garis Kebutuhan (Demand)</span>
+            <span>Kebutuhan (Demand)</span>
           </div>
-          <div class="flex items-center gap-1.5 font-medium text-slate-700">
+          <div class="flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-xs bg-purple-100 border border-purple-300 inline-block"></span>
             <span>Zona Surplus (≥100%)</span>
           </div>
-          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
-            Model Prakiraan v1 (Akurasi: ±14,2%)
-          </span>
         </div>
       </div>
 
@@ -247,7 +239,7 @@
     <!-- Kontainer Tabel Rincian 12 Bulan (Default Hidden) -->
     <div id="container-tabel-12-bulan" class="hidden bg-white rounded-2xl shadow-2xs border border-slate-200/90 overflow-hidden space-y-0">
       <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
           Tabel Rincian Prediksi Horizon 1–12 Bulan (Komoditas: {{ $komoditas->nama }})
         </h3>
         <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 self-start sm:self-auto">
@@ -326,126 +318,72 @@
       </div>
     </div>
 
-    <!-- Analisis Dampak & Rekomendasi Koridor Redistribusi (Pangkas Klaim Fiktif) -->
+    <!-- Analisis Dampak & Rekomendasi Koridor Redistribusi -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="koridor-redistribusi">
       <!-- Card Kiri: Analisis Dampak Wilayah -->
-      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-2xs border border-slate-200/90 flex flex-col justify-between space-y-4">
-        <div class="space-y-3">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-            <h3 class="text-base font-extrabold text-slate-900 tracking-tight">
-              Analisis Dampak {{ $cardSurplus['is_surplus'] ? 'Surplus' : 'Defisit' }}
-            </h3>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Kelebihan pasokan sebesar <b class="text-purple-800 font-bold tabular-nums">{{ $cardSurplus['selisih_formatted'] }}</b> memerlukan penanganan logistik terencana di {{ $namaWilayah }}.
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-2xs border border-slate-200/90 flex flex-col justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 tracking-tight mb-3">
+            Analisis Dampak {{ $cardSurplus['is_surplus'] ? 'Surplus' : 'Defisit' }}
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            {{ $pesanDampak }}
           </p>
-
-          <!-- 1 Blok Dampak Resmi Ringkas & Jelas -->
-          <div class="p-4 rounded-xl bg-purple-50 border border-purple-200">
-            <div class="flex items-start gap-3">
-              <div class="w-8 h-8 rounded-lg bg-purple-200 text-purple-900 flex items-center justify-center font-bold text-sm shrink-0">
-                ◆
-              </div>
-              <div class="space-y-1">
-                <div class="text-xs font-bold text-purple-950 uppercase tracking-wider">Dampak Wilayah</div>
-                <p class="text-xs text-slate-700 leading-relaxed">
-                  {{ $pesanDampak }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-          <span>Status Wilayah: <b class="text-purple-800 font-bold ml-1">Penuh / Surplus</b></span>
-          <span>Tindakan: <b class="text-slate-800 font-bold ml-1">Redistribusi Pangan</b></span>
         </div>
       </div>
 
       <!-- Card Kanan: Rekomendasi Kebijakan & Koridor Redistribusi -->
-      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-2xs border border-slate-200/90 flex flex-col justify-between space-y-4">
-        <div class="space-y-3">
-          <div class="flex items-center justify-between gap-2 flex-wrap">
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-              <h3 class="text-base font-extrabold text-slate-900 tracking-tight">
-                Rekomendasi Kebijakan & Koridor Redistribusi
-              </h3>
-            </div>
-            <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">
-              Prioritas Logistik
-            </span>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Alihkan surplus pasokan ke kabupaten penyangga terdekat yang berstatus defisit di provinsi {{ $namaProvinsiInduk ?? $namaWilayah }}:
-          </p>
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-2xs border border-slate-200/90 flex flex-col justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 tracking-tight mb-3">
+            Rekomendasi Kebijakan &amp; Koridor Redistribusi
+          </h3>
 
-          <!-- Daftar Wilayah Defisit Terdekat -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <!-- Daftar Wilayah Defisit Terdekat (Flattened Rows) -->
+          <div class="divide-y divide-slate-100">
             @forelse ($rekomendasiDefisit as $dest)
-              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-2.5">
-                <div>
-                  <div class="flex items-center justify-between gap-1">
+              <div class="py-3 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-0.5">
+                  <div class="flex items-center gap-2">
                     <span class="text-xs font-bold text-slate-900">{{ $dest['nama'] }}</span>
-                    <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800">{{ $dest['status_label'] }}</span>
+                    <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800">{{ $dest['status_label'] }}</span>
                   </div>
-                  <div class="text-xs text-slate-500 mt-1">{{ $dest['jarak_info'] }}</div>
-                  <div class="mt-2 pt-2 border-t border-slate-200/80 space-y-1 text-xs">
-                    <div class="flex justify-between">
-                      <span class="text-slate-500">Defisit:</span>
-                      <span class="font-bold text-rose-700 tabular-nums">{{ $dest['defisit_info'] }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-500">Rekomendasi:</span>
-                      <span class="font-bold text-emerald-700 tabular-nums">{{ $dest['alokasi_info'] }}</span>
-                    </div>
+                  <div class="text-xs text-slate-500">
+                    Defisit: <b class="text-rose-700 font-semibold tabular-nums">{{ $dest['defisit_info'] }}</b> &bull; Rekomendasi Alokasi: <b class="text-emerald-700 font-semibold tabular-nums">{{ $dest['alokasi_info'] }}</b>
                   </div>
                 </div>
-                <div class="pt-1">
+                <div class="shrink-0">
                   @can('create', App\Models\Shipment::class)
                     <a href="{{ route('pengiriman.create') }}?tujuan={{ $dest['kode'] }}&komoditas={{ $komoditas->kode }}"
-                       class="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-800 hover:bg-emerald-900 shadow-xs transition">
-                      <span>▶ Buat DO {{ str_replace('Kab. ', '', $dest['nama']) }}</span>
+                       class="min-h-[44px] inline-flex items-center justify-center px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-emerald-800 hover:bg-emerald-900 transition">
+                      ▶ Buat DO {{ str_replace('Kab. ', '', $dest['nama']) }}
                     </a>
                   @else
-                    <div class="w-full min-h-[44px] flex items-center justify-center py-2 px-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600">
+                    <div class="min-h-[44px] flex items-center justify-center py-2 px-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600">
                       Disposisi Mandat Distributor
                     </div>
                   @endcan
                 </div>
               </div>
             @empty
-              <div class="col-span-2 p-4 text-center text-xs text-slate-500">Tidak ada kabupaten defisit penyangga di provinsi ini.</div>
+              <div class="py-4 text-center text-xs text-slate-500">
+                Tidak ada wilayah defisit di Jawa Tengah pada periode ini.
+              </div>
             @endforelse
           </div>
 
-          <!-- Pool Armada Terdekat Card -->
-          <div class="mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
-              </div>
-              <div>
-                <div class="text-xs font-bold text-slate-900">Pool Armada Terdekat: Sub-Depo PT Logistik Pangan Banyumas</div>
-                <div class="text-xs text-slate-500">Kapasitas angkut terdistribusi untuk pengalihan surplus antar-wilayah.</div>
-              </div>
+          <!-- Pool Armada Terdekat -->
+          <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-bold text-slate-900">Pool Armada Terdekat: Sub-Depo PT Logistik Pangan Banyumas</span>
+              <span class="text-slate-500 block sm:inline sm:ml-1">&bull; Kapasitas terdistribusi untuk pengalihan surplus</span>
             </div>
             @can('create', App\Models\Shipment::class)
-              <a href="{{ route('pengiriman.create') }}" class="min-h-[44px] px-4 py-2 inline-flex items-center justify-center rounded-xl text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white transition shrink-0">
+              <a href="{{ route('pengiriman.create') }}" class="min-h-[44px] px-3.5 py-2 inline-flex items-center justify-center rounded-xl font-bold bg-emerald-800 hover:bg-emerald-900 text-white transition shrink-0">
                 Panggil Operator Logistik
               </a>
-            @else
-              <span class="min-h-[44px] px-4 py-2 inline-flex items-center justify-center rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
-                Khusus Operator Logistik
-              </span>
             @endcan
           </div>
-        </div>
-
-        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-          <span>Rekomendasi Rute: <b class="text-slate-800 font-bold ml-1">Terbuka</b></span>
-          <span>Target Serapan: <b class="text-emerald-700 font-bold ml-1 tabular-nums">900,0 ton</b></span>
         </div>
       </div>
     </div>
@@ -552,12 +490,6 @@ function renderChart12Bulan(seri) {
           ctx.moveTo(left, yPos);
           ctx.lineTo(right, yPos);
           ctx.stroke();
-
-          // Label garis
-          ctx.setLineDash([]);
-          ctx.fillStyle = t.color;
-          ctx.font = '700 11px Instrument Sans, sans-serif';
-          ctx.fillText(t.label, left + 10, yPos - 5);
         }
       });
 

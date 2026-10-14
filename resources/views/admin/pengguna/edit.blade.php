@@ -10,10 +10,7 @@
     </nav>
 
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-6 sm:p-7">
-        <h1 class="text-xl font-bold text-slate-900 mb-1">Edit Akun Pengguna</h1>
-        <p class="text-xs sm:text-sm text-slate-500 mb-6">
-            Perbarui data akun pengguna. Kosongkan kata sandi jika tidak ingin mengubahnya.
-        </p>
+        <h1 class="text-xl font-bold text-slate-900 mb-6">Edit Akun Pengguna</h1>
 
         {{-- Info status akun --}}
         @if (! $pengguna->is_active)

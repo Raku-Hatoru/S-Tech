@@ -19,11 +19,6 @@
         <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
           Portal Manajemen Distribusi Pangan Logistik
         </h1>
-        <div class="flex items-center gap-2 text-xs text-slate-600 mt-1 flex-wrap font-medium">
-          <span class="font-bold text-slate-800">{{ auth()->user()->organisasi ?? 'PT Pangan Nusantara Mandiri' }}</span>
-          <span class="text-slate-300">·</span>
-          <span>Penanggung Jawab: <b class="text-slate-700">{{ auth()->user()->name }}</b></span>
-        </div>
       </div>
 
       <!-- Action Tabs -->

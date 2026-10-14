@@ -22,7 +22,7 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Brand / Logo -->
                 <div class="flex items-center gap-3 min-w-0">
-                    <a href="{{ url('/') }}" class="min-h-[44px] flex items-center gap-2.5 sm:gap-3 group min-w-0">
+                    <a href="{{ url('/') }}" class="min-h-[44px] flex items-center gap-2.5 sm:gap-3 group min-w-0" title="SIPANGAN WASPADA (Prototipe)">
                         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-700 flex items-center justify-center text-white shadow-sm ring-1 ring-emerald-800/10 shrink-0 transition-transform group-hover:scale-105">
                             <!-- Emblem Logo Pangan -->
                             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -35,9 +35,7 @@
                             <div class="flex items-center gap-1.5 sm:gap-2">
                                 <span class="font-bold text-base sm:text-lg tracking-tight text-slate-900">SIPANGAN</span>
                                 <span class="hidden sm:inline font-bold text-base sm:text-lg tracking-tight text-slate-900">WASPADA</span>
-                                <span class="hidden md:inline-block px-1.5 py-0.5 text-[10px] sm:text-xs font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded border border-slate-200 shrink-0">PROTOTIPE</span>
                             </div>
-                            <p class="hidden xl:block text-xs text-slate-600 font-medium">Sistem Pemantauan &amp; Early-Warning Surplus Pangan Nasional</p>
                         </div>
                     </a>
                 </div>
@@ -84,19 +82,12 @@
                 <!-- Status / Auth User (Sesuai Design Mockup) -->
                 <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                     @auth
-                        <div class="hidden xl:flex items-center gap-1.5 text-xs font-semibold text-slate-600 select-none py-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            <span>{{ auth()->user()->role->nama ?? 'Operator' }}</span>
-                        </div>
-                    @endauth
-
-                    @auth
                         <div class="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
                             <div class="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs">
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             </div>
                             <div class="text-left hidden sm:block">
-                                <div class="text-xs font-bold text-slate-900 leading-tight">{{ auth()->user()->name }}</div>
+                                <div class="text-xs font-bold text-slate-900 leading-tight">{{ preg_replace('/\s*\(Demo.*?\)/i', '', auth()->user()->name) }}</div>
                                 <div class="text-xs text-slate-600 font-medium leading-none">{{ auth()->user()->role->nama ?? 'Operator' }}</div>
                             </div>
                             <form method="POST" action="{{ route('logout') }}" class="inline ml-1">
@@ -126,9 +117,8 @@
 
         <!-- Mobile Navigation Menu Dropdown -->
         <nav id="mobile-nav" aria-label="Navigasi Mobile" class="hidden md:hidden border-t border-slate-200 py-3 px-4 space-y-2 bg-slate-50">
-            <div class="flex items-center justify-between pb-2 mb-1 border-b border-slate-200">
+            <div class="pb-2 mb-1 border-b border-slate-200">
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Menu Sistem</span>
-                <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-slate-200 text-slate-700 rounded border border-slate-300">PROTOTIPE</span>
             </div>
             <a href="{{ route('peta.index') }}"
                class="min-h-[44px] px-3.5 flex items-center rounded-xl text-xs font-bold transition {{ request()->is('peta*') || request()->is('/') ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
@@ -165,7 +155,7 @@
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             </div>
                             <div>
-                                <div class="text-xs font-bold text-slate-900">{{ auth()->user()->name }}</div>
+                                <div class="text-xs font-bold text-slate-900">{{ preg_replace('/\s*\(Demo.*?\)/i', '', auth()->user()->name) }}</div>
                                 <div class="text-[10px] text-slate-600 font-medium">{{ auth()->user()->role->nama ?? 'Operator' }}</div>
                             </div>
                         </div>
@@ -196,7 +186,7 @@
     <footer class="mt-auto bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600">
             <div>
-                <span>&copy; {{ date('Y') }} SIPANGAN WASPADA &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
+                <span>&copy; {{ date('Y') }} SIPANGAN WASPADA (Prototipe) &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
             </div>
             <div class="text-xs text-slate-500 font-medium">
                 <span>Diperbarui otomatis tiap 15 menit</span>

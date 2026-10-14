@@ -5,13 +5,7 @@
     {{-- Header & Subnav Admin --}}
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-            <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                <span>Panel Administrator</span>
-                <span>/</span>
-                <span class="text-slate-800 font-medium">Pengguna</span>
-            </div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Kelola Pengguna Sistem</h1>
-            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Daftar akun pengguna, penetapan peran, dan status akses sistem.</p>
         </div>
 
         <div class="flex flex-wrap items-center gap-3">

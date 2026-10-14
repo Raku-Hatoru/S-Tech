@@ -6,13 +6,7 @@
     {{-- Breadcrumb & Subnav Admin --}}
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-            <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                <span>Panel Administrator</span>
-                <span>/</span>
-                <span class="text-slate-800 font-medium">Prediksi Forecast</span>
-            </div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Hasil Prediksi XGBoost & Versi Model</h1>
-            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Kelola keluaran model proyeksi (panen, pasokan masuk, kebutuhan) dan versi model aktif.</p>
         </div>
 
         {{-- Navigasi Tab Admin --}}
@@ -153,7 +147,6 @@
                 <div class="p-5 border-b border-slate-200 flex items-center justify-between">
                     <div>
                         <h2 class="text-base font-bold text-slate-900">Versi Model Machine Learning</h2>
-                        <p class="text-xs text-slate-500">Versi model yang digunakan untuk kalibrasi prediksi dan label transparansi sistem.</p>
                     </div>
                 </div>
 
@@ -201,7 +194,6 @@
                 <div class="p-5 border-b border-slate-200 flex items-center justify-between">
                     <div>
                         <h2 class="text-base font-bold text-slate-900">Riwayat Impor Forecast</h2>
-                        <p class="text-xs text-slate-500">Catatan audit riwayat proses berkas hasil prediksi.</p>
                     </div>
                     <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 tabular-nums">
                         {{ $imports->total() }} Sesi

@@ -24,7 +24,7 @@
             ID: BUMDES-{{ $kabupaten->kode }}-AKTIF
           </span>
           <span class="text-slate-300">·</span>
-          <span>Wilayah Terdaftar: <b class="text-slate-900 font-bold">{{ $kabupaten->nama }}, {{ $kabupaten->provinsi->nama ?? 'Jawa Tengah' }}</b></span>
+          <span>Wilayah: <b class="text-slate-900 font-bold">{{ $kabupaten->nama }}, {{ $kabupaten->provinsi->nama ?? 'Jawa Tengah' }}</b></span>
           <span class="text-slate-300">·</span>
           <span class="text-slate-500">Terkunci ke 1 Kabupaten sesuai regulasi ketahanan pangan</span>
         </div>
@@ -193,15 +193,9 @@
       {{-- Kolom Kiri: Formulir Input Hasil Panen & Sisa Stok (7/12) --}}
       <div class="lg:col-span-7 bg-white rounded-2xl shadow-2xs border border-slate-200/90 overflow-hidden">
         <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <h2 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-              Formulir Input Hasil Panen & Sisa Stok
-            </h2>
-          </div>
-          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
-            Survei Bulanan
-          </span>
+          <h2 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+            Formulir Input Hasil Panen & Sisa Stok
+          </h2>
         </div>
 
         {{-- Filter Row: Periode & Komoditas --}}
@@ -423,9 +417,6 @@
           <h3 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
             Rekapitulasi Laporan Panen Bulanan & Evaluasi Prediksi
           </h3>
-          <p class="text-xs text-slate-500 mt-0.5 font-medium">
-            Evaluasi perbandingan akurasi model prediktif pasokan dengan pelaporan survei lapangan bulanan BUMDes {{ $kabupaten->nama }}.
-          </p>
         </div>
 
         <div class="flex items-center gap-2.5 self-start sm:self-center">

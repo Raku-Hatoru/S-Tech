@@ -23,10 +23,8 @@
         <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
           Rekomendasi Jadwal Tanam Komoditas
         </h1>
-        <div class="flex items-center gap-2 text-xs text-slate-600 mt-1 flex-wrap font-medium">
-          <span>Wilayah: <b class="text-slate-900 font-bold">{{ $kabupaten->nama }}, {{ $kabupaten->provinsi->nama ?? 'Jawa Tengah' }}</b></span>
-          <span class="text-slate-300">·</span>
-          <span>Panduan koordinasi pola tanam BUMDes bersama Gapoktan</span>
+        <div class="text-xs text-slate-600 mt-1 font-medium">
+          Wilayah: <b class="text-slate-900 font-bold">{{ $kabupaten->nama }}, {{ $kabupaten->provinsi->nama ?? 'Jawa Tengah' }}</b>
         </div>
       </div>
 
@@ -37,9 +35,6 @@
           <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
           <span>Kembali ke Input Panen</span>
         </a>
-        <span class="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 text-xs font-extrabold uppercase tracking-wide">
-          SIMULASI / DATA CONTOH
-        </span>
       </div>
     </div>
 
@@ -65,26 +60,14 @@
       </div>
     @endif
 
-    {{-- Banner Utama: Label Wajib SIMULASI / DATA CONTOH --}}
-    <div class="bg-blue-50/80 border border-blue-200 rounded-2xl p-5 sm:p-6 shadow-2xs flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-      <div class="flex items-start gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 border border-blue-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        </div>
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="px-2 py-0.5 rounded text-xs font-extrabold bg-blue-200 text-blue-900 uppercase tracking-wide">
-              SIMULASI / DATA CONTOH
-            </span>
-            <h2 class="text-xs sm:text-sm font-extrabold text-blue-950 tracking-tight">
-              [SIMULASI / DATA CONTOH] Panduan Jadwal Tanam untuk Disampaikan kepada Petani agar Pasokan Bulanan Seimbang.
-            </h2>
-          </div>
-          <p class="text-xs text-blue-900 font-medium leading-relaxed max-w-3xl">
-            BUMDes meneruskan rekomendasi ini ke kelompok tani (Gapoktan) {{ $kabupaten->nama }} guna mencegah lonjakan panen berlebih serta menjaga kestabilan cadangan pangan daerah.
-          </p>
-        </div>
-      </div>
+    {{-- Banner Utama: Label Wajib SIMULASI / DATA CONTOH (PRD F-10) --}}
+    <div class="bg-blue-50/80 border border-blue-200 rounded-2xl p-4 sm:p-5 shadow-2xs flex items-center gap-3">
+      <span class="px-2.5 py-1 rounded text-xs font-extrabold bg-blue-200 text-blue-900 uppercase tracking-wide shrink-0">
+        [SIMULASI / DATA CONTOH]
+      </span>
+      <span class="text-xs sm:text-sm text-blue-950 font-medium">
+        Panduan jadwal tanam untuk disampaikan kepada petani agar pasokan bulanan seimbang.
+      </span>
     </div>
 
     {{-- Konten Utama: 2 Kolom (Tabel Kiri 8/12 + Info Kanan 4/12) --}}
@@ -93,14 +76,9 @@
       {{-- Kolom Kiri: Tabel Kalender Rekomendasi Tanam (8/12) --}}
       <div class="lg:col-span-8 bg-white rounded-2xl shadow-2xs border border-slate-200/90 overflow-hidden space-y-4">
         <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-              Kalender Rotasi Tanam Binaan Wilayah {{ $kabupaten->nama }}
-            </h3>
-            <p class="text-xs text-slate-500 mt-0.5 font-medium">
-              Estimasi jadwal semai, perkiraan masa panen, serta rekomendasi agronomi musim 2026.
-            </p>
-          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+            Kalender Rotasi Tanam Binaan Wilayah {{ $kabupaten->nama }}
+          </h3>
           <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
             {{ count($recommendationsList) }} Komoditas
           </span>

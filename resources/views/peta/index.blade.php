@@ -98,9 +98,6 @@
             Data contoh
           </span>
         </div>
-        <p class="text-xs text-slate-600 font-medium mt-1 leading-relaxed">
-          Diagnostik rasio pasokan vs kebutuhan wilayah untuk mitigasi pemborosan pangan.
-        </p>
       </div>
 
       <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
@@ -603,7 +600,7 @@
                 <span>Model Prakiraan Pasokan</span>
               </div>
               <p class="leading-relaxed">
-                Proyeksi menggunakan model <strong>Autoregressive XGBoost v1</strong> dengan horizon prakiraan 12 bulan ke depan. Model dilatih dari deret waktu historis panen dan tren konsumsi dengan tingkat deviasi rata-rata MAE &plusmn;3,8% (WAPE &plusmn;14,2%).
+                Proyeksi menggunakan model <strong>Autoregressive Machine Learning v1</strong> dengan horizon prakiraan 12 bulan ke depan. Model dilatih dari deret waktu historis panen dan tren konsumsi dengan tingkat deviasi rata-rata MAE &plusmn;3,8% (WAPE &plusmn;14,2%).
               </p>
             </div>
           </div>

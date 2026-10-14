@@ -6,13 +6,7 @@
     {{-- Breadcrumb & Subnav Admin --}}
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-            <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                <span>Panel Administrator</span>
-                <span>/</span>
-                <span class="text-slate-800 font-medium">Dataset Historis</span>
-            </div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Dataset Historis Pangan</h1>
-            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Kelola data riil neraca pangan wilayah, panen, stok, pasokan, dan kebutuhan per kabupaten.</p>
         </div>
 
         {{-- Navigasi Tab Admin --}}
@@ -146,7 +140,6 @@
                 <div class="p-5 border-b border-slate-200 flex items-center justify-between">
                     <div>
                         <h2 class="text-base font-bold text-slate-900">Riwayat Impor Dataset</h2>
-                        <p class="text-xs text-slate-500">Catatan audit sesi unggah berkas ke basis data historis.</p>
                     </div>
                     <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 tabular-nums">
                         {{ $imports->total() }} Sesi
