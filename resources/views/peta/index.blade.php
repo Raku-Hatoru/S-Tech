@@ -208,7 +208,20 @@
       <div class="flex items-center gap-2 min-w-0">
         <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <span class="truncate font-semibold text-slate-800">
-          <span id="banner-nasional-text">{{ $ringkasan['jumlah_penuh'] ?? 27 }} dari {{ $ringkasan['total_wilayah'] ?? 34 }} wilayah pantau berstatus Penuh/Surplus &bull; {{ $ringkasan['jumlah_waspada'] ?? 3 }} Waspada &bull; {{ $ringkasan['jumlah_defisit'] ?? 0 }} Defisit</span>
+          @php
+            $totalWil = $ringkasan['total_wilayah'] ?? 34;
+            $penuhWil = $ringkasan['jumlah_penuh'] ?? 27;
+            $defisitWil = $ringkasan['jumlah_defisit'] ?? 0;
+            $waspadaWil = $ringkasan['jumlah_waspada'] ?? 3;
+            if ($defisitWil > 0) {
+                $bannerKalimat = "{$penuhWil} dari {$totalWil} wilayah surplus · {$defisitWil} wilayah defisit memerlukan relokasi pasokan";
+            } elseif ($penuhWil > 0) {
+                $bannerKalimat = "{$penuhWil} dari {$totalWil} wilayah surplus; pertimbangkan penyimpanan atau pengolahan";
+            } else {
+                $bannerKalimat = "{$totalWil} wilayah pantau dalam kondisi seimbang dan aman";
+            }
+          @endphp
+          <span id="banner-nasional-text">{{ $bannerKalimat }}</span>
         </span>
       </div>
       <div class="flex items-center gap-2 shrink-0">
@@ -321,7 +334,7 @@
           <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-baseline gap-1.5 flex-wrap">
             <span id="panel-nama">Kabupaten Banyumas</span><span class="text-slate-400 font-normal">,</span>
             <span id="panel-provinsi" class="text-xs font-semibold text-slate-600">Jawa Tengah</span>
-            <span id="panel-kode" class="text-xs font-mono font-medium text-slate-500">33.02</span>
+            <span id="panel-kode" class="text-xs font-mono font-medium text-slate-500">3302</span>
           </h2>
         </div>
 
@@ -350,7 +363,11 @@
         <div class="space-y-2 pt-1">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold uppercase tracking-wider text-slate-600" id="panel-neraca-title">NERACA KOMODITAS BERAS</span>
-            <span class="font-bold text-slate-700" id="panel-neraca-periode">Februari 2026</span>
+            @php
+              $activePeriodeMeta = collect($periodesList)->firstWhere('kode', $periodeDefault);
+              $activePeriodeLabel = $activePeriodeMeta ? "{$activePeriodeMeta['label']} ({$activePeriodeMeta['tipe']})" : 'Desember 2025 (Aktual)';
+            @endphp
+            <span class="font-bold text-slate-700" id="panel-neraca-periode">{{ $activePeriodeLabel }}</span>
           </div>
 
           <div class="grid grid-cols-3 gap-2">
@@ -490,72 +507,100 @@
           </div>
 
           <div class="px-6 py-5 space-y-4 text-xs text-slate-700">
-            <!-- Spesifikasi Model & Titik Pantau (Dipindahkan dari Header Halaman) -->
-            <div class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between text-xs flex-wrap gap-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="font-extrabold uppercase tracking-wider text-emerald-400">SIPANGAN-XGBOOST v1</span>
-                <span class="text-slate-300">• 34 Wilayah Percontohan (Data Contoh)</span>
-              </div>
-              <span class="text-xs text-slate-200 font-semibold bg-slate-800 px-2.5 py-1 rounded-md">Data Contoh: Estimasi BPS &amp; BAPANAS</span>
-            </div>
+            <!-- 1. Sumber Data Acuan -->
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                Sumber Data Acuan
+                <span>Sumber Data Acuan</span>
               </div>
               <p class="leading-relaxed">
-                Basis data historis mengacu pada statistik <strong>Badan Pangan Nasional (BAPANAS)</strong> dan <strong>Badan Pusat Statistik (BPS)</strong> untuk pola konsumsi per kapita, neraca regional, dan iklim dasar. Data realisasi panen dikonsolidasikan dari simulasi pelaporan mitra BUMDes dan estimasi pertanian percontohan (PRD 2.3 &amp; 14).
+                Basis data historis mengacu pada statistik resmi Badan Pangan Nasional (BAPANAS) dan Badan Pusat Statistik (BPS) untuk pola konsumsi per kapita dan neraca wilayah. Angka panen dan stok dikonsolidasikan dari pelaporan mitra BUMDes serta data contoh simulasi pertanian percontohan.
               </p>
             </div>
 
-            <!-- Cakupan Wilayah -->
+            <!-- 2. Cakupan Wilayah Percontohan -->
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                Cakupan Wilayah Percontohan (Pilot Project)
+                <span>Cakupan Wilayah Percontohan</span>
               </div>
               <p class="leading-relaxed">
-                Sistem saat ini memantau <strong>34 kabupaten/kota percontohan</strong> di 10 provinsi sentra pangan nasional. Peta georeferensi WGS84 menampilkan batas seluruh wilayah Indonesia, di mana wilayah yang belum masuk percontohan ditandai dengan status <em>Tanpa Data</em> berwarna abu-abu.
+                Sistem saat ini memantau <strong>34 kabupaten/kota percontohan</strong> di 10 provinsi sentra pangan nasional. Wilayah di luar percontohan ditampilkan netral berwarna abu-abu dengan label <em>Tanpa Data</em>.
               </p>
             </div>
 
-            <!-- Metodologi Rasio & Status -->
-            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <!-- 3. Cara Membaca Status & Rasio Pasokan -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                Metodologi Indeks Rasio Pasokan
+                <span>Cara Membaca Status &amp; Rasio Pasokan</span>
               </div>
-              <p class="leading-relaxed">
-                Rasio pasokan dihitung dari perbandingan antara total pasokan tersedia (stok awal + panen riil/proyeksi + pasokan masuk) terhadap estimasi total kebutuhan konsumsi penduduk per bulan:
+              <p class="leading-relaxed text-slate-600">
+                Status dihitung dari perbandingan total pasokan terhadap kebutuhan konsumsi wilayah per bulan acuan:
               </p>
-              <ul class="list-disc list-inside space-y-1 pl-1 text-slate-700">
-                <li><strong>Defisit Kritis:</strong> Rasio &lt; 95% (kebutuhan melebihi pasokan).</li>
-                <li><strong>Seimbang / Aman:</strong> Rasio 95% &ndash; 105% (cadangan pangan terjaga ideal).</li>
-                <li><strong>Waspada Surplus:</strong> Rasio 105% &ndash; 120% (pasokan mulai melebihi daya serap).</li>
-                <li><strong>Penuh / Surplus Berlebih:</strong> Rasio &gt; 120% (risiko kelebihan stok dan pemborosan pangan).</li>
-              </ul>
+              <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-bold">
+                      <th class="py-1.5 px-2.5">Status</th>
+                      <th class="py-1.5 px-2.5">Rentang Rasio</th>
+                      <th class="py-1.5 px-2.5">Makna Indikator</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 bg-white">
+                    <tr>
+                      <td class="py-1.5 px-2.5 font-bold text-rose-700 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-defisit);"></span>
+                        ▼ Defisit
+                      </td>
+                      <td class="py-1.5 px-2.5 font-semibold text-slate-800">&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%</td>
+                      <td class="py-1.5 px-2.5 text-slate-600">Pasokan kritis di bawah kebutuhan konsumsi; perlu intervensi logistik.</td>
+                    </tr>
+                    <tr>
+                      <td class="py-1.5 px-2.5 font-bold text-emerald-700 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-seimbang);"></span>
+                        ✔ Seimbang
+                      </td>
+                      <td class="py-1.5 px-2.5 font-semibold text-slate-800">{{ round(($ambangDefisit ?? 0.70) * 100) }}% &ndash; &lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%</td>
+                      <td class="py-1.5 px-2.5 text-slate-600">Pasokan mencukupi kebutuhan konsumsi wilayah secara proporsional.</td>
+                    </tr>
+                    <tr>
+                      <td class="py-1.5 px-2.5 font-bold text-amber-700 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-waspada);"></span>
+                        ▲ Waspada
+                      </td>
+                      <td class="py-1.5 px-2.5 font-semibold text-slate-800">{{ round(($ambangWaspada ?? 0.90) * 100) }}% &ndash; &lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%</td>
+                      <td class="py-1.5 px-2.5 text-slate-600">Pasokan mendekati kapasitas batas aman; mitigasi penumpukan stok.</td>
+                    </tr>
+                    <tr>
+                      <td class="py-1.5 px-2.5 font-bold text-purple-700 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-penuh);"></span>
+                        ◆ Penuh / Surplus
+                      </td>
+                      <td class="py-1.5 px-2.5 font-semibold text-slate-800">&ge;{{ round(($ambangPenuh ?? 1.00) * 100) }}%</td>
+                      <td class="py-1.5 px-2.5 text-slate-600">Pasokan melimpah; waspada risiko pembusukan dan pemborosan pangan.</td>
+                    </tr>
+                    <tr>
+                      <td class="py-1.5 px-2.5 font-medium text-slate-600 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(--status-tanpa-data);"></span>
+                        — Tanpa Data
+                      </td>
+                      <td class="py-1.5 px-2.5 font-semibold text-slate-500">—</td>
+                      <td class="py-1.5 px-2.5 text-slate-500">Wilayah di luar 34 kabupaten/kota percontohan nasional.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <!-- Model Prakiraan -->
+            <!-- 4. Model Prakiraan Pasokan -->
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                Model Prakiraan (Forecast Horizon 12 Bulan)
+                <span>Model Prakiraan Pasokan</span>
               </div>
               <p class="leading-relaxed">
-                Proyeksi menggunakan model <strong>Autoregressive XGBoost v1</strong> yang dilatih dengan deret waktu historis panen, anomali iklim BMKG, dan tren konsumsi. Model menghasilkan proyeksi horizon 12 bulan ke depan dengan deviasi rata-rata (MAE: ±3,8%, WAPE: ±14,2%).
-              </p>
-            </div>
-
-            <!-- Klausul Regulasi & Batasan Sistem (Dipindahkan dari Footer) -->
-            <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/90 space-y-1.5">
-              <div class="font-bold text-amber-950 flex items-center gap-1.5">
-                <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg>
-                Klausul Regulasi &amp; Batasan Sistem
-              </div>
-              <p class="leading-relaxed text-amber-900">
-                Sistem ini merupakan platform pemantauan &amp; pelacakan dini pasokan pangan, bukan platform transaksi jual-beli komersial. Dikelola sesuai ketentuan dan kerangka tata kelola ketahanan pangan nasional Republik Indonesia.
+                Proyeksi menggunakan model <strong>Autoregressive XGBoost v1</strong> dengan horizon prakiraan 12 bulan ke depan. Model dilatih dari deret waktu historis panen dan tren konsumsi dengan tingkat deviasi rata-rata MAE &plusmn;3,8% (WAPE &plusmn;14,2%).
               </p>
             </div>
           </div>
@@ -789,6 +834,13 @@ async function muatStatusData() {
   if (errorEl) errorEl.classList.add('hidden');
   if (emptyEl) emptyEl.classList.add('hidden');
 
+  // Pastikan frame peta spasial selalu ter-render
+  try {
+    await renderMapLayer();
+  } catch (geoErr) {
+    console.warn('[SIPANGAN] Base map frame loading:', geoErr);
+  }
+
   try {
     const res = await fetch(`${API_BASE}/status?komoditas=${state.komoditas}&periode=${state.periode}&level=${state.level}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}: Gagal memuat data status`);
@@ -806,7 +858,7 @@ async function muatStatusData() {
       updateKpiCards(json.ringkasan, json.komoditas);
     }
 
-    await renderMapLayer();
+    updateAllLayerStyles();
     renderTabelData(json.data || []);
     buildSearchAutocomplete(json.data || []);
 
@@ -831,10 +883,20 @@ async function muatStatusData() {
 function updateKpiCards(r, komoditas) {
   if (!r) return;
 
-  // Banner Ringkas 1 Baris
+  // Banner Ringkas 1 Baris Dinamis Sesuai Data
   const bannerText = document.getElementById('banner-nasional-text');
   if (bannerText) {
-    bannerText.textContent = `${r.jumlah_penuh ?? 0} dari ${r.total_wilayah ?? 34} wilayah pantau berstatus Penuh/Surplus · ${r.jumlah_waspada ?? 0} Waspada · ${r.jumlah_defisit ?? 0} Defisit`;
+    const totalWil = r.total_wilayah ?? 34;
+    const penuhWil = r.jumlah_penuh ?? 0;
+    const defisitWil = r.jumlah_defisit ?? 0;
+    const waspadaWil = r.jumlah_waspada ?? 0;
+    if (defisitWil > 0) {
+      bannerText.textContent = `${penuhWil} dari ${totalWil} wilayah surplus · ${defisitWil} wilayah defisit memerlukan relokasi pasokan`;
+    } else if (penuhWil > 0) {
+      bannerText.textContent = `${penuhWil} dari ${totalWil} wilayah surplus; pertimbangkan penyimpanan atau pengolahan`;
+    } else {
+      bannerText.textContent = `${totalWil} wilayah pantau dalam kondisi seimbang dan aman`;
+    }
   }
 
   // 4 Angka Kunci Horizontal Summary Strip
@@ -1012,13 +1074,17 @@ function clearPanelWilayah() {
   });
   const statusLabel = document.getElementById('panel-status-label');
   if (statusLabel) {
-    statusLabel.textContent = '— DATA TIDAK TERSEDIA';
-    statusLabel.className = 'text-lg font-black mt-0.5 text-slate-500';
+    statusLabel.textContent = 'Data wilayah tidak dapat dimuat';
+    statusLabel.className = 'text-sm sm:text-base font-bold mt-0.5 text-slate-600';
   }
   const rasioLabel = document.getElementById('panel-rasio-label');
   if (rasioLabel) {
-    rasioLabel.textContent = 'Rasio Pasokan: —';
+    rasioLabel.textContent = '—';
     rasioLabel.className = 'text-xs font-bold mt-0.5 text-slate-500';
+  }
+  const neracaPeriode = document.getElementById('panel-neraca-periode');
+  if (neracaPeriode) {
+    neracaPeriode.textContent = '—';
   }
   const iconBox = document.getElementById('panel-status-icon-box');
   if (iconBox) {
@@ -1031,6 +1097,27 @@ function clearPanelWilayah() {
   }
   const dampakContainer = document.getElementById('panel-dampak-container');
   if (dampakContainer) dampakContainer.classList.add('hidden');
+}
+
+function formatPeriodeWithTag(periodeKode) {
+  const selectPeriode = document.getElementById('select-periode');
+  if (selectPeriode) {
+    for (let i = 0; i < selectPeriode.options.length; i++) {
+      const opt = selectPeriode.options[i];
+      if (opt.value === periodeKode) {
+        return opt.text.trim();
+      }
+    }
+  }
+  const parts = (periodeKode || '').split('-');
+  if (parts.length === 2) {
+    const bulanNames = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const m = parseInt(parts[1], 10);
+    const bName = bulanNames[m] || parts[1];
+    const tag = periodeKode <= '2025-12' ? '(Aktual)' : '(Proyeksi)';
+    return `${bName} ${parts[0]} ${tag}`;
+  }
+  return periodeKode || '—';
 }
 
 // ── Update Panel Wilayah Terpilih (Kanan) ────────────────────────────────
@@ -1080,7 +1167,7 @@ async function updatePanelWilayah(kode) {
 
       // Neraca Supply & Demand
       const neracaPeriode = document.getElementById('panel-neraca-periode');
-      if (neracaPeriode) neracaPeriode.textContent = point.periode;
+      if (neracaPeriode) neracaPeriode.textContent = formatPeriodeWithTag(point.periode || state.periode);
       const supplyEl = document.getElementById('panel-supply-formatted');
       if (supplyEl) supplyEl.textContent = point.supply_formatted || '—';
       const demandEl = document.getElementById('panel-demand-formatted');

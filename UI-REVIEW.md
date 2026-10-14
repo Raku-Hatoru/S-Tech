@@ -1040,6 +1040,93 @@ Polygons outside map card: 0 (expect 0: PASS)
 - **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi terjaga).
 - **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
 
+---
+
+## 15. Step 11 — The Same Facts, Thresholds and Labels Everywhere, and No Misleading Text in Edge States
+
+### 15.1 Ringkasan Pekerjaan & Konsistensi Fakta
+Step 11 memfokuskan pada konsistensi menyeluruh (*end-to-end consistency*) antara data, ambang batas konfigurasi, label status, penanganan error state, dan sanitasi terminologi di seluruh antarmuka publik (`/peta` dan `/wilayah/3302`):
+1. **Sinkronisasi Ambang Batas Modal & Legenda**: Tabel status di dalam modal "Tentang Data" digenerate secara dinamis dari variabel ambang batas yang sama persis dengan legenda peta (`$ambangDefisit`, `$ambangWaspada`, `$ambangPenuh`).
+2. **Eradikasi Kebocoran Teks & Istilah Teknis**: Memastikan `PRD`, `Selimbang`, `harga`, `deflasi`, dan `XGBoost` bernilai **0 kemunculan** di luar modal (nama model `Autoregressive XGBoost v1` diisolasi hanya di dalam modal).
+3. **Perampingan Modal Menjadi 4 Blok Esensial**: Menghilangkan banner gelap berulang, akronim `WGS84`, dan jargon mentah. Modal dipadatkan menjadi 4 blok terstruktur: *Sumber Data Acuan*, *Cakupan Wilayah Percontohan*, *Cara Membaca Status & Rasio Pasokan*, dan *Model Prakiraan Pasokan*.
+4. **Logika Banner Jujur Berbasis Data Riil**: Pesan banner bergantung pada jumlah defisit faktual. Bila 0 wilayah defisit (seperti pada data aktual Desember 2025 dengan 27 surplus, 7 seimbang/waspada, 0 defisit), teks secara jujur menyarankan penyimpanan/pengolahan dan tidak menyebut relokasi ke wilayah defisit fiktif.
+5. **Standarisasi Format Kode Wilayah & Periode**: Mengubah format kode wilayah dari `33.02` menjadi `3302` (sesuai basis data dan rute `/wilayah/3302`). Menyelaraskan format periode panel samping menjadi `Desember 2025 (Aktual)` baik pada render Blade awal maupun mutasi DOM JavaScript.
+6. **Penanganan Kegagalan (Failure State) yang Andal**: Jika request API gagal atau terblokir, kanvas peta dasar (507 poligon batas wilayah) tetap ter-render di balik dialog error `#peta-error-state` (memenuhi Map Rule). Panel samping menampilkan placeholder netral `Data wilayah tidak dapat dimuat` dengan seluruh angka tereset ke `"—"`, tanpa memunculkan sisa angka *hardcoded* (`105,1%`, `Februari 2026`, `18.500 ton`).
+
+---
+
+### 15.2 Tabel Perbandingan Ambang Batas (Modal vs Legenda)
+
+| Level Status | Ambang Batas Legenda Peta | Ambang Batas Tabel Modal | Simbol & Warna | Keterangan / Makna Indikator |
+| :--- | :---: | :---: | :---: | :--- |
+| **Defisit** | `<70%` | `<70%` | ▼ Merah Rose (`#e11d48`) | Pasokan kritis di bawah kebutuhan konsumsi; perlu intervensi logistik. |
+| **Seimbang** | `70% – <90%` | `70% – <90%` | ✔ Hijau Emerald (`#059669`) | Pasokan mencukupi kebutuhan konsumsi wilayah secara proporsional. |
+| **Waspada** | `90% – <100%` | `90% – <100%` | ▲ Oranye Amber (`#d97706`) | Pasokan mendekati kapasitas batas aman; mitigasi penumpukan stok. |
+| **Penuh / Surplus** | `≥100%` | `≥100%` | ◆ Ungu Purple (`#7c3aed`) | Pasokan melimpah; waspada risiko pembusukan dan pemborosan pangan. |
+| **Tanpa Data** | `—` | `—` | — Abu-abu Slate (`#64748b`) | Wilayah di luar 34 kabupaten/kota percontohan nasional. |
+
+*Kesesuaian: 100% Identik (Kedua komponen merujuk pada nilai dinamis `$ambangDefisit ?? 0.70`, `$ambangWaspada ?? 0.90`, `$ambangPenuh ?? 1.00`).*
+
+---
+
+### 15.3 Hasil Audit Kebocoran Teks (HTML Grep Leak Audit)
+Pengujian dijalankan langsung terhadap berkas HTML hasil render browser nyata (Playwright headless Chromium):
+
+```
+======================================================
+5. HTML Grep Leak Audit:
+   - /peta outside modal:  {"PRD":0,"Selimbang":0,"harga":0,"deflasi":0,"XGBoost":0}
+   - /wilayah/3302:        {"PRD":0,"Selimbang":0,"harga":0,"deflasi":0,"XGBoost":0}
+   - modal markup:         {"PRD":0,"Selimbang":0,"harga":0,"deflasi":0,"XGBoost":1,"WGS84":0}
+======================================================
+```
+
+| Pola Pencarian | Target Batasan | Hasil Render `/peta` (Luar Modal) | Hasil Render `/wilayah/3302` | Hasil di Dalam Modal | Status Kepatuhan |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| `PRD` | 0 di semua halaman | **0** | **0** | **0** | **TERPENUHI (CLEAN)** |
+| `Selimbang` | 0 di semua halaman | **0** | **0** | **0** | **TERPENUHI (CLEAN)** |
+| `harga` | 0 di semua halaman | **0** | **0** | **0** | **TERPENUHI (CLEAN)** |
+| `deflasi` | 0 di semua halaman | **0** | **0** | **0** | **TERPENUHI (CLEAN)** |
+| `XGBoost` | 0 di luar modal, boleh di modal | **0** | **0** | **1** | **TERPENUHI (CLEAN)** |
+| `WGS84` | 0 di dalam modal | — | — | **0** | **TERPENUHI (CLEAN)** |
+
+---
+
+### 15.4 Tabel Evaluasi Butir Pekerjaan Step 11
+
+| Item | Before (Step 10) | After (Step 11) | Evidence | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Sinkronisasi Ambang Batas** | Tabel modal statis tidak terikat dinamis ke legenda | Tabel status modal digenerate dari `$ambangDefisit`, `$ambangWaspada`, `$ambangPenuh` sama persis dengan legenda | [`docs/ui-review/step11-modal.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-modal.png), [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php#L550-L590) | **Selesai** |
+| **Kebocoran Teks PRD & Jargon** | Ada teks `(PRD 2.3 & 14)` dan `WGS84` di modal | Dieliminasi total; seluruh referensi PRD dan akronim geodesi dihapus | `scripts/verify-step11.mjs` (PRD=0, WGS84=0) | **Selesai** |
+| **Koreksi Typo Selimbang** | Potensi salah ketik status Seimbang | 0 kemunculan kata "Selimbang" di seluruh view | `grep -rin "Selimbang" resources/views/` -> 0 hasil | **Selesai** |
+| **Eradikasi Istilah Harga & Deflasi** | Ada istilah harga di detail wilayah (HPP Rp 6.000, dsb) | Diganti narasi penumpukan dan penolakan stok gabah tanpa istilah harga/deflasi | `scripts/verify-step11.mjs` (harga=0, deflasi=0) | **Selesai** |
+| **Isolasi Nama Model XGBoost** | Muncul pada detail wilayah (`Prediksi XGBoost`) | Dihapus dari detail wilayah; hanya diizinkan di dalam modal Tentang Data | `scripts/verify-step11.mjs` (Luar modal: 0, Detail: 0, Modal: 1) | **Selesai** |
+| **Perampingan Modal Tentang Data** | Modal panjang dengan banner gelap duplikat | 4 blok ringkas: Sumber Data, Cakupan, Cara Membaca Status (tabel), Model Prakiraan | [`docs/ui-review/step11-modal.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-modal.png) | **Selesai** |
+| **Logika Banner Nasional Jujur** | Teks statis/asumsi menyarankan relokasi pasokan ke defisit | Kondisional: jika defisit = 0, pesan menyarankan penyimpanan/pengolahan tanpa relokasi fiktif | [`docs/ui-review/step11-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-1440.png), `step11-evidence.json` | **Selesai** |
+| **Standarisasi Kode Wilayah** | Tampil format `33.02` pada panel samping | Distandarisasi menjadi `3302` sesuai URL rute dan basis data | [`docs/ui-review/step11-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-1440.png), `step11-evidence.json` | **Selesai** |
+| **Konsistensi Format Periode** | Blade awal `Februari 2026`, JS dinamis `2025-12` | Selaras format `Desember 2025 (Aktual)` / `{Bulan} {Tahun} ({Tipe})` di semua state | [`docs/ui-review/step11-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-1440.png), `step11-evidence.json` | **Selesai** |
+| **Failure State & Kerangka Peta** | API gagal menyebabkan peta kosong dan angka statis basi | Peta dasar 507 poligon tetap ter-render di balik overlay error; panel netral `Data wilayah tidak dapat dimuat` tanpa angka basi | [`docs/ui-review/step11-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-error.png), `step11-evidence.json` | **Selesai** |
+| **Map Rule (Hard Rule 2)** | Terpenuhi pada state normal | 507 poligon interaktif, 34 poligon pilot terwarnai, 0 poligon di luar container baik di normal maupun error state | `scripts/verify-step11.mjs` (507 polygons, 34 pilots, 0 outside) | **Selesai** |
+
+---
+
+### 15.5 Bukti Tangkapan Layar & Data Hasil Pengukuran
+1. [`docs/ui-review/step11-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-1440.png) — Tampilan Normal Desktop 1440x900: Banner jujur `"27 dari 34 wilayah surplus; pertimbangkan penyimpanan atau pengolahan"`, kode wilayah `3302`, periode `Desember 2025 (Aktual)`, 507 poligon terkurung.
+2. [`docs/ui-review/step11-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-390.png) — Tampilan Mobile 390x844: Responsif tanpa horizontal overflow, peta ter-render utuh.
+3. [`docs/ui-review/step11-modal.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-modal.png) — Modal "Tentang Data": 4 blok padat, tabel status 5 baris identik dengan legenda, bersih dari PRD dan WGS84.
+4. [`docs/ui-review/step11-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-error.png) — State Kegagalan API: Overlay error dialog aktif dengan peta 507 poligon tetap utuh di latar belakang, panel samping netral dengan seluruh metrik `"—"`.
+5. [`docs/ui-review/step11-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-evidence.json) — Berkas rekaman metrik evaluasi otomatis.
+
+---
+
+### 15.6 Status Rangkaian Uji Regresi
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 882 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+- **UNVERIFIED Items**: **0 (Nol)**.
+
+
 
 
 

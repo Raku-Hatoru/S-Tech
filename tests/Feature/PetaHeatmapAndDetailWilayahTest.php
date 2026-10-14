@@ -117,7 +117,7 @@ class PetaHeatmapAndDetailWilayahTest extends TestCase
         $response->assertSee('Jawa Tengah');
         $response->assertSee('Total Supply');
         $response->assertSee('Demand Terproyeksi');
-        $response->assertSee('XGBoost');
+        $response->assertSee('Model Prakiraan');
     }
 
     /**
