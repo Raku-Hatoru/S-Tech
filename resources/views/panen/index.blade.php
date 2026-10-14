@@ -72,7 +72,7 @@
                         </span>
                     </div>
                     <p class="text-xs text-rose-800 leading-relaxed max-w-3xl">
-                        Hasil agregasi survei lumbung padi per {{ $periodeDisplay }} menembus {{ number_format($stokAkhirRiilTon, 1, ',', '.') }} ton. Indeks surplus melampaui kapasitas aman penyangga pangan lokal (ambang batas 90% terlewati). Rekomendasi redistribusi antar-kabupaten disiagakan guna mencegah penyusutan mutu dan penurunan harga di tingkat petani.
+                        Hasil agregasi survei lumbung padi per {{ $periodeDisplay }} menembus {{ number_format($stokAkhirRiilTon, 1, ',', '.') }} ton. Indeks surplus melampaui kapasitas aman penyangga pangan lokal (ambang batas 90% terlewati). Rekomendasi redistribusi antar-kabupaten disiagakan guna mencegah penyusutan mutu dan pembusukan pangan di tingkat petani.
                     </p>
                 </div>
             </div>

@@ -25,7 +25,7 @@ class SettingController extends Controller
             'ambang_penuh_min' => (float) Setting::nilai('ambang_penuh_min', 1.0000),
             'unit_switch_kg' => (int) Setting::nilai('unit_switch_kg', 2000),
             'teks_disclaimer' => Setting::nilai('teks_disclaimer', 'Sistem ini bukan layanan penjualan, hanya layanan pemantauan dan tracking.'),
-            'pesan_dampak_surplus' => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi/terbuang dan menghasilkan emisi gas ke lingkungan; harga di tingkat petani dapat turun karena pasokan melimpah.'),
+            'pesan_dampak_surplus' => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.'),
             'pesan_dampak_defisit' => Setting::nilai('pesan_dampak_defisit', 'Risiko kekurangan pangan di wilayah ini hingga kelaparan bila tidak dipenuhi.'),
         ];
 

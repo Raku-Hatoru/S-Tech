@@ -62,7 +62,7 @@
                     </h2>
                 </div>
                 <p class="text-xs text-blue-800 leading-relaxed max-w-3xl">
-                    BUMDes meneruskan rekomendasi ini ke kelompok tani (Gapoktan) {{ $kabupaten->nama }} guna mencegah lonjakan panen berlebih (spoilage shock) di bulan yang sama serta menjaga kestabilan harga jual gabah di tingkat petani.
+                    BUMDes meneruskan rekomendasi ini ke kelompok tani (Gapoktan) {{ $kabupaten->nama }} guna mencegah lonjakan panen berlebih (spoilage shock) di bulan yang sama serta menjaga kelancaran distribusi logistik pangan lokal.
                 </p>
             </div>
         </div>
@@ -166,7 +166,7 @@
                         <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Model Dinamika Pasokan BMKG • 2026</h4>
                     </div>
                     <p class="text-xs text-slate-600 leading-relaxed mt-2">
-                        Penyesuaian waktu tanam MT-2 dirancang untuk mereduksi risiko oversupply komoditas beras pada Q3 2026, yang berpotensi memicu depresiasi harga gabah di tingkat petani di bawah HPP (Harga Pembelian Pemerintah).
+                        Penyesuaian waktu tanam MT-2 dirancang untuk mereduksi risiko oversupply komoditas beras pada Q3 2026, yang berpotensi memicu penumpukan stok gabah di tingkat penggilingan melampaui kapasitas serap gudang lokal.
                     </p>
                 </div>
 

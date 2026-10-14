@@ -322,7 +322,7 @@ class WilayahController extends Controller
         // Pesan dampak
         $statusValue = $statusTerbaru['status'] ?? StatusLevel::TanpaData->value;
         $pesanDampak = match ($statusValue) {
-            StatusLevel::Penuh->value => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi/terbuang dan menghasilkan emisi gas; harga produsen berisiko turun drastis akibat pasokan melimpah di atas kapasitas serap.'),
+            StatusLevel::Penuh->value => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.'),
             StatusLevel::Defisit->value => Setting::nilai('pesan_dampak_defisit', 'Risiko kekurangan pangan di wilayah ini hingga kelaparan bila pasokan tidak segera dipenuhi.'),
             StatusLevel::Waspada->value => 'Pasokan mendekati kapasitas penuh. Waspadai potensi penumpukan stok komoditas.',
             StatusLevel::Seimbang->value => 'Pasokan pangan wilayah terpantau dalam kisaran seimbang dan mencukupi kebutuhan konsumsi masyarakat.',

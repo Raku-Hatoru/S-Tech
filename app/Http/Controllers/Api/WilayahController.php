@@ -154,7 +154,7 @@ class WilayahController extends Controller
 
             // Pesan dampak sesuai status rasio
             $pesanDampak = match (true) {
-                $titikTerakhir && $titikTerakhir['status'] === StatusLevel::Penuh->value => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi/terbuang dan menghasilkan emisi gas ke lingkungan; harga di tingkat petani dapat turun karena pasokan melimpah.'),
+                $titikTerakhir && $titikTerakhir['status'] === StatusLevel::Penuh->value => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.'),
                 $titikTerakhir && $titikTerakhir['status'] === StatusLevel::Defisit->value => Setting::nilai('pesan_dampak_defisit', 'Risiko kekurangan pangan di wilayah ini hingga kelaparan bila pasokan tidak segera dipenuhi.'),
                 $titikTerakhir && $titikTerakhir['status'] === StatusLevel::Waspada->value => 'Pasokan mendekati kapasitas penuh. Waspadai potensi penumpukan stok komoditas.',
                 default => 'Pasokan pangan wilayah terpantau dalam kisaran seimbang dan mencukupi kebutuhan konsumsi.',
@@ -342,9 +342,9 @@ class WilayahController extends Controller
         };
 
         $pesanDampak = match ($statusLevel) {
-            StatusLevel::Penuh => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi/terbuang dan menghasilkan emisi gas; harga produsen berisiko turun drastis akibat pasokan melimpah di atas kapasitas serap.'),
+            StatusLevel::Penuh => Setting::nilai('pesan_dampak_surplus', 'Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.'),
             StatusLevel::Waspada => 'Pasokan di wilayah tujuan mendekati batas jenuh (90%–100%). Waspadai potensi penumpukan stok.',
-            StatusLevel::Defisit => Setting::nilai('pesan_dampak_defisit', 'Wilayah tujuan sedang defisit pasokan (<70%). Pasokan pangan sangat dibutuhkan untuk stabilisasi harga dan konsumsi masyarakat.'),
+            StatusLevel::Defisit => Setting::nilai('pesan_dampak_defisit', 'Wilayah tujuan sedang defisit pasokan (<70%). Pasokan pangan sangat dibutuhkan untuk menjaga keseimbangan pasokan dan konsumsi masyarakat.'),
             default => null,
         };
 

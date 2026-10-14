@@ -63,7 +63,7 @@
           Peta Heatmap &amp; Early-Warning Surplus Pangan Nasional
         </h1>
         <p class="text-xs text-slate-600 font-medium mt-0.5 truncate">
-          Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan anjloknya harga produsen.
+          Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan pemborosan pangan.
         </p>
       </div>
 
@@ -372,12 +372,8 @@
             Peringatan Dampak Wilayah
           </div>
           <p id="panel-pesan-dampak" class="text-amber-950 leading-relaxed text-xs">
-            Pangan berisiko basi/terbuang dan menghasilkan emisi gas; harga produsen berisiko turun drastis akibat pasokan melimpah di atas kapasitas serap.
+            Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.
           </p>
-          <div class="text-xs font-bold text-amber-900 flex items-center gap-1 pt-0.5">
-            <svg class="w-3 h-3 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-            Estimasi Deflasi Produsen: -14,2% dalam 14 hari kerja
-          </div>
         </div>
 
         <!-- Tombol Aksi -->
@@ -628,7 +624,7 @@
                 <li><strong>Defisit Kritis:</strong> Rasio &lt; 95% (kebutuhan melebihi pasokan).</li>
                 <li><strong>Seimbang / Aman:</strong> Rasio 95% &ndash; 105% (cadangan pangan terjaga ideal).</li>
                 <li><strong>Waspada Surplus:</strong> Rasio 105% &ndash; 120% (pasokan mulai melebihi daya serap).</li>
-                <li><strong>Penuh / Surplus Berlebih:</strong> Rasio &gt; 120% (risiko kelebihan stok dan harga jatuh).</li>
+                <li><strong>Penuh / Surplus Berlebih:</strong> Rasio &gt; 120% (risiko kelebihan stok dan pemborosan pangan).</li>
               </ul>
             </div>
 

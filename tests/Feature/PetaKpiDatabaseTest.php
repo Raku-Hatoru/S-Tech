@@ -157,7 +157,7 @@ class PetaKpiDatabaseTest extends TestCase
         $response = $this->get('/peta');
         $response->assertStatus(200);
 
-        // Assert metrik palsu tidak ada sama sekali di HTML
+        // Assert metrik palsu dan terminologi harga tidak ada sama sekali di HTML
         $response->assertDontSee('82.4%');
         $response->assertDontSee('kapasitas gudang', false);
         $response->assertDontSee('Cold Storage', false);
@@ -166,6 +166,10 @@ class PetaKpiDatabaseTest extends TestCase
         $response->assertDontSee('100% Terintegrasi BUMDes & Bulog', false);
         $response->assertDontSee('Akurasi Model Machine Learning', false);
         $response->assertDontSee('-14.2%');
+        $response->assertDontSee('-14,2%');
+        $response->assertDontSee('harga', false);
+        $response->assertDontSee('deflasi', false);
+        $response->assertDontSee('Estimasi Deflasi Produsen', false);
 
         // Assert metrik riil dan elemen ID konsisten ada
         $response->assertSee('id="kpi-total-supply"', false);
@@ -174,6 +178,29 @@ class PetaKpiDatabaseTest extends TestCase
         $response->assertSee('id="kpi-selisih-bersih"', false);
         $response->assertSee('id="banner-nasional-text"', false);
         $response->assertSee('Total Pasokan Terpantau (34 Wilayah)');
+    }
+
+    /**
+     * Uji halaman /peta dan detail wilayah tidak memuat spekulasi harga atau estimasi deflasi.
+     */
+    public function test_peta_and_detail_pages_contain_no_price_predictions_or_deflation_terms(): void
+    {
+        $responsePeta = $this->get('/peta');
+        $responsePeta->assertStatus(200);
+        $responsePeta->assertDontSee('harga', false);
+        $responsePeta->assertDontSee('deflasi', false);
+        $responsePeta->assertDontSee('-14,2%');
+        $responsePeta->assertDontSee('Estimasi Deflasi Produsen', false);
+
+        $kabupaten = Kabupaten::where('kode', '3302')->first() ?? Kabupaten::first();
+        if ($kabupaten) {
+            $responseDetail = $this->get('/wilayah/'.$kabupaten->kode);
+            $responseDetail->assertStatus(200);
+            $responseDetail->assertDontSee('harga', false);
+            $responseDetail->assertDontSee('deflasi', false);
+            $responseDetail->assertDontSee('-14,2%');
+            $responseDetail->assertDontSee('HPP', false);
+        }
     }
 
     /**

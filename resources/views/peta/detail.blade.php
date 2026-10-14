@@ -389,14 +389,14 @@
               </p>
             </div>
 
-            <!-- Item 2: Anjloknya Harga GKP -->
-            <div class="p-3.5 rounded-xl bg-red-50/60 border border-red-200/80">
-              <div class="flex items-center gap-2 text-xs font-bold text-red-900">
-                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                <span>Anjloknya Harga Gabah Kering Panen (GKP)</span>
+            <!-- Item 2: Penumpukan Stok dan Penolakan Gudang GKP -->
+            <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/80">
+              <div class="flex items-center gap-2 text-xs font-bold text-amber-900">
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span>Penolakan dan Penumpukan Stok Gabah (GKP)</span>
               </div>
               <p class="text-[11px] text-slate-700 mt-1 leading-relaxed">
-                Petani di tingkat sentra (Sumbang, Rawalo, Sokaraja) rentan ditekan tengkulak hingga di bawah Harga Pembelian Pemerintah (HPP Rp 6.000/kg) karena gudang penggilingan menolak stok baru.
+                Lumbung dan penggilingan di tingkat sentra (Sumbang, Rawalo, Sokaraja) rentan mengalami penumpukan pasokan melebihi daya serap lokal karena gudang pengeringan menolak pasokan baru.
               </p>
             </div>
 

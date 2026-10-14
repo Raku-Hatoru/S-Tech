@@ -250,7 +250,7 @@
                   PERINGATAN DINI PASOKAN: Wilayah tujuan (Kab. Banyumas) saat ini berstatus PENUH (Rasio Keterisian: 105,1%).
                 </h3>
                 <p id="desc-warning" class="text-xs text-red-800 leading-relaxed">
-                  Pangan berisiko basi/terbuang dan berpotensi memicu deflasi ekstrem yang merugikan serta menurunkan harga gabah di tingkat petani lokal.
+                  Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.
                 </p>
               </div>
             </div>
@@ -512,7 +512,7 @@ async function onFilterChange() {
       sidebarStatus.textContent = 'STATUS: OVERFLOW';
 
       document.getElementById('heading-warning').textContent = `PERINGATAN DINI PASOKAN: Wilayah tujuan (${data.nama}) saat ini berstatus ${data.label.toUpperCase()} (Rasio Keterisian: ${data.rasio_persen}).`;
-      document.getElementById('desc-warning').textContent = data.pesan_dampak || 'Pangan berisiko basi/terbuang dan menurunkan harga di tingkat petani lokal.';
+      document.getElementById('desc-warning').textContent = data.pesan_dampak || 'Pangan berisiko basi atau terbuang bila pasokan melebihi kapasitas serap wilayah.';
 
       toggleSubmitState();
     } else if (data.status === 'defisit') {
@@ -531,7 +531,7 @@ async function onFilterChange() {
       document.getElementById('label-warning-threat').textContent = 'Kebutuhan Pasokan Mendesak';
 
       document.getElementById('heading-warning').textContent = `INFO KETAHANAN PANGAN: Wilayah tujuan (${data.nama}) saat ini berstatus DEFISIT (Rasio: ${data.rasio_persen}).`;
-      document.getElementById('desc-warning').textContent = 'Pasokan pangan sangat dibutuhkan di wilayah ini guna menstabilkan harga konsumen dan mencegah kelangkaan.';
+      document.getElementById('desc-warning').textContent = 'Pasokan pangan sangat dibutuhkan di wilayah ini guna menjaga keseimbangan pasokan dan mencegah kelangkaan.';
 
       // Otomatis aktifkan tombol kirim jika defisit
       const btn = document.getElementById('btn-submit-dispatch');

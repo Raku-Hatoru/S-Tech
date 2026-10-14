@@ -45,9 +45,9 @@ class SettingSeeder extends Seeder
             ],
             [
                 'kunci' => 'pesan_dampak_surplus',
-                'nilai' => config('pangan.pesan_dampak_surplus', 'Pangan berisiko basi/terbuang dan menghasilkan emisi gas ke lingkungan; harga di tingkat petani dapat turun karena pasokan melimpah.'),
+                'nilai' => config('pangan.pesan_dampak_surplus', 'Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.'),
                 'tipe' => 'text',
-                'keterangan' => 'Penjelasan dampak risiko kelebihan pasokan bagi petani & lingkungan',
+                'keterangan' => 'Penjelasan dampak risiko kelebihan pasokan logistik & lingkungan',
             ],
             [
                 'kunci' => 'pesan_dampak_defisit',

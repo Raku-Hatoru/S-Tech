@@ -108,7 +108,7 @@ class DemoShipmentSeeder extends Seeder
                     'level_peringatan' => StatusLevel::Defisit,
                     'rasio_tujuan' => 0.6500,
                     'konfirmasi_peringatan' => false,
-                    'catatan' => 'Pasokan stabilisasi harga wilayah defisit.',
+                    'catatan' => 'Pasokan menjaga keseimbangan pasokan wilayah defisit.',
                 ]
             );
 

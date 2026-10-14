@@ -91,7 +91,7 @@ class PlantingController extends Controller
             ."Wilayah: Kabupaten {$kabupaten->nama}\n"
             ."BUMDes Pangan Mitra Gapoktan\n"
             ."Status: [SIMULASI / DATA CONTOH SISTEM KETAHANAN PANGAN]\n\n"
-            ."Guna mencegah penumpukan panen raya berlebih (spoilage shock) dan menjaga stabilitas harga gabah di tingkat petani, disarankan rekomendasi jadwal tanam berikut:\n\n";
+            ."Guna mencegah penumpukan panen raya berlebih (spoilage shock) dan menjaga keseimbangan pasokan gabah di tingkat petani, disarankan rekomendasi jadwal tanam berikut:\n\n";
 
         foreach ($recommendationsList as $idx => $item) {
             $waText .= ($idx + 1).". *{$item->komoditas_label}* ({$item->varietas})\n"

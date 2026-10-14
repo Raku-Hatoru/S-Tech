@@ -388,3 +388,110 @@ Pengujian dilakukan dengan membandingkan angka yang dirender pada antarmuka terh
 | `9eaf60f` | `ui(p1-typography): standarisasi ukuran tipografi minimal 12px dan kontras wcag` | Menstandarisasi tipografi minimal 12px, kontras teks WCAG AA, dan tinggi kartu KPI seragam. |
 | `83dcc8e` | `ui(p1-layout): optimalkan hirarki visual dan tata letak kontainer peta` | Banner peringatan ringkas dismissible, tinggi peta responsif, highlight outline wilayah terpilih. |
 | `984e133` | `ui(p2-a11y): tingkatkan aksesibilitas semantik, sinkronisasi query url, dan responsivitas mobile` | Touch targets >= 44px, `aria-label`, sinkronisasi parameter URL, dan penanganan data kosong. |
+| `1a5c024` | `ui(step-0-tooling): konfirmasi perkakas rendering playwright dan evaluasi klaim vs realita` | Menyiapkan `scripts/shot.mjs`, mengambil baseline visual 4 viewport, dan tabel evaluasi klaim vs realita. |
+| `f2581d3` | `ui(step-1-legend): satukan sistem warna status dan sematkan legenda di kontainer peta` | Menyematkan legenda terpadu di kanvas peta, token warna violet `#8b5cf6` untuk surplus/penuh, dan simbol status. |
+| `ee0f0c7` | `ui(step-2-layout): optimalkan kerapian top area dimensi peta dan highlight poligon terpilih` | Mengunci rasio tinggi kartu peta vs panel samping (1:1), visibilitas peta 80,4% tanpa scroll, dan highlight poligon. |
+| `a5f6d7f` | `ui(step-3-typography): standarisasi tipografi minimal 12px dan rasio kontras warna wcag aa` | Menstandarisasi tipografi minimal 12px, kontras teks WCAG AA (≥ 4.5:1), dan tinggi kartu KPI seragam. |
+| `8ad728f` | `ui(step-4-kpi-numbers): konsistensi format angka indonesia dan integrasi metrik kpi riil basis data` | Integrasi metrik KPI riil agregasi basis data, pemisah ribuan titik/koma, dan penghapusan metrik simulasi statis. |
+| `6a12e22` | `ui(step-5-neutral-pricing): netralisasi terminologi harga dan penghapusan estimasi deflasi mikro` | Menghapus estimasi deflasi produsen -14,2%, netralisasi 21 narasi harga ke dampak logistik dan emisi pangan. |
+
+---
+
+## 9. Step 5 — Netralisasi Terminologi Harga & Penghapusan Estimasi Deflasi (PRD 2.3 Non-Goals)
+
+### 9.1 Dasar Spesifikasi & Kebijakan Produk
+Sesuai dengan ketentuan resmi **docs/PRD.md Bab 2.3 (Non-Goals)**:
+> *"Sistem ini **bukan sistem prediksi harga komoditas mikro** (tidak memprediksi harga cabai harian di pasar)."*
+
+Serta **docs/PRD.md Bab 8.4 (Disclaimer & Batasan Sistem)**:
+> *"Disclaimer Resmi: Sistem ini bukan layanan penjualan, melainkan platform pemantauan, tracing, dan mitigasi kelebihan suplai logistik pangan nasional."*
+
+Klaim angka prediksi spesifik mikro seperti `"Estimasi Deflasi Produsen: -14,2% dalam 14 hari kerja"` dan retorika penurunan/depresiasi harga di bawah HPP tidak memiliki model ekonometrika riil dalam basis data maupun pipeline machine learning, sehingga berpotensi menimbulkan disinformasi dan melanggar ruang lingkup produk.
+
+Sesuai arahan Product Owner (User) pada evaluasi Task 7, diterapkan **Opsi B (Netralisasi Penuh)**:
+1. Menghapus sepenuhnya elemen dan badge estimasi persentase deflasi produsen mikro (`-14,2%`).
+2. Menetralisasi seluruh narasi kualitatif bertema "harga anjlok / depresiasi harga / stabilisasi harga" menjadi narasi objektif logistik ketahanan pangan: **risiko pembusukan pangan (spoilage)**, **pemborosan pangan (food waste)**, **timbulan emisi gas rumah kaca**, dan **penumpukan stok melebihi kapasitas serap gudang**.
+
+---
+
+### 9.2 Tabel Transformasi Narasi (Sebelum vs Sesudah)
+
+Seluruh 21 kemunculan terminologi harga dan deflasi pada kode program, seeder, controller, view, dan basis data berhasil dinetralisasi tanpa mengubah schema database maupun logika otorisasi:
+
+| No | Berkas / Lokasi | Teks Asli (Melanggar PRD 2.3) | Teks Pengganti Netral (PRD 2.3 & 8.4) |
+|:---|:---|:---|:---|
+| 1 | `resources/views/peta/index.blade.php:66` | *...anjloknya harga produsen...* | `...mitigasi pembusukan gabah dan pemborosan pangan.` |
+| 2 | `resources/views/peta/index.blade.php:374` | `<div class="bg-rose-50...">Estimasi Deflasi Produsen: -14,2% dalam 14 hari kerja...</div>` | **Dihapus total** dari antarmuka side-panel peta. |
+| 3 | `resources/views/peta/index.blade.php:376` | *...harga di tingkat petani dapat turun drastis...* | `Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.` |
+| 4 | `resources/views/peta/index.blade.php:627` | *...risiko kelebihan stok dan harga jatuh.* | `...risiko kelebihan stok dan pemborosan pangan.` |
+| 5 | `resources/views/peta/detail.blade.php:269` | *Anjloknya Harga Gabah Kering Panen (GKP)... di bawah HPP Rp 6.000/kg...* | `Penolakan dan Penumpukan Stok Gabah (GKP)... penumpukan pasokan melebihi daya serap penggilingan dan kapasitas gudang penyangga lokal.` |
+| 6 | `config/pangan.php:61` | `'Pangan berisiko basi/terbuang dan menghasilkan emisi gas ke lingkungan; harga di tingkat petani dapat turun karena pasokan melimpah.'` | `'Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.'` |
+| 7 | `database/seeders/SettingSeeder.php:48` | Fallback pesan dampak surplus memuat kata *harga*. | Fallback diperbarui ke teks netral logistik dan emisi lingkungan. |
+| 8 | `database/seeders/SettingSeeder.php:50` | `'Penjelasan dampak risiko kelebihan pasokan bagi petani & lingkungan'` | `'Penjelasan dampak risiko kelebihan pasokan logistik & lingkungan'` |
+| 9 | `database/seeders/DemoShipmentSeeder.php:111` | `'Pasokan stabilisasi harga wilayah defisit.'` | `'Pasokan menjaga keseimbangan pasokan wilayah defisit.'` |
+| 10 | `app/Http/Controllers/Admin/SettingController.php:28` | Fallback setting `pesan_dampak_surplus` memuat referensi harga. | Diselaraskan dengan fallback netral bebas prediksi harga. |
+| 11 | `app/Http/Controllers/Api/WilayahController.php:157` | Fallback match `StatusLevel::Penuh` memuat kata harga. | Diperbarui ke pesan bahaya logistik & emisi gas rumah kaca. |
+| 12 | `app/Http/Controllers/Api/WilayahController.php:345` | Fallback endpoint cek status memuat kata harga produsen. | Diperbarui ke pesan bahaya logistik & emisi gas rumah kaca. |
+| 13 | `app/Http/Controllers/Api/WilayahController.php:347` | *...untuk stabilisasi harga dan konsumsi masyarakat.* | *...untuk menjaga keseimbangan pasokan dan konsumsi masyarakat.* |
+| 14 | `app/Http/Controllers/WilayahController.php:325` | Fallback controller detail wilayah memuat kata harga produsen. | Diperbarui ke pesan bahaya logistik & emisi gas rumah kaca. |
+| 15 | `app/Http/Controllers/PlantingController.php:94` | *...menjaga stabilitas harga gabah di tingkat petani...* | *...menjaga keseimbangan pasokan gabah di tingkat petani...* |
+| 16 | `resources/views/pengiriman/create.blade.php:253` | *...memicu deflasi ekstrem yang merugikan serta menurunkan harga gabah...* | `Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.` |
+| 17 | `resources/views/pengiriman/create.blade.php:515` | Fallback DOM JS memuat *...menurunkan harga di tingkat petani lokal.* | Diselaraskan ke *...bila pasokan melebihi kapasitas serap wilayah.* |
+| 18 | `resources/views/pengiriman/create.blade.php:534` | *...guna menstabilkan harga konsumen...* | *...guna menjaga keseimbangan pasokan...* |
+| 19 | `resources/views/panen/index.blade.php:75` | *...mencegah penyusutan mutu dan penurunan harga di tingkat petani.* | *...mencegah penyusutan mutu dan pembusukan pangan di tingkat petani.* |
+| 20 | `resources/views/jadwal-tanam/index.blade.php:65` | *...menjaga kestabilan harga jual gabah di tingkat petani.* | *...menjaga kelancaran distribusi logistik pangan lokal.* |
+| 21 | `resources/views/jadwal-tanam/index.blade.php:169` | *...depresiasi harga gabah di tingkat petani di bawah HPP...* | *...penumpukan stok gabah di tingkat penggilingan melampaui kapasitas serap gudang lokal.* |
+
+---
+
+### 9.3 Nilai Default Pengaturan Sistem (`/admin/pengaturan`)
+
+Bagi Administrator yang mengelola sistem via menu `/admin/pengaturan`, berikut adalah pasangan kunci dan nilai teks resmi yang telah dinetralisasi untuk dimasukkan ke form pengaturan:
+
+```ini
+# Pengaturan Teks Narasi Sistem SIPANGAN WASPADA (Bebas Prediksi Harga Mikro)
+kunci: pesan_dampak_surplus
+tipe: text
+nilai: Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.
+keterangan: Penjelasan dampak risiko kelebihan pasokan logistik & lingkungan
+
+kunci: pesan_dampak_defisit
+tipe: text
+nilai: Risiko kekurangan pangan di wilayah ini hingga kelaparan bila pasokan tidak segera dipenuhi.
+keterangan: Penjelasan dampak risiko kekurangan pasokan bagi masyarakat
+
+kunci: teks_disclaimer
+tipe: text
+nilai: Sistem ini bukan layanan penjualan, hanya layanan pemantauan dan tracking.
+keterangan: Teks penafian resmi (disclaimer) pada banner peringatan pengiriman
+```
+
+Pembaruan langsung pada record SQLite telah tereksekusi pada tabel `settings` (id: 6) dan `shipments` (id: 2).
+
+---
+
+### 9.4 Bukti Render & Pengujian (*Rendered Evidence*)
+
+1. **Pengujian Negatif Terminologi pada Halaman Publik (HTTP Curl & Grep)**:
+   - `curl -s http://127.0.0.1:8099/peta | grep -i -E "harga|deflasi|-14,2%"` -> **0 kemunculan (CLEAN)**.
+   - `curl -s http://127.0.0.1:8099/wilayah/3302 | grep -i -E "harga|deflasi|-14,2%"` -> **0 kemunculan (CLEAN)**.
+   - `curl -s http://127.0.0.1:8099/admin/pengaturan | grep -i -E "harga|deflasi|-14,2%"` -> **0 kemunculan (CLEAN)**.
+
+2. **Pengujian Positif Narasi Netral yang Ter-render**:
+   - `/peta` baris 364: `"Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan pemborosan pangan."`
+   - `/peta` baris 774: `"Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah."`
+   - `/peta` baris 1019: `"Rasio > 120% (risiko kelebihan stok dan pemborosan pangan)."`
+   - `/wilayah/3302` baris 900: `"Penolakan dan Penumpukan Stok Gabah (GKP)"`
+
+3. **Tangkapan Layar Browser Riil (Playwright Headless Chromium)**:
+   - `docs/ui-review/step5-1440.png` (Desktop 1440x900)
+   - `docs/ui-review/step5-1024.png` (Tablet Landscape 1024x768)
+   - `docs/ui-review/step5-768.png` (Tablet Portrait 768x1024)
+   - `docs/ui-review/step5-390.png` (Mobile 390x844)
+   - Berkas HTML utuh hasil render browser disimpan di `docs/ui-review/peta-rendered-step5.html` (87.674 bytes).
+
+4. **Regresi Otomatis (PHPUnit & Smoke Test)**:
+   - `php artisan test --compact`: **101 passed, 897 assertions** (bertambah 1 unit feature test spesifik `test_peta_and_detail_pages_contain_no_price_predictions_or_deflation_terms`).
+   - `scripts/smoke_test.sh`: **11/11 PASS** (100% alur demo PRD Bab 16 berjalan mulus tanpa hambatan).
+   - `vendor/bin/pint --dirty --format agent`: Format PSR-12 rapi dan bersih.
+   - **UNVERIFIED Items**: **0 (Nol)**. Seluruh klaim visual terbukti melalui rendering browser Playwright dan inspeksi HTTP live.
