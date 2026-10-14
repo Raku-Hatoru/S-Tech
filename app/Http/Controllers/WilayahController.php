@@ -354,10 +354,10 @@ class WilayahController extends Controller
             'cardPengiriman' => $cardPengiriman,
             'rekomendasiDefisit' => $rekomendasiDefisit,
             'modelVersion' => [
-                'nama' => $activeModel?->nama ?? 'v1-2026Q1-xgboost',
-                'algoritma' => strtoupper($activeModel?->algoritma ?? 'XGBoost Multi-Horizon'),
+                'nama' => 'v1-2026Q1',
+                'algoritma' => 'Multi-Horizon',
                 'tanggal_latih' => $activeModel?->tanggal_latih?->format('d/m/Y') ?? '02/01/2026',
-                'wape' => '14.2%',
+                'wape' => '14,2%',
             ],
         ]);
     }

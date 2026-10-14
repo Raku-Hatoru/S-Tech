@@ -760,6 +760,41 @@ let geoLayerProv = null;
 let geoLayerKab  = null;
 let selectedLayer = null;
 let isInitialMapFramed = false;
+let currentActiveTooltipLayer = null;
+
+function closeAllTooltips() {
+  if (currentActiveTooltipLayer) {
+    try { currentActiveTooltipLayer.closeTooltip(); } catch (e) {}
+    currentActiveTooltipLayer = null;
+  }
+  [geoLayerProv, geoLayerKab].forEach(geo => {
+    if (geo && typeof geo.eachLayer === 'function') {
+      geo.eachLayer(l => {
+        try {
+          if (typeof l.isTooltipOpen === 'function' && l.isTooltipOpen()) {
+            l.closeTooltip();
+          }
+        } catch (e) {}
+      });
+    }
+  });
+  const pane = document.querySelector('#peta-map .leaflet-tooltip-pane');
+  if (pane) {
+    pane.innerHTML = '';
+  }
+}
+
+if (map) {
+  map.on('mouseout', () => {
+    closeAllTooltips();
+  });
+}
+const mapContainerEl = document.getElementById('peta-map');
+if (mapContainerEl) {
+  mapContainerEl.addEventListener('mouseleave', () => {
+    closeAllTooltips();
+  });
+}
 
 function getFeatureStyle(kode, isHover = false) {
   const status = state.statusData[kode]?.status ?? 'tanpa_data';
@@ -800,6 +835,11 @@ function updateAllLayerStyles() {
     const kode = String(layer.feature?.properties?.kode ?? '');
     const isSelected = kode === String(state.selectedKode);
     layer.setStyle(getFeatureStyle(kode, false));
+    if (layer.feature && layer.feature.properties) {
+      try {
+        layer.setTooltipContent(buildTooltip(layer.feature.properties, state.statusData[kode]));
+      } catch (e) {}
+    }
     if (isSelected) {
       selectedLayer = layer;
     }
@@ -936,8 +976,15 @@ async function renderMapLayer() {
         style: feat => getFeatureStyle(feat.properties.kode),
         onEachFeature: (feat, layer) => {
           const kode = feat.properties.kode;
-          layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), { sticky: true, className: 'leaflet-dark-tooltip' });
-          layer.on('mouseover', function() {
+          layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), {
+            permanent: false,
+            sticky: true,
+            className: 'leaflet-dark-tooltip'
+          });
+          layer.on('mouseover', function(e) {
+            closeAllTooltips();
+            currentActiveTooltipLayer = this;
+            try { this.openTooltip(e.latlng); } catch (err) {}
             if (String(kode) !== String(state.selectedKode)) {
               this.setStyle(getFeatureStyle(kode, true));
               this.bringToFront();
@@ -945,12 +992,19 @@ async function renderMapLayer() {
             }
           });
           layer.on('mouseout', function() {
+            try { this.closeTooltip(); } catch (err) {}
+            if (currentActiveTooltipLayer === this) {
+              currentActiveTooltipLayer = null;
+            }
             if (String(kode) !== String(state.selectedKode)) {
               this.setStyle(getFeatureStyle(kode, false));
               bringSelectedToFront();
             }
           });
-          layer.on('click', function() {
+          layer.on('click', function(e) {
+            closeAllTooltips();
+            currentActiveTooltipLayer = this;
+            try { this.openTooltip(e.latlng); } catch (err) {}
             state.selectedKode = kode;
             updateAllLayerStyles();
             map.fitBounds(layer.getBounds(), { padding: [30, 30] });
@@ -968,8 +1022,15 @@ async function renderMapLayer() {
         style: feat => getFeatureStyle(feat.properties.kode),
         onEachFeature: (feat, layer) => {
           const kode = feat.properties.kode;
-          layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), { sticky: true, className: 'leaflet-dark-tooltip' });
-          layer.on('mouseover', function() {
+          layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), {
+            permanent: false,
+            sticky: true,
+            className: 'leaflet-dark-tooltip'
+          });
+          layer.on('mouseover', function(e) {
+            closeAllTooltips();
+            currentActiveTooltipLayer = this;
+            try { this.openTooltip(e.latlng); } catch (err) {}
             if (String(kode) !== String(state.selectedKode)) {
               this.setStyle(getFeatureStyle(kode, true));
               this.bringToFront();
@@ -977,12 +1038,19 @@ async function renderMapLayer() {
             }
           });
           layer.on('mouseout', function() {
+            try { this.closeTooltip(); } catch (err) {}
+            if (currentActiveTooltipLayer === this) {
+              currentActiveTooltipLayer = null;
+            }
             if (String(kode) !== String(state.selectedKode)) {
               this.setStyle(getFeatureStyle(kode, false));
               bringSelectedToFront();
             }
           });
-          layer.on('click', function() {
+          layer.on('click', function(e) {
+            closeAllTooltips();
+            currentActiveTooltipLayer = this;
+            try { this.openTooltip(e.latlng); } catch (err) {}
             state.selectedKode = kode;
             updateAllLayerStyles();
             updatePanelWilayah(kode);

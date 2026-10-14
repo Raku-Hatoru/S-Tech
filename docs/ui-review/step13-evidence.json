@@ -1,0 +1,70 @@
+{
+  "step": 13,
+  "timestamp": "2026-10-14T17:28:40.783Z",
+  "petaTooltip": {
+    "maxTooltipsDuringHover": 1,
+    "isSingleton": true,
+    "tooltipAppearedOnHover": true,
+    "tooltipCountAfterMouseLeave": 0,
+    "pass": true
+  },
+  "wilayahResponsive": {
+    "390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "768": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "1024": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "wilayahA11y": {
+    "totalViolations": 0,
+    "colorContrastViolations": 0,
+    "criticalSeriousViolations": 0,
+    "violations": []
+  },
+  "bannedWords": {
+    "bannedFound": [],
+    "receiptFound": false,
+    "pass": true
+  },
+  "status": "SUCCESS",
+  "accordion": {
+    "initialHidden": true,
+    "initialAria": "false",
+    "toggledHidden": false,
+    "toggledAria": "true",
+    "finalHidden": true,
+    "finalAria": "false",
+    "pass": true
+  }
+}

@@ -1194,6 +1194,65 @@ Berdasarkan audit Playwright berbasis browser Chromium riil (`scripts/verify-ste
 - **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
 - **UNVERIFIED Items**: **0 (Nol)**.
 
+---
+
+## 17. Step 13 — Perbaikan Tooltip Tunggal di /peta dan Perombakan Halaman Detail Wilayah (/wilayah/{kode})
+
+### 17.1 Ringkasan Sasaran & Hasil Audit
+Step 13 menuntaskan dua sasaran utama:
+1. **Perbaikan Tumpukan Tooltip di `/peta`**: Memastikan mekanisme Leaflet GeoJSON layer tooltip bersifat singleton mutlak (maksimal 1 tooltip aktif di seluruh peta pada saat kursor bergerak atau mengklik poligon), serta membersihkan tooltip seketika saat kursor meninggalkan kanvas peta (*mouseleave*).
+2. **Perombakan Bersih Halaman Detail Wilayah (`/wilayah/{kode}`)**:
+   - **Penyelarasan Warna Status**: Status Penuh / Surplus diselaraskan 100% dengan palet resmi `/peta` menggunakan warna Ungu Violet (`#8b5cf6`, `bg-purple-50/90`, border `border-purple-200`, simbol `◆`), menggantikan warna merah yang sebelumnya memicu kebingungan dengan defisit.
+   - **Restrukturisasi 3 Metrik KPI**: Menyederhanakan 4 kartu sebelumnya menjadi 3 kartu KPI utama yang lega dan proporsional (`Total Supply Aktif`, `Demand Terproyeksi`, `Surplus Bersih Kritis` / `Defisit Bersih Kritis`), dengan baris ringkasan pasokan masuk, panen, konsumsi, dan batas aman.
+   - **Penyederhanaan Grafik Deret Waktu 12 Bulan (Chart.js)**: Kurva supply ungu `#8b5cf6`, garis kebutuhan demand emerald `#059669`, dan 3 garis horizontal ambang batas status (`#8b5cf6`, `#f59e0b`, `#ef4444`). Catatan kaki model disederhanakan tanpa akronim teknis (`WAPE`, `XGBoost`).
+   - **Tabel 12 Bulan Progresif (Accordion)**: Tabel granular disembunyikan secara default di balik tombol toggle interaktif ber-ARIA `min-h-[44px]` (`#btn-toggle-tabel-12`), menyajikan simbol status unik (`◆`, `✔`, `▲`, `▼`) dan persentase rasio bersih.
+   - **Pembersihan Klaim Fiktif Mikro & Restrukturisasi Koridor**: Menghilangkan seluruh klaim palsu (`>29°C`, `>18%`, `14 titik BUMDes`, `12 Unit Truk Tronton`) dan menggantikannya dengan 1 kotak dampak resmi (`$pesanDampak`), kartu koridor redistribusi defisit terdekat, in-page anchor `#koridor-redistribusi`, serta tombol aksi logistik terproteksi `@can('create', App\Models\Shipment::class)`.
+   - **Aksesibilitas & Standar Target Sentuh**: Seluruh elemen interaktif (breadcrumb, selector komoditas, tombol unduh CSV, tombol toggle accordion, tombol aksi koridor) memenuhi ukuran fisik minimal $\ge 44\times 44\text{ CSS px}$ dengan kontras teks WCAG AA $\ge 4.5:1$ (0 pelanggaran axe-core).
+
+Berdasarkan audit Playwright berbasis browser Chromium riil (`scripts/verify-step13.mjs`):
+- **Tooltip Singleton di `/peta`**: Maksimal tooltip saat melintasi poligon = **1**; tooltip setelah mouseleave kanvas = **0** (**PASS**).
+- **Scroll Horizontal**: **0 (Nol)** pada keempat viewport (1440, 1024, 768, 390).
+- **Tipografi di Bawah 12px**: **0 (Nol)** pada keempat viewport.
+- **Target Sentuh < 44x44px**: **0 (Nol)** pada keempat viewport.
+- **Axe-core WCAG AA Accessibility**: **0 Total Pelanggaran, 0 Pelanggaran Kontras Warna, 0 Pelanggaran Kritis/Serius**.
+- **Kata Terlarang / Bocoran Internal**: **0 (Nol)** (bebas `PRD`, `Selimbang`, `harga`, `deflasi`, `XGBoost`).
+- **Kerahasiaan Nomor Resi Publik**: **0 (Nol)** (bebas `DO-*` dan `SHP-*` pada tampilan publik).
+
+---
+
+### 17.2 Tabel Evaluasi Butir Pekerjaan Step 13
+
+| Item / Komponen | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi Ter-render | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **1. Tooltip Singleton & Dismissal pada `/peta`** | Tooltip antar layer GeoJSON (provinsi vs kabupaten) berisiko bertumpuk (*stacked*); tooltip terkadang tertinggal saat kursor keluar peta. | Ditambahkan penanganan layer terpadu `currentActiveTooltipLayer` & fungsi `closeAllTooltips()`. Mouseout layer dan mouseleave kanvas `#peta-map` langsung menutup seluruh tooltip. | [`docs/ui-review/step13-tooltip.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-tooltip.png)<br>`step13-evidence.json`: Max hover = 1, After leave = 0 | **Selesai** |
+| **2. Penyelarasan Rona Status Penuh / Surplus (`#8b5cf6`)** | Banner dan indikator Penuh/Surplus menggunakan warna merah/merah tua yang menyerupai status defisit. | Diubah ke rona Ungu Violet (`#8b5cf6`, `bg-purple-50/90`, `border-purple-200`, simbol `◆`), selaras dengan `:root` CSS variable status `/peta`. | [`docs/ui-review/step13-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1440.png)<br>Tangkapan layar membuktikan banner dan simbol status berwarna ungu violet. | **Selesai** |
+| **3. Restrukturisasi 3 Kotak Metrik KPI Lapang** | 4 kartu KPI padat bertumpuk dengan teks kecil `text-[10px]` dan informasi mikro yang bising. | Direstrukturisasi menjadi 3 kartu KPI lapang (`Total Supply Aktif`, `Demand Terproyeksi`, `Surplus Bersih Kritis`), mempertahankan string asersi pengujian dengan tipografi jelas $\ge 12\text{px}$. | [`docs/ui-review/step13-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1440.png), [`docs/ui-review/step13-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-390.png) | **Selesai** |
+| **4. Penyederhanaan Grafik 12 Bulan (Chart.js)** | Garis supply berwarna merah, threshold line tidak selaras, catatan kaki panjang dengan singkatan teknis `WAPE` dan `XGBoost`. | Kurva supply bergulir ungu `#8b5cf6`, demand emerald `#059669`, 3 garis threshold putus-putus (`#8b5cf6`, `#f59e0b`, `#ef4444`). Catatan kaki model diringkas tanpa istilah terlarang. | [`docs/ui-review/step13-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1440.png)<br>Pemeriksaan kode sumber Chart.js pada kanvas `#chart12Bulan`. | **Selesai** |
+| **5. Accordion Tabel Rincian Prediksi 12 Bulan** | Tabel granular 12 baris selalu terbuka memanjang ke bawah, menyita ruang visual signifikan. | Ditempatkan dalam accordion terlipat (*collapsed*) di balik tombol toggle `min-h-[44px]` `#btn-toggle-tabel-12` ber-ARIA. Dilengkapi simbol status unik (`◆`, `✔`, `▲`, `▼`) dan persentase bersih. | [`docs/ui-review/step13-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1440.png)<br>`step13-evidence.json`: Initial hidden = true, Toggled = false, Final = true. | **Selesai** |
+| **6. Eliminasi Klaim Fiktif & Integritas Koridor** | Menampilkan kartu klaim palsu (`>29°C`, `>18%`, `14 titik BUMDes`, `12 Unit Truk Tronton`). | Seluruh klaim mikro fiktif disingkirkan; diganti 1 blok resmi `$pesanDampak`, kartu wilayah defisit terdekat, anchor `#koridor-redistribusi`, dan tombol logistik `@can('create', App\Models\Shipment::class)`. | [`docs/ui-review/step13-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1440.png)<br>`AuthorizationAndVisibilityAuditTest` & `PetaHeatmapAndDetailWilayahTest` 100% PASS. | **Selesai** |
+| **7. Aksesibilitas WCAG AA & Target Sentuh $\ge 44\text{px}$** | Beberapa tautan navigasi dan tombol memiliki tinggi sentuh < 44px; badge logistik tamu memiliki rasio kontras < 4.5:1. | Seluruh elemen interaktif diberi ukuran batas $\ge 44\times 44\text{ CSS px}$ (`min-h-[44px] min-w-[44px]`). Kontras warna badge disempurnakan (`text-slate-700` pada `bg-slate-100`). | `docs/ui-review/axe-step13-1440.json`: 0 violations.<br>`step13-evidence.json`: Tap targets < 44px = 0. | **Selesai** |
+
+---
+
+### 17.3 Berkas Bukti Tangkapan Layar & Rekaman Pengukuran
+1. [`docs/ui-review/step13-tooltip.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-tooltip.png) — Bukti tooltip tunggal aktif di peta `/peta` tanpa penumpukan tooltip ganda.
+2. [`docs/ui-review/step13-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1440.png) — Tampilan Desktop 1440x900 `/wilayah/3302`: Subheader bersih, banner status ungu violet, 3 kartu KPI lapang, grafik Chart.js ramping, accordion tabel terlipat, dan koridor redistribusi rapi.
+3. [`docs/ui-review/step13-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-1024.png) — Tampilan Tablet Landscape 1024x768 `/wilayah/3302`: Tata letak responsif, 0 teks terpotong, nol tumpang tindih kontrol.
+4. [`docs/ui-review/step13-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-768.png) — Tampilan Tablet Portrait 768x1024 `/wilayah/3302`: Alur kartu vertikal rapi, kontrol interaktif lapang.
+5. [`docs/ui-review/step13-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-390.png) — Tampilan Mobile 390x844 `/wilayah/3302`: Responsif penuh tanpa horizontal scroll (`390px === 390px`), tombol aksi sentuh $\ge 44\text{px}$.
+6. [`docs/ui-review/step13-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step13-evidence.json) — Berkas rekaman numerik hasil verifikasi Playwright otomatis.
+7. [`docs/ui-review/axe-step13-1440.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/axe-step13-1440.json) — Berkas hasil pemindaian aksesibilitas axe-core WCAG AA (0 pelanggaran).
+
+---
+
+### 17.4 Status Rangkaian Uji Regresi
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 888 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+- **UNVERIFIED Items**: **0 (Nol)**.
+
+
 
 
 
