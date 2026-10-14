@@ -4,6 +4,14 @@
 {{-- Leaflet CSS --}}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style>
+  :root {
+    --status-defisit: #ef4444;
+    --status-seimbang: #16a34a;
+    --status-waspada: #d97706;
+    --status-penuh: #7c3aed;
+    --status-tanpa-data: #64748b;
+  }
+
   /* ── Map Canvas Styling ───────────────────────────── */
   #peta-map {
     height: 620px;
@@ -158,28 +166,29 @@
         </span>
         <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span>
+            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#ef4444] text-[9px] text-white font-black">▼</span>
             <span class="font-bold text-slate-800">Defisit (&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Kekurangan Pasokan</span>
+            <span class="text-xs text-slate-500">Kekurangan Pasokan</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#16a34a] text-[9px] text-white font-black">✔</span>
             <span class="font-bold text-slate-800">Seimbang ({{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Pasokan Aman</span>
+            <span class="text-xs text-slate-500">Pasokan Aman</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#eab308]"></span>
+            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#d97706] text-[9px] text-white font-black">▲</span>
             <span class="font-bold text-slate-800">Waspada ({{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Mendekati Jenuh</span>
+            <span class="text-xs text-slate-500">Mendekati Jenuh</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#991b1b]"></span>
+            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#7c3aed] text-[9px] text-white font-black">◆</span>
             <span class="font-bold text-slate-800">Penuh / Surplus (≥{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
-            <span class="text-[11px] text-slate-400">Risiko Pembusukan & Emisi</span>
+            <span class="text-xs text-slate-500">Kelebihan Pasokan</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#64748b]"></span>
-            <span class="font-bold text-slate-500">Tanpa Data</span>
+            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#64748b] text-[9px] text-white font-black">—</span>
+            <span class="font-bold text-slate-600">Tanpa Data</span>
+            <span class="text-xs text-slate-400">Di Luar Pilot</span>
           </div>
         </div>
       </div>
@@ -679,11 +688,11 @@ const IndoFormat = {
 };
 
 const STATUS_COLOR = {
-  defisit:    { fill: '#ef4444', border: '#b91c1c', label: 'Defisit',          badge: 'bg-rose-100 text-rose-800 border-rose-200' },
-  seimbang:   { fill: '#22c55e', border: '#15803d', label: 'Seimbang',         badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
-  waspada:    { fill: '#eab308', border: '#b45309', label: 'Waspada',          badge: 'bg-amber-100 text-amber-800 border-amber-200' },
-  penuh:      { fill: '#991b1b', border: '#7f1d1d', label: 'Penuh / Surplus',   badge: 'bg-red-100 text-red-800 border-red-200' },
-  tanpa_data: { fill: '#64748b', border: '#475569', label: 'Tanpa Data',       badge: 'bg-slate-100 text-slate-600 border-slate-200' },
+  defisit:    { fill: '#ef4444', border: '#b91c1c', symbol: '▼', label: 'Defisit',          badge: 'bg-rose-100 text-rose-800 border-rose-200' },
+  seimbang:   { fill: '#16a34a', border: '#15803d', symbol: '✔', label: 'Seimbang',         badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
+  waspada:    { fill: '#d97706', border: '#b45309', symbol: '▲', label: 'Waspada',          badge: 'bg-amber-100 text-amber-800 border-amber-200' },
+  penuh:      { fill: '#7c3aed', border: '#5b21b6', symbol: '◆', label: 'Penuh / Surplus',   badge: 'bg-purple-100 text-purple-800 border-purple-200' },
+  tanpa_data: { fill: '#64748b', border: '#475569', symbol: '—', label: 'Tanpa Data',       badge: 'bg-slate-100 text-slate-600 border-slate-200' },
 };
 
 let state = {
@@ -835,12 +844,12 @@ function buildTooltip(props, d) {
   const supply = d?.supply_formatted ?? d?.total_supply_formatted ?? '—';
 
   return `<div style="background:#0f172a;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;min-width:170px;color:#fff;font-family:inherit">
-    <div style="font-weight:800;font-size:.85rem;color:#f1f5f9;margin-bottom:4px">${nama}</div>
+    <div style="font-weight:800;font-size:13px;color:#f1f5f9;margin-bottom:4px">${nama}</div>
     <div style="display:flex;align-items:center;gap:6px">
-      <div style="width:10px;height:10px;border-radius:2px;background:${col.fill}"></div>
-      <span style="font-size:.7rem;font-weight:700;color:${col.fill}">${col.label} (${rasio})</span>
+      <div style="width:14px;height:14px;border-radius:3px;background:${col.fill};display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:900">${col.symbol}</div>
+      <span style="font-size:12px;font-weight:700;color:${col.fill}">${col.label} (${rasio})</span>
     </div>
-    <div style="font-size:.7rem;color:#94a3b8;margin-top:5px">Supply: <span style="color:#e2e8f0;font-weight:600">${supply}</span></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:5px">Supply: <span style="color:#e2e8f0;font-weight:600">${supply}</span></div>
   </div>`;
 }
 
@@ -888,15 +897,19 @@ async function updatePanelWilayah(kode) {
     const point = json.seri.find(s => s.periode === state.periode) || json.status_terbaru;
     if (point) {
       const col = getStatusColor(point.status);
-      const isSurplus = point.status === 'penuh';
-
       // Status Box
       const box = document.getElementById('panel-status-box');
-      box.className = isSurplus
-        ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between'
-        : (point.status === 'defisit' ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between' : 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between');
+      if (point.status === 'penuh') {
+        box.className = 'p-4 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-between';
+      } else if (point.status === 'defisit') {
+        box.className = 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between';
+      } else if (point.status === 'waspada') {
+        box.className = 'p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between';
+      } else {
+        box.className = 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between';
+      }
 
-      document.getElementById('panel-status-label').textContent = point.label.toUpperCase();
+      document.getElementById('panel-status-label').textContent = `${col.symbol} ${point.label.toUpperCase()}`;
       const rasioText = IndoFormat.percent(point.rasio_persen);
       document.getElementById('panel-rasio-label').textContent = `Rasio Pasokan: ${rasioText} (Batas Aman: 100%)`;
 
@@ -1039,7 +1052,10 @@ function filterTabel(q) {
         <div class="text-[11px] text-slate-400">${d.nama_provinsi ?? ''}</div>
       </td>
       <td class="px-4 py-3">
-        <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${col.badge}">${col.label}</span>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold ${col.badge}">
+          <span>${col.symbol}</span>
+          <span>${col.label}</span>
+        </span>
       </td>
       <td class="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums">${rasioStr}</td>
       <td class="px-4 py-3 text-right text-slate-600 tabular-nums">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>
