@@ -33,11 +33,11 @@
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-1.5 sm:gap-2">
-                                <span class="font-bold text-base sm:text-lg tracking-tight text-slate-900 truncate">SIPANGAN</span>
+                                <span class="font-bold text-base sm:text-lg tracking-tight text-slate-900">SIPANGAN</span>
                                 <span class="hidden sm:inline font-bold text-base sm:text-lg tracking-tight text-slate-900">WASPADA</span>
-                                <span class="px-1.5 py-0.5 text-[10px] sm:text-xs font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded border border-slate-200 shrink-0">PROTOTIPE</span>
+                                <span class="hidden md:inline-block px-1.5 py-0.5 text-[10px] sm:text-xs font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded border border-slate-200 shrink-0">PROTOTIPE</span>
                             </div>
-                            <p class="hidden sm:block text-xs text-slate-600 font-medium truncate">Sistem Pemantauan &amp; Early-Warning Surplus Pangan Nasional</p>
+                            <p class="hidden xl:block text-xs text-slate-600 font-medium">Sistem Pemantauan &amp; Early-Warning Surplus Pangan Nasional</p>
                         </div>
                     </a>
                 </div>
@@ -91,7 +91,7 @@
                     @endauth
 
                     @auth
-                        <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
                             <div class="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs">
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             </div>
@@ -107,7 +107,7 @@
                             </form>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="min-h-[44px] inline-flex items-center gap-2 px-4 py-2.5 border border-slate-300 rounded-xl text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 transition shadow-2xs">
+                        <a href="{{ route('login') }}" class="min-h-[44px] hidden md:inline-flex items-center gap-2 px-4 py-2.5 border border-slate-300 rounded-xl text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 transition shadow-2xs">
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
                             Masuk
                         </a>
@@ -125,7 +125,11 @@
         </div>
 
         <!-- Mobile Navigation Menu Dropdown -->
-        <nav id="mobile-nav" aria-label="Navigasi Mobile" class="hidden md:hidden border-t border-slate-200 py-3 px-4 space-y-1.5 bg-slate-50">
+        <nav id="mobile-nav" aria-label="Navigasi Mobile" class="hidden md:hidden border-t border-slate-200 py-3 px-4 space-y-2 bg-slate-50">
+            <div class="flex items-center justify-between pb-2 mb-1 border-b border-slate-200">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Menu Sistem</span>
+                <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-slate-200 text-slate-700 rounded border border-slate-300">PROTOTIPE</span>
+            </div>
             <a href="{{ route('peta.index') }}"
                class="min-h-[44px] px-3.5 flex items-center rounded-xl text-xs font-bold transition {{ request()->is('peta*') || request()->is('/') ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50' }}">
                 Peta Heatmap Nasional
@@ -152,6 +156,33 @@
                     Panel Admin
                 </a>
             @endif
+
+            <div class="pt-2 border-t border-slate-200">
+                @auth
+                    <div class="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">{{ auth()->user()->name }}</div>
+                                <div class="text-[10px] text-slate-600 font-medium">{{ auth()->user()->role->nama ?? 'Operator' }}</div>
+                            </div>
+                        </div>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="min-h-[44px] min-w-[44px] flex items-center justify-center text-xs text-rose-600 hover:text-rose-800 font-bold p-1 rounded-lg" title="Keluar" aria-label="Keluar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="w-full min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-300 rounded-xl text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 transition shadow-2xs">
+                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                        Masuk
+                    </a>
+                @endauth
+            </div>
         </nav>
     </header>
 

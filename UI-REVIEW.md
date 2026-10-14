@@ -1117,14 +1117,97 @@ Pengujian dijalankan langsung terhadap berkas HTML hasil render browser nyata (P
 4. [`docs/ui-review/step11-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-error.png) — State Kegagalan API: Overlay error dialog aktif dengan peta 507 poligon tetap utuh di latar belakang, panel samping netral dengan seluruh metrik `"—"`.
 5. [`docs/ui-review/step11-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step11-evidence.json) — Berkas rekaman metrik evaluasi otomatis.
 
----
-
 ### 15.6 Status Rangkaian Uji Regresi
 - **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 882 assertions** (100% PASS).
 - **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
 - **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
 - **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
 - **UNVERIFIED Items**: **0 (Nol)**.
+
+---
+
+## 16. Step 12 — Responsiveness Across Four Viewports: No Overlap, No Truncation, No Horizontal Scroll
+
+### 16.1 Ringkasan Sasaran & Hasil Audit
+Step 12 menguji dan menuntaskan kepatuhan tata letak responsif pada empat lebar viewport acuan: **1440x900 (Desktop)**, **1024x768 (Tablet Landscape)**, **768x1024 (Tablet Portrait)**, dan **390x844 (Mobile iPhone 14)**. 
+
+Berdasarkan audit Playwright berbasis browser Chromium riil (`scripts/verify-step12.mjs`), seluruh target berhasil tercapai (**ALL EMPTY / ZERO DEFECTS**):
+- **Teks Terpotong (*Truncated Text*)**: 0 di seluruh 4 lebar viewport.
+- **Tumpang Tindih Elemen Interaktif (*Overlapping Pairs*)**: 0 di seluruh 4 lebar viewport.
+- **Scroll Horizontal Tak Perlu (*Horizontal Scroll*)**: Nol / Tidak Ada (`document.documentElement.scrollWidth === window.innerWidth`).
+- **Target Sentuh Kecil (*Tap Targets < 44x44 CSS px*)**: 0 di seluruh 4 lebar viewport (seluruh kontrol memenuhi standar WCAG 2.5.5 / 2.5.8 $\ge 44\times 44\text{ px}$).
+- **Aturan Peta Spasial (*Map Rule 2*)**: 507 poligon batas nasional ter-render, 34 poligon wilayah percontohan terwarnai, dan 0 poligon berada di luar container peta di keempat viewport.
+
+---
+
+### 16.2 Hasil Pengukuran Sebelum vs Sesudah (Before vs After Comparison)
+
+| Viewport | Metrik Uji | Sebelum (Before) | Sesudah (After) | Status | Keterangan Solusi Teknis |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **1440x900**<br>(Desktop) | Scroll Horizontal | NO | **NO** | **PASS** | `scrollWidth: 1440px === innerWidth: 1440px` |
+| | Teks Terpotong | 0 | **0** | **PASS** | Subjudul & seluruh label terbaca utuh tanpa ellipsis. |
+| | Tumpang Tindih | 0 | **0** | **PASS** | Grid 4 kolom `minmax(0, 1fr)` mengisolasi kontrol filter. |
+| | Tap Target < 44px | 1 (`#btn-bulan-ini` 16px) | **0** | **PASS** | `#btn-bulan-ini` diubah menjadi tombol berbingkai `min-h-[44px]`. |
+| | Ketinggian Peta & Panel | Map: 659px, Panel: 659px | **Map: 659px, Panel: 659px** | **PASS** | Sama persis (`lg:items-stretch h-full`), peta memenuhi card. |
+| | Rangkuman KPI | 4 kartu | **1 baris 4 kolom** | **PASS** | Strip horizontal 4 angka kunci duduk dalam satu baris. |
+| **1024x768**<br>(Tablet Landscape) | Scroll Horizontal | NO | **NO** | **PASS** | `scrollWidth: 1024px === innerWidth: 1024px` |
+| | Teks Terpotong | 0 | **0** | **PASS** | Subjudul tidak terpotong (`truncate` disingkirkan). |
+| | Tumpang Tindih | 0 | **0** | **PASS** | Header beralih ke layout `flex-col xl:flex-row`, tombol aksi turun di bawah judul tanpa menekan ruang judul. Filter bar 2-kolom mencegah tabrakan. |
+| | Tap Target < 44px | 1 (`#btn-bulan-ini` 16px) | **0** | **PASS** | Target tombol $\ge 44\text{px}$. |
+| | Ketinggian Peta & Panel | Map: 659px, Panel: 659px | **Map: 659px, Panel: 659px** | **PASS** | Sejajar sempurna. |
+| **768x1024**<br>(Tablet Portrait) | Scroll Horizontal | NO | **NO** | **PASS** | `scrollWidth: 768px === innerWidth: 768px` |
+| | Teks Terpotong | 1 (Tagline navbar 357px > 305px) | **0** | **PASS** | Tagline disembunyikan di bawah breakpoint `xl:` agar navbar tidak sesak. |
+| | Tumpang Tindih | 0 | **0** | **PASS** | Seluruh kontrol interaktif terpisah bersih. |
+| | Tap Target < 44px | 1 (`#btn-bulan-ini` 16px) | **0** | **PASS** | Target tombol $\ge 44\text{px}$. |
+| | Tata Letak Halaman | 1 kolom | **1 kolom vertikal** | **PASS** | Peta di atas (739px), panel samping di bawah peta (423px). |
+| | Rangkuman KPI | 4 kartu | **Grid 2x2 ringkas** | **PASS** | Angka kunci tersusun dalam grid 2x2 yang lapang. |
+| **390x844**<br>(Mobile iPhone 14) | Scroll Horizontal | NO | **NO** | **PASS** | `scrollWidth: 390px === innerWidth: 390px` (nol overflow). |
+| | Teks Terpotong | 2 (Subjudul 484px & Banner 444px) | **0** | **PASS** | Subjudul dan teks banner diperbolehkan wrap alami multi-baris (`leading-relaxed` & `leading-normal`). |
+| | Tumpang Tindih | 0 | **0** | **PASS** | Seluruh elemen berada pada alur blok yang pas. |
+| | Tap Target < 44px | 0 | **0** | **PASS** | Semua tombol mobile memenuhi syarat minimal 44x44px. |
+| | Header Navbar | Padat chip & login | **Brand + Hamburger** | **PASS** | Header hanya menampilkan Brand emblem + Hamburger. Chip PROTOTIPE & tombol Masuk dipindahkan ke menu accordion mobile. |
+| | Filter Bar | Default terbuka | **Accordion Collapsed** | **PASS** | Filter berada di dalam accordion `"Panel Filter & Pencarian Peta"` (tertutup default). |
+| | Tinggi Kanvas Peta | Statis | **~60vh (min-h: 420px)** | **PASS** | Kanvas responsif 60vh menyisakan hanya tombol Reset & Zoom tanpa overlay tebal. |
+| | Rangkuman KPI | 4 kartu bertumpuk | **Grid 2x2 angka ringkas** | **PASS** | Disajikan dalam kartu 2x2 dengan tipografi angka proporsional (`text-base font-black`). |
+
+---
+
+### 16.3 Tabel Evaluasi Butir Pekerjaan Step 12
+
+| Item | Before (Step 11) | After (Step 12) | Evidence | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Playwright Audit Script** | Belum ada skrip komprehensif 4 viewport | Skrip `scripts/verify-step12.mjs` mengecek scroll horizontal, clipping teks, tabrakan bounding box, dan tap target | `scripts/verify-step12.mjs`, `step12-evidence.json` | **Selesai** |
+| **Pencegahan Tabrakan Filter Bar (1024 & 1440)** | Grid 4-kolom sempit memicu risiko tumpang tindih kolom 2 dan 3 | Grid responsif `grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 sm:gap-4` dengan `min-w-0` pada setiap kolom | [`docs/ui-review/step12-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1024.png), [`docs/ui-review/step12-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1440.png) | **Selesai** |
+| **Eradikasi Teks Terpotong pada Subjudul** | Subjudul menggunakan class `truncate` sehingga terpotong ellipsis di layar sempit | Class `truncate` dihilangkan; diganti `leading-relaxed` dengan wrapping alami | `step12-evidence.json` (truncatedCount = 0 pada semua viewport) | **Selesai** |
+| **Wrapping Tombol Header pada 1024** | Header flex horizontal memeras lebar judul dan memotong teks | Header beralih menjadi `flex-col xl:flex-row`, tombol aksi turun rapi di bawah judul pada 1024px | [`docs/ui-review/step12-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1024.png) | **Selesai** |
+| **Kesejajaran Desktop 1440** | Map card dan side panel berpotensi tidak sejajar | Map card dan side panel dipastikan sama tinggi (659px vs 659px) via `lg:items-stretch h-full` | [`docs/ui-review/step12-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1440.png), `step12-evidence.json` | **Selesai** |
+| **Strip KPI Horizontal 1440** | Summary strip multi-row | 1 strip horizontal ringkas 4 kolom dalam satu baris rata | [`docs/ui-review/step12-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1440.png) | **Selesai** |
+| **Header Mobile 390 Ringkas** | Header mobile memuat badge PROTOTIPE dan tombol Masuk yang menyempitkan ruang | Header navbar mobile (< md) hanya menampilkan Brand Logo + SIPANGAN WASPADA + Hamburger button; chip & tombol login masuk ke menu | [`docs/ui-review/step12-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-390.png) | **Selesai** |
+| **Accordion Filter Mobile 390** | Potensi filter melebar ke bawah | Filter tersimpan rapi dalam accordion terlipat (*collapsed*) dengan label ringkas | [`docs/ui-review/step12-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-390.png) | **Selesai** |
+| **Tinggi Peta Mobile ~60vh** | Peta mengambil tinggi acak | Peta disetel `height: 60vh; min-height: 420px; max-height: 560px` dengan overlay minimal (hanya Reset & Zoom) | [`docs/ui-review/step12-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-390.png) | **Selesai** |
+| **Grid KPI Mobile 390** | 4 kartu vertikal panjang | Grid 2x2 ringkas dengan angka `text-base` tabular yang proporsional | [`docs/ui-review/step12-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-390.png) | **Selesai** |
+| **Tata Letak Tablet 768** | Dua kolom sempit | Tata letak kolom tunggal (*single column*): Peta Leaflet di atas, Panel Samping di bawah, KPI strip 2x2 | [`docs/ui-review/step12-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-768.png) | **Selesai** |
+| **Kepatuhan Tap Target 44x44px** | Tombol `#btn-bulan-ini` dan tombol Tutup modal tingginya di bawah 44px (16px) | Seluruh kontrol interaktif dijamin memiliki ukuran batas fisik $\ge 44\times 44\text{ px}$ | `step12-evidence.json` (smallTargetCount = 0 pada semua viewport) | **Selesai** |
+| **Map Rule (Hard Rule 2)** | Terpenuhi pada desktop | Terpenuhi 100% di ke-4 viewport: 507 poligon nasional, 34 wilayah pilot terwarnai, 0 di luar container | `scripts/verify-step12.mjs` (507 polygons, 34 pilots, 0 outside pada 1440, 1024, 768, 390) | **Selesai** |
+
+---
+
+### 16.4 Berkas Bukti Tangkapan Layar & Rekaman Pengukuran
+1. [`docs/ui-review/step12-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1440.png) — Tampilan Desktop 1440x900: Ketinggian peta dan side panel sama persis (659px), filter 4 kolom proporsional, summary strip 1 baris, nol teks terpotong.
+2. [`docs/ui-review/step12-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-1024.png) — Tampilan Tablet Landscape 1024x768: Tombol aksi membungkus di bawah judul tanpa mendesak subjudul, filter bar 2 kolom lega, nol tabrakan kontrol.
+3. [`docs/ui-review/step12-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-768.png) — Tampilan Tablet Portrait 768x1024: Kolom tunggal bersih, peta di atas, panel samping di bawah, summary strip 2x2 proporsional, navbar bebas teks terpotong.
+4. [`docs/ui-review/step12-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-390.png) — Tampilan Mobile 390x844: Header bersih (Brand + Hamburger), banner membungkus alami 2 baris, kanvas peta 60vh, summary strip 2x2 angka kompak, nol scroll horizontal.
+5. [`docs/ui-review/step12-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step12-evidence.json) — Berkas rekaman numerik sebelum dan sesudah verifikasi.
+
+---
+
+### 16.5 Status Rangkaian Uji Regresi
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 888 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+- **UNVERIFIED Items**: **0 (Nol)**.
+
 
 
 

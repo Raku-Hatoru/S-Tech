@@ -87,28 +87,28 @@
 <div class="min-h-screen bg-[#f8fafc] py-3 sm:py-4">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 sm:space-y-3.5">
 
-    <!-- Header Ringkas (Title + Subtitle 1 Baris + Tombol Aksi dalam 1 Baris di Desktop) -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+    <!-- Header Ringkas (Title + Subtitle 1 Baris + Tombol Aksi) -->
+    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
       <div class="min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
           <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Peta Pemantauan Surplus &amp; Defisit Pangan
           </h1>
-          <span class="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-slate-200 text-slate-700 rounded border border-slate-300">
+          <span class="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-slate-200 text-slate-700 rounded border border-slate-300 shrink-0">
             Data contoh
           </span>
         </div>
-        <p class="text-xs text-slate-600 font-medium mt-0.5 truncate">
+        <p class="text-xs text-slate-600 font-medium mt-1 leading-relaxed">
           Diagnostik rasio pasokan vs kebutuhan wilayah untuk mitigasi pemborosan pangan.
         </p>
       </div>
 
       <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-        <button type="button" id="btn-tentang-data" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
+        <button type="button" id="btn-tentang-data" onclick="bukaModalTentangData()" class="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, sumber data acuan, dan pemodelan">
           <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
           Tentang Data
         </button>
-        <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
+        <button type="button" onclick="window.print()" class="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           Unduh Buletin (.PDF)
         </button>
@@ -124,19 +124,19 @@
           <span>Panel Filter &amp; Pencarian Peta</span>
         </div>
         <div class="flex items-center gap-2">
-          <span id="mobile-filter-summary" class="text-xs text-slate-500 font-semibold truncate max-w-[140px]">Beras &bull; {{ $periodeDefault }}</span>
+          <span id="mobile-filter-summary" class="text-xs text-slate-500 font-semibold whitespace-nowrap">Beras &bull; {{ $periodeDefault }}</span>
           <svg id="icon-filter-chevron" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
       </button>
     </div>
 
     <!-- Filter Control Bar (4 Kolom Ringkas) -->
-    <div id="filter-container" class="hidden md:grid bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-start">
+    <div id="filter-container" class="hidden md:grid bg-white rounded-2xl p-3 sm:p-4 border border-slate-200/90 shadow-2xs grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 sm:gap-4 items-start">
       <!-- 1. Komoditas Pangan -->
-      <div>
+      <div class="min-w-0">
         <label for="select-komoditas" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-          Komoditas Pangan
+          <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          <span class="truncate">Komoditas Pangan</span>
         </label>
         <div class="relative">
           <select id="select-komoditas" aria-label="Pilih Komoditas Pangan" class="w-full min-h-[44px] bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
@@ -151,7 +151,7 @@
       </div>
 
       <!-- 2. Periode Waktu -->
-      <div>
+      <div class="min-w-0">
         <label for="select-periode" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
           Periode Waktu
         </label>
@@ -163,18 +163,21 @@
               </option>
             @endforeach
           </select>
-          <button type="button"
-                  id="btn-bulan-ini"
-                  onclick="pilihBulanBerjalan()"
-                  class="hidden text-xs text-emerald-700 hover:text-emerald-800 font-bold underline transition mt-1 select-none"
-                  title="Pindah ke bulan kalender saat ini ({{ \Carbon\Carbon::parse($bulanBerjalan.'-01')->isoFormat('MMMM YYYY') }})">
-            &larr; Ke bulan berjalan
-          </button>
+          <div class="mt-1.5 flex items-center">
+            <button type="button"
+                    id="btn-bulan-ini"
+                    onclick="pilihBulanBerjalan()"
+                    class="hidden min-h-[44px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 transition select-none shadow-2xs"
+                    title="Pindah ke bulan kalender saat ini ({{ \Carbon\Carbon::parse($bulanBerjalan.'-01')->isoFormat('MMMM YYYY') }})">
+              <span>&larr;</span>
+              <span>Ke bulan berjalan</span>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- 3. Tingkat -->
-      <div>
+      <div class="min-w-0">
         <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
           Tingkat
         </label>
@@ -189,10 +192,10 @@
       </div>
 
       <!-- 4. Pencarian Wilayah -->
-      <div class="relative">
+      <div class="relative min-w-0">
         <label for="input-search-wilayah" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          Pencarian Wilayah
+          <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="truncate">Pencarian Wilayah</span>
         </label>
         <div class="relative">
           <input type="text" id="input-search-wilayah" placeholder="Ketik Banyumas, Brebes, dll..." autocomplete="off"
@@ -207,7 +210,7 @@
     <div id="banner-nasional" class="px-3.5 py-2 sm:py-2.5 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between gap-3 text-xs text-slate-800 shadow-2xs">
       <div class="flex items-center gap-2 min-w-0">
         <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="truncate font-semibold text-slate-800">
+        <span class="font-semibold text-slate-800 leading-normal text-xs">
           @php
             $totalWil = $ringkasan['total_wilayah'] ?? 34;
             $penuhWil = $ringkasan['jumlah_penuh'] ?? 27;
@@ -410,39 +413,39 @@
     </div>
 
     <!-- Indikator Konsolidasi Pangan (Ringkasan Horizontal 4 Angka Kunci) -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:grid-cols-2 lg:divide-x divide-slate-100">
+    <div class="bg-white rounded-2xl p-3 sm:p-4 border border-slate-200/90 shadow-2xs">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
         <!-- 1. Total Pasokan -->
-        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pasokan</div>
-          <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+        <div class="p-2.5 sm:p-3 bg-slate-50/70 rounded-xl border border-slate-100 flex flex-col justify-between">
+          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pasokan</div>
+          <div class="text-base sm:text-lg lg:text-2xl font-black text-slate-900 tracking-tight mt-1">
             <span id="kpi-total-supply" class="tabular-nums">{{ $ringkasan['total_supply_formatted'] ?? '1.105.796,7 ton' }}</span>
           </div>
         </div>
 
         <!-- 2. Total Kebutuhan -->
-        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Kebutuhan</div>
-          <div class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
+        <div class="p-2.5 sm:p-3 bg-slate-50/70 rounded-xl border border-slate-100 flex flex-col justify-between">
+          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Total Kebutuhan</div>
+          <div class="text-base sm:text-lg lg:text-2xl font-black text-slate-900 tracking-tight mt-1">
             <span id="kpi-demand-val" class="tabular-nums">{{ $ringkasan['total_demand_formatted'] ?? '494.273,2 ton' }}</span>
           </div>
         </div>
 
         <!-- 3. Wilayah Surplus/Penuh -->
-        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Wilayah Surplus/Penuh</div>
-          <div class="text-xl sm:text-2xl font-black text-purple-900 tracking-tight mt-1">
+        <div class="p-2.5 sm:p-3 bg-purple-50/60 rounded-xl border border-purple-100/80 flex flex-col justify-between">
+          <div class="text-[10px] sm:text-xs font-bold text-purple-700 uppercase tracking-wider">Wilayah Surplus/Penuh</div>
+          <div class="text-base sm:text-lg lg:text-2xl font-black text-purple-900 tracking-tight mt-1 flex items-baseline gap-1">
             <span id="kpi-jumlah-penuh" class="tabular-nums">{{ $ringkasan['jumlah_penuh'] ?? 23 }}</span>
-            <span class="text-xs font-bold text-slate-500">wilayah</span>
+            <span class="text-[10px] sm:text-xs font-bold text-purple-600">wilayah</span>
           </div>
         </div>
 
         <!-- 4. Wilayah Defisit/Waspada -->
-        <div class="px-2 sm:px-3 pt-2 sm:pt-0">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Wilayah Defisit/Waspada</div>
-          <div class="text-xl sm:text-2xl font-black text-amber-900 tracking-tight mt-1">
+        <div class="p-2.5 sm:p-3 bg-amber-50/60 rounded-xl border border-amber-100/80 flex flex-col justify-between">
+          <div class="text-[10px] sm:text-xs font-bold text-amber-700 uppercase tracking-wider">Wilayah Defisit/Waspada</div>
+          <div class="text-base sm:text-lg lg:text-2xl font-black text-amber-900 tracking-tight mt-1 flex items-baseline gap-1">
             <span id="kpi-jumlah-defisit-waspada" class="tabular-nums">{{ $ringkasan['jumlah_defisit_waspada'] ?? 10 }}</span>
-            <span class="text-xs font-bold text-slate-500">wilayah</span>
+            <span class="text-[10px] sm:text-xs font-bold text-amber-600">wilayah</span>
           </div>
         </div>
       </div>
@@ -606,7 +609,7 @@
           </div>
 
           <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end">
-            <button type="button" onclick="tutupModalTentangData()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
+            <button type="button" onclick="tutupModalTentangData()" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
               Tutup
             </button>
           </div>

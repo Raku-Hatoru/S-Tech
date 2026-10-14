@@ -1,0 +1,172 @@
+{
+  "before": {
+    "390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "truncatedCount": 2,
+      "truncatedElements": [
+        {
+          "selector": "p.text-xs.text-slate-600.font-medium",
+          "text": "Diagnostik rasio pasokan vs kebutuhan wi",
+          "scrollWidth": 484,
+          "clientWidth": 358
+        },
+        {
+          "selector": "span.truncate.font-semibold.text-slate-800",
+          "text": "27 dari 34 wilayah surplus; pertimbangka",
+          "scrollWidth": 444,
+          "clientWidth": 248
+        }
+      ],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 0,
+      "smallTargets": [],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 675,
+      "sideCardHeight": 467
+    },
+    "768": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "truncatedCount": 1,
+      "truncatedElements": [
+        {
+          "selector": "p.hidden.sm:block.text-xs",
+          "text": "Sistem Pemantauan & Early-Warning Surplu",
+          "scrollWidth": 357,
+          "clientWidth": 305
+        }
+      ],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 1,
+      "smallTargets": [
+        {
+          "target": "button#btn-bulan-ini (\"← Ke bulan berjalan\")",
+          "width": 119.9,
+          "height": 16
+        }
+      ],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 739,
+      "sideCardHeight": 423
+    },
+    "1024": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "truncatedCount": 0,
+      "truncatedElements": [],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 1,
+      "smallTargets": [
+        {
+          "target": "button#btn-bulan-ini (\"← Ke bulan berjalan\")",
+          "width": 119.9,
+          "height": 16
+        }
+      ],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 659,
+      "sideCardHeight": 659
+    },
+    "1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "truncatedCount": 0,
+      "truncatedElements": [],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 1,
+      "smallTargets": [
+        {
+          "target": "button#btn-bulan-ini (\"← Ke bulan berjalan\")",
+          "width": 119.9,
+          "height": 16
+        }
+      ],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 659,
+      "sideCardHeight": 659
+    }
+  },
+  "after": {
+    "390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "truncatedCount": 0,
+      "truncatedElements": [],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 0,
+      "smallTargets": [],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 675,
+      "sideCardHeight": 467
+    },
+    "768": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "truncatedCount": 0,
+      "truncatedElements": [],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 0,
+      "smallTargets": [],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 739,
+      "sideCardHeight": 423
+    },
+    "1024": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "truncatedCount": 0,
+      "truncatedElements": [],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 0,
+      "smallTargets": [],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 659,
+      "sideCardHeight": 659
+    },
+    "1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "truncatedCount": 0,
+      "truncatedElements": [],
+      "overlapCount": 0,
+      "overlaps": [],
+      "smallTargetCount": 0,
+      "smallTargets": [],
+      "mapInteractiveCount": 507,
+      "coloredPilotCount": 34,
+      "outsideCount": 0,
+      "mapCardHeight": 659,
+      "sideCardHeight": 659
+    }
+  }
+}
