@@ -19,7 +19,31 @@ Penyempurnaan antarmuka (UI Polish) difokuskan pada halaman peta publik (`/peta`
 
 ---
 
-## Step 0 — Baseline Rendering, Tooling, dan Evaluasi Klaim vs Realita
+## 2. Tabel Konsolidasi Status Akhir Antarmuka (Consolidated Review Table)
+
+Berikut adalah tabel konsolidasi status akhir untuk seluruh butir evaluasi antarmuka pada cabang kerja `ui/polish-20261014`. Setiap status **Selesai** merujuk langsung ke berkas tangkapan layar Playwright, hasil inspeksi DOM ter-render, atau pengukuran otomatis yang dihasilkan pada cabang ini. Fitur yang tidak memiliki bukti rendering nyata dicatat secara transparan sebagai **UNVERIFIED**.
+
+| No | Item / Isu Antarmuka | Kondisi Akhir Terverifikasi (Final State) | Berkas Bukti Rendering (Evidence File) | Status |
+|:---:|:---|:---|:---|:---:|
+| 1 | **Pembersihan Label Internal PRD** (P0) | Label internal PRD (`(PRD v1.1)`, nomor bab spesifikasi, dan catatan teknis) telah dibersihkan secara menyeluruh dari seluruh tampilan `/peta`. Output DOM tidak memuat kata PRD internal. | [`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png)<br>[`docs/ui-review/peta-rendered-step7.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step7.html) | **Selesai** |
+| 2 | **Penyederhanaan Istilah Teknis & Copywriting** (P0) | Moniker machine learning disederhanakan, informasi teknis model dipusatkan ke Modal "Tentang Data", istilah teknis diganti padanan bahasa Indonesia baku, dan narasi harga dinetralisasi. | [`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png)<br>[`docs/ui-review/step7-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-390.png) | **Selesai** |
+| 3 | **Format Angka & Persentase Baku Indonesia** (P0) | Seluruh angka tonase dan rasio persentase pada kartu KPI, panel samping, popup, dan tabel rekapitulasi menggunakan pemisah ribuan titik dan desimal koma (`3.482.150,0 ton`, `82,4%`, `104,8%`, `61,2%`). Kelas `font-mono` dihilangkan. | [`docs/ui-review/step4-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step4-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 4 | **Kejujuran Label Periode & Horizon Proyeksi** (P0) | Dropdown periode membedakan eksplisit status data masa lalu/kini `(Aktual)` dan masa depan `(Proyeksi)`. Tombol interaktif berganti menjadi `Ke bulan berjalan`. Chip informatif `Proyeksi 12 bulan` (Januari–Desember 2026). Footer tahun dinamis. | [`docs/ui-review/step6-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step6-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 5 | **Keselarasan Label Komoditas Antar Komponen** (P0) | Sinkronisasi dinamis label komoditas pangan (`Total Pasokan Beras Nasional`, dsb.) pada kartu KPI 1, panel neraca wilayah, dan tabel rekapitulasi secara otomatis saat filter komoditas diubah. | [`docs/ui-review/step4-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step4-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 6 | **Transparansi Cakupan Titik Pantau Spasial** (P0) | Header menyajikan data jujur: `Data Contoh: BAPANAS & BPS`, `Stok Terdata (Simulasi)`, dan `34 Wilayah Percontohan (Data Contoh)`. Tepat 34 poligon kabupaten pilot terwarnai penuh, poligon wilayah lainnya tetap informatif abu-abu `#64748b`. | [`docs/ui-review/step6-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step6-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 7 | **Netralisasi Terminologi Harga & Estimasi Deflasi** (P0) | Mematuhi PRD 2.3 (Non-Goals). Badge estimasi deflasi produsen mikro `-14,2%` dihapus total. Narasi harga produsen anjlok dinetralisasi ke risiko logistik ketahanan pangan objektif: risiko pembusukan gabah, pemborosan pangan, dan timbulan emisi gas rumah kaca. | [`docs/ui-review/step5-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step5-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 8 | **Diferensiasi Warna & Simbol Status Aksesibel** (P1) | Kategori Penuh/Surplus menggunakan warna ungu violet `#8b5cf6` (rasio kontras 4.52:1 terhadap kanvas gelap `#080f1d`). Disertai simbol bentuk unik (▼ Defisit, ✔ Seimbang, ▲ Waspada, ◆ Penuh/Surplus, — Tanpa Data) di peta, legenda, panel wilayah, dan tabel. | [`docs/ui-review/step1-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step1-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 9 | **Integrasi Legenda Docked ke Kontainer Peta** (P1) | Legenda dipindahkan menyatu (*docked*) tepat di bawah kanvas peta (`#map-legend`) dengan format ringkas, membaca nilai ambang dinamis dari basis data settings (`<70%`, `70%–<90%`, `90%–<100%`, `≥100%`). Menghemat ruang vertikal >70px. | [`docs/ui-review/step1-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step1-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 10 | **Standarisasi Tipografi Minimal 12px & Kontras WCAG AA** (P1) | 0 teks berukuran `< 12px`. 0 teks dengan rasio kontras `< 4.5:1`. 4 kartu KPI memiliki tinggi seragam rapi (`min-h-[148px]`). Diverifikasi otomatis via pemindaian axe-core (0 pelanggaran) dan DOM tree walker di Playwright. | [`docs/ui-review/axe-step8-final.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/axe-step8-final.json)<br>[`docs/ui-review/step3-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step3-1440.png) | **Selesai** |
+| 11 | **Tata Letak Kontainer Peta, Rasio Tinggi 1:1, & Highlight Poligon** (P1) | Banner nasional 1 baris dismissible (tinggi 76px). Rasio tinggi kartu peta vs panel samping identik 1:1 (793,5px vs 793,5px, selisih 0,00px). Visibilitas peta tanpa scroll 77,9% ($\ge 60\%$). Poligon wilayah terpilih memiliki highlight outline emas tebal 3.5px (`#fbbf24`) dan diangkat ke depan (`bringToFront()`). | [`docs/ui-review/step2-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step2-1440.png)<br>[`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png) | **Selesai** |
+| 12 | **Responsivitas Viewport & Ukuran Touch Target** (P2) | Nol pergeseran horizontal pada 390px, 768px, 1024px (`scrollWidth == windowWidth`). 100% target sentuh interaktif $\ge 44 \times 44\text{ px}$ (0 pelanggar). Tinggi peta mobile proporsional 60vh (520px = 61,6%). Filter terlipat ke akordeon drawer mobile. | [`docs/ui-review/step7-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-390.png)<br>[`docs/ui-review/step7-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-768.png)<br>[`docs/ui-review/step7-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1024.png) | **Selesai** |
+| 13 | **Aksesibilitas Semantik Dasar & Keyboard Navigation** (P2) | Landmark semantik lengkap (`header`, `nav aria-label`, `main`, `footer`), tepat 1 heading `<h1>`, indikator fokus keyboard `:focus-visible` tampak jelas (`#059669`), `aria-label` pada seluruh tombol berikon, tabel rekapitulasi dapat difokus via keyboard (`tabindex="0" role="region"`). | [`docs/ui-review/step7-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-1440.png)<br>[`docs/ui-review/peta-rendered-step7.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step7.html) | **Selesai** |
+| 14 | **Sinkronisasi Parameter URL (Query String)** (P2) | State filter dan wilayah terpilih tidak disinkronisasikan ke query string URL melalui `history.replaceState`. Halaman `/peta` saat ini memuat state default saat di-reload. Fitur ini tidak terdapat pada kode basis. | *Tidak ada berkas bukti rendering (fitur tidak terimplementasi pada kode klien)* | **UNVERIFIED** |
+| 15 | **Penanganan State Kosong & Galat (Empty & Error States)** (P2) | Pesan state kosong baku (`"Tidak ada data untuk periode ini"` dan `"Wilayah tidak ditemukan"`). Overlay status galat `#peta-error-state` (*"Gagal Memuat Data Spasial"*) dengan tombol *"Coba Lagi"* muncul saat request API gagal (teruji via simulasi pemblokiran jaringan di Playwright). | [`docs/ui-review/step7-error.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step7-error.png)<br>[`scripts/shot-error.mjs`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/scripts/shot-error.mjs) | **Selesai** |
+
+---
+
+## 3. Step 0 — Baseline Rendering, Tooling, dan Evaluasi Klaim vs Realita
 
 ### 1. Konfirmasi Perkakas Headless Browser & Lingkungan Eksekusi
 - **Framework Otomasi**: Playwright `v1.64.0` (terpasang di `devDependencies`).
@@ -395,7 +419,8 @@ Pengujian dilakukan dengan membandingkan angka yang dirender pada antarmuka terh
 | `8ad728f` | `ui(step-4-kpi-numbers): konsistensi format angka indonesia dan integrasi metrik kpi riil basis data` | Integrasi metrik KPI riil agregasi basis data, pemisah ribuan titik/koma, dan penghapusan metrik simulasi statis. |
 | `d25cc21` | `ui(step-5-neutral-pricing): netralisasi terminologi harga dan penghapusan estimasi deflasi mikro` | Menghapus estimasi deflasi produsen -14,2%, netralisasi 21 narasi harga ke dampak logistik dan emisi pangan. |
 | `acfdaae` | `ui(step-6-honest-labels): period logic aktual proyeksi dan label data jujur` | Label periode (Aktual/Proyeksi), tombol ke bulan berjalan, restyle chips non-klik, audit klaim data contoh. |
-| `6333fe1` | `ui(step-7-responsive-a11y): responsive mobile tablet aksesibilitas dan empty error state` | Drawer filter mobile, touch target >= 44px, :focus-visible, map 60vh, aria-label, empty/error state. |
+| `ff2d1a3` | `ui(step-7-responsive-a11y): responsive mobile tablet aksesibilitas dan empty error state` | Drawer filter mobile, touch target >= 44px, :focus-visible, map 60vh, aria-label, empty/error state. |
+| `750602b` | `ui(step-8-final-audit): final honest regression dan konsolidasi laporan ui-review` | Regresi akhir, verifikasi integritas audit.md (4 peran), dan tabel konsolidasi ui-review. |
 
 ---
 
@@ -756,4 +781,56 @@ VERIFIKASI PENGUJIAN GALAT JARINGAN / API BLOCKING
    - `./scripts/smoke_test.sh`: **11/11 PASS** (100% PASS alur PRD Bab 16).
    - `vendor/bin/pint --dirty --format agent`: **PASSED** (PSR-12).
    - **Item UNVERIFIED**: **0 (Nol)**. Seluruh target responsivitas, aksesibilitas, dan error state terbukti via browser headless riil.
+
+---
+
+## 12. Step 8 — Regresi Akhir Terpadu, Verifikasi Integritas Audit, dan Konsolidasi Laporan
+
+### 12.1 Pengujian Regresi Bersih (Clean Build)
+1. **PHPUnit Test Suite**:
+   - Perintah: `php artisan optimize:clear && php artisan test --compact`
+   - Hasil: **101 passed, 897 assertions** (100% PASS, baseline awal: 97 passed, 827 assertions).
+2. **Smoke Test Demo Flow PRD Bab 16**:
+   - Perintah: `./scripts/smoke_test.sh`
+   - Hasil: **11/11 PASS** (100% PASS alur pengujian end-to-end tanpa error).
+3. **Pengujian Aksesibilitas & Tipografi (Playwright Axe-Core & DOM Walker)**:
+   - Perintah: `node scripts/a11y_scan.mjs docs/ui-review/axe-step8-final.json`
+   - Hasil:
+     - Pelanggaran axe-core (WCAG 2.1 AA): **0 violations**.
+     - Pelanggaran kontras teks (< 4.5:1): **0 nodes**.
+     - Teks sekunder berukuran kecil (< 12px): **0 nodes**.
+4. **Pengujian Responsivitas & Target Sentuh (Playwright DOM Walker)**:
+   - Perintah: `node scripts/check-step7.mjs`
+   - Hasil:
+     - **Mobile (390x844)**: `scrollWidth: 390px` (Nol scroll horizontal, PASS), tinggi peta 520px (61,6% ~ 60vh), target sentuh $\ge 44\text{ px}$: 14/14 patuh (0 pelanggar).
+     - **Tablet Portrait (768x1024)**: `scrollWidth: 768px` (Nol scroll horizontal, PASS), tinggi peta 600px (58,6% ~ 60vh), target sentuh $\ge 44\text{ px}$: 20/20 patuh (0 pelanggar).
+     - **Tablet Landscape (1024x768)**: `scrollWidth: 1024px` (Nol scroll horizontal, PASS), tinggi peta 654,5px (85,2%), target sentuh $\ge 44\text{ px}$: 20/20 patuh (0 pelanggar).
+
+### 12.2 Verifikasi Kepatuhan & Integritas AUDIT.md (4 Peran & Kerahasiaan Resi)
+Pengujian regresi kepatuhan audit dijalankan melalui `./scripts/verify_audit_integrity.sh` dengan hasil terverifikasi 100%:
+1. **Tamu (Guest / Tanpa Login)**:
+   - Mode Publik badge & tombol Masuk tampil di header: **PASS**.
+   - Modul internal (Portal Pengiriman, Portal BUMDes, Panel Admin) tersembunyi 100%: **PASS**.
+   - Tombol "Disposisi Logistik" di `/peta` dan tombol "▶ Buat DO" di `/wilayah/3302` tersembunyi: **PASS**.
+2. **Distributor**:
+   - Navbar menampilkan modul "Portal Pengiriman": **PASS**.
+   - Tombol "Disposisi Logistik" di peta dan "▶ Buat DO" di detail wilayah tampil: **PASS**.
+   - Modul BUMDes dan Admin tersembunyi (403 Forbidden): **PASS**.
+3. **BUMDes**:
+   - Navbar menampilkan modul "Portal BUMDes": **PASS**.
+   - Modul Pengiriman dan Admin tersembunyi (403 Forbidden): **PASS**.
+   - Tombol aksi "Disposisi Logistik" tersembunyi: **PASS**.
+4. **Administrator**:
+   - Navbar menampilkan seluruh modul ("Portal Pengiriman", "Portal BUMDes", "Panel Admin"): **PASS**.
+   - Tombol aksi logistik pada peta tampil: **PASS**.
+5. **Kerahasiaan Nomor Resi**:
+   - Halaman publik `/peta` dan `/wilayah/3302` 100% bebas dari kebocoran nomor resi pengiriman (`DO-*`, `SHP-*`): **PASS**.
+6. **Kredensial Demo Halaman Login**:
+   - Halaman `/login` 100% bebas dari kebocoran email demo dan kata sandi demo: **PASS**.
+
+### 12.3 Status Butir Belum Terverifikasi (UNVERIFIED Item)
+- **Item**: Sinkronisasi Parameter URL via `history.replaceState` (Task 14).
+- **Status**: **UNVERIFIED**.
+- **Keterangan**: Pada basis kode saat ini, interaksi filter dropdown dan pemilihan wilayah di `/peta` berjalan secara client-side reaktif tanpa sinkronisasi URL query string (`?komoditas=...&periode=...`). Hal ini dicatat secara jujur karena ketiadaan kode implementasi dan berkas bukti rendering pada cabang ini.
+
 
