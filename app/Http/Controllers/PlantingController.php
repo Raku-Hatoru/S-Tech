@@ -75,7 +75,7 @@ class PlantingController extends Controller
         } else {
             $recommendationsList = $recommendations->map(function ($rec) use ($namaBulan) {
                 return (object) [
-                    'komoditas_label' => $rec->komoditas->nama ?? 'Komoditas',
+                    'komoditas_label' => ($rec->komoditas && $rec->komoditas->kode === 'beras') ? 'Beras (MT-2)' : ($rec->komoditas->nama ?? 'Komoditas'),
                     'varietas' => 'Varietas Unggul Lokal',
                     'waktu_tanam' => ($namaBulan[$rec->bulan_tanam] ?? 'Bulan '.$rec->bulan_tanam).' 2026',
                     'perkiraan_panen' => ($namaBulan[$rec->bulan_panen] ?? 'Bulan '.$rec->bulan_panen).' 2026',

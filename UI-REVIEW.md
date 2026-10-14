@@ -1320,6 +1320,67 @@ Berdasarkan pengujian browser Chromium riil menggunakan Playwright (`scripts/ver
 - **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
 - **UNVERIFIED Items**: **0 (Nol)**.
 
+---
+
+## 19. Tahap 3 (Step 15): Perampingan UI & Penataan Ulang Portal BUMDes (/panen dan /jadwal-tanam)
+
+### 19.1 Ringkasan Sasaran & Hasil Audit
+Step 15 menuntaskan penataan ulang dan pembersihan komprehensif terhadap catatan kecil (*micro-notes*), *helper text* berlebihan, subjudul birokratis panjang, dan istilah teknis terlarang (`XGBoost`) pada 2 halaman portal BUMDes:
+1. **Halaman Portal Panen & Sisa Stok (`/panen`)**:
+   - Mengurangi kepadatan visual halaman yang sebelumnya memuat formulir input survei sekaligus grafik & tabel evaluasi 12 bulan secara bertumpuk.
+   - Header disederhanakan dengan tata letak bersih dan proporsional, mempertahankan identitas resmi `ID: BUMDES-{{ $kabupaten->kode }}-AKTIF`, nama wilayah terdaftar, serta klausul keterkuncian 1 kabupaten sesuai mandat pengujian.
+   - Banner status wilayah dirampingkan menjadi strip kompak dengan rona Ungu Violet (`bg-purple-50/90 border-purple-200`, simbol `◆`), dan untuk pengguna peran BUMDes tetap menyajikan badge informasi non-actionable `Disposisi via Operator Terdaftar` (mematuhi Temuan C-05 tanpa link mati ke `pengiriman.create`).
+   - 4 kartu KPI disederhanakan menjadi strip angka horizontal bersih (*Stok Akhir Riil*, *Hasil Panen Riil Bulan Ini*, *Status Wilayah Aktual*, *Komoditas Terpilih*) tanpa kalimat penjelasan teknis berulang di bawah angka numerik.
+   - Formulir input survei dibersihkan dari seluruh *micro-helper text* dan kotak narasi logika arsitektur panjang; field input panen riil (`panen_kg`) dan sisa stok (`sisa_stok_kg`) dilengkapi badge pratinjau live konversi berat instan (`#badge_panen_ton`, `#badge_stok_ton`) yang teruji otomatis via Playwright (`12.000.000 kg` $\to$ `= 12.000,0 ton`, `3.500.000 kg` $\to$ `= 3.500,0 ton`).
+   - Bagian tabel evaluasi 12 bulan ditata lebih lapang dengan kontras tinggi, pembungkus tabel berkemampuan aksesibilitas keyboard (`tabindex="0" role="region" aria-label="Tabel Rekapitulasi Laporan Panen"`), serta tombol `Unduh CSV Rekap` dan `Cetak Laporan` yang memenuhi ukuran sentuh $\ge 44\times 44\text{ CSS px}$.
+2. **Halaman Rekomendasi Jadwal Tanam (`/jadwal-tanam`)**:
+   - Menghapus paragraf penjelasan agronomi dan metodologi yang panjang di setiap kartu, menyisakan tata letak panduan yang ringkas dan fungsional.
+   - Menampilkan header bersih dengan badge resmi `[SIMULASI / DATA CONTOH]`, pemilih kabupaten khusus Administrator, serta kartu banner yang ringkas.
+   - Tabel kalender rotasi tanam menyajikan 6 kolom data jelas (*Komoditas*, *Waktu Tanam Disarankan*, *Perkiraan Panen*, *Proyeksi Kebutuhan*, *Curah Hujan*, *Catatan Agronomi*) dengan entri `Beras (MT-2)` yang teruji hadir konsisten.
+   - Tombol bagikan edaran WhatsApp resmi (`Teruskan Panduan ke Gapoktan`) berukuran sentuh $\ge 44\times 44\text{ CSS px}$ dengan tautan dinamis `$waLink` yang siap pakai.
+   - Panel samping menyajikan alur koordinasi lapangan 3 langkah dan sinkronisasi iklim BMKG secara padat tanpa klaim sensor berlebih.
+
+Berdasarkan pengujian browser Chromium riil menggunakan Playwright (`scripts/verify-step15.mjs`):
+- **Scroll Horizontal (Mobile 390x844)**: **0 (Nol)** pada kedua halaman (`390px === 390px`).
+- **Tipografi di Bawah 12px**: **0 (Nol)** pada kedua halaman (semua font $\ge 12\text{px}$).
+- **Target Sentuh < 44x44px**: **0 (Nol)** pada kedua halaman (semua kontrol $\ge 43.5\times 43.5\text{ CSS px}$).
+- **Axe-core WCAG AA Accessibility**: **0 Total Pelanggaran, 0 Pelanggaran Kontras Warna, 0 Pelanggaran Kritis/Serius**.
+- **Kata Terlarang / Bocoran Internal**: **0 (Nol)** (bebas `PRD`, `Selimbang`, `harga`, `deflasi`, `XGBoost`).
+
+---
+
+### 19.2 Tabel Evaluasi Butir Perampingan Step 15
+
+| Komponen / Fitur | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi Ter-render | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **1. Header & Identitas BUMDes (`/panen`)** | Header padat memuat chip basis data `Live • XGBoost v1-2026Q1` dan ikon dekoratif besar. | Header bersih berjenjang, bebas dari kata terlarang `XGBoost`, mempertahankan badge `ID: BUMDES-{{ $kabupaten->kode }}-AKTIF` dan keterkuncian 1 kabupaten. | [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png)<br>`BumdesHarvestAndPlantingTest` 100% PASS | **Selesai** |
+| **2. Banner Peringatan Status Penuh (`/panen`)** | Banner merah tebal multibaris menyerupai defisit; menyertakan narasi panjang. | Rona Ungu Violet baku (`bg-purple-50/90 border-purple-200`, simbol `◆`), ringkas 2 baris, menampilkan badge `Disposisi via Operator Terdaftar` untuk pengguna BUMDes (Temuan C-05). | [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png)<br>`AuthorizationAndVisibilityAuditTest` PASS | **Selesai** |
+| **3. 4 KPI Strip Horizontal (`/panen`)** | 4 kartu KPI besar dengan teks kecil `text-[11px]` berisi klaim mikro fiktif di bawah angka. | Strip horizontal 4 metrik kunci bersih (*Stok Akhir Riil*, *Hasil Panen*, *Status Aktual*, *Komoditas*) tanpa sub-line verbose. Angka diformat tebal `tabular-nums`. | [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png)<br>[`docs/ui-review/step15-panen-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-390.png) | **Selesai** |
+| **4. Formulir Input Panen & Sisa Stok (`/panen`)** | Mengandung penamaan `Field 1`, `Field 2 PENTING`, box biru panjang klausul logika sistem, dan `Schema: 4.12 & 4.13`. | Seluruh catatan mikro dihapus; label input lugas, kontrol input berukuran `min-h-[44px]`, tombol aksi sentuh $\ge 44\text{px}$, bebas dari gangguan visual. | [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png)<br>Form submit `POST /panen` sukses tersimpan. | **Selesai** |
+| **5. Live Converter kg ke ton (`/panen`)** | Badge konversi berat terbungkus teks mikro. | Badge `#badge_panen_ton` dan `#badge_stok_ton` ditampilkan di sebelah label; teruji merespons input `12.000.000 kg` $\to$ `= 12.000,0 ton` dan `3.500.000 kg` $\to$ `= 3.500,0 ton`. | [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png)<br>`step15-evidence.json`: liveConversion verified | **Selesai** |
+| **6. Tabel Rekapitulasi 12 Bulan (`/panen`)** | Subjudul menyebut `machine learning XGBoost`; tabel berdesakan; region scrollable tidak ber-ARIA. | Subjudul dibersihkan dari `XGBoost`, simbol status menggunakan palet resmi (`◆`, `▲`, `✔`, `▼`), pembungkus tabel dilengkapi `tabindex="0" role="region"`, tombol unduh CSV dan cetak $\ge 44\text{px}$. | [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png)<br>`step15-evidence.json`: 0 axe violations | **Selesai** |
+| **7. Header & Banner Simulasi (`/jadwal-tanam`)** | Banner biru panjang memuat klausul hukum multibaris yang bertele-tele. | Banner ringkas dengan badge tegas `[SIMULASI / DATA CONTOH]`, heading terstruktur, dan 1 kalimat ringkas panduan Gapoktan. | [`docs/ui-review/step15-jadwal-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-jadwal-1440.png)<br>`step15-evidence.json`: hasSimulasiBadge = true | **Selesai** |
+| **8. Tabel Rotasi Tanam & WhatsApp (`/jadwal-tanam`)** | Tabel padat; tombol WhatsApp tidak memenuhi `min-h-[44px]`; card model samping berbelit-belit. | Tabel lapang memuat entri `Beras (MT-2)`, tombol `Teruskan Panduan ke Gapoktan` berukuran `min-h-[44px]` linking ke `$waLink`, alur 3 langkah dan integrasi iklim BMKG disajikan ringkas. | [`docs/ui-review/step15-jadwal-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-jadwal-1440.png)<br>[`docs/ui-review/step15-jadwal-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-jadwal-390.png)<br>`step15-evidence.json`: hasBerasMT2 = true | **Selesai** |
+
+---
+
+### 19.3 Berkas Bukti Tangkapan Layar & Rekaman Pengukuran
+1. [`docs/ui-review/step15-panen-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-1440.png) — Tampilan Desktop 1440x900 `/panen`: Subheader bersih, banner status Penuh rona Ungu Violet `◆`, 4 KPI horizontal tanpa sub-teks, form input panen & sisa stok ringkas dengan live converter, card info lumbung, dan tabel evaluasi 12 bulan.
+2. [`docs/ui-review/step15-panen-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-panen-390.png) — Tampilan Mobile 390x844 `/panen`: Formulir dan tabel responsif penuh tanpa horizontal scroll (`390px === 390px`).
+3. [`docs/ui-review/step15-jadwal-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-jadwal-1440.png) — Tampilan Desktop 1440x900 `/jadwal-tanam`: Subheader bersih, badge `[SIMULASI / DATA CONTOH]`, tabel rotasi tanam `Beras (MT-2)`, tombol edaran WhatsApp Gapoktan, dan panel iklim BMKG ringkas.
+4. [`docs/ui-review/step15-jadwal-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-jadwal-390.png) — Tampilan Mobile 390x844 `/jadwal-tanam`: Tata letak vertikal seluler lapang tanpa overflow horizontal.
+5. [`docs/ui-review/step15-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step15-evidence.json) — Berkas rekaman numerik hasil verifikasi Playwright otomatis (0 scroll horizontal, 0 font < 12px, 0 tap target < 44px, 0 pelanggaran axe-core, 0 kata terlarang).
+
+---
+
+### 19.4 Status Rangkaian Uji Regresi
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 888 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+- **UNVERIFIED Items**: **0 (Nol)**.
+
+
 
 
 
