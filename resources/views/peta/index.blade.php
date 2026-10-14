@@ -304,7 +304,7 @@
               </div>
               <div class="text-[11px] text-slate-400 mt-0.5" id="panel-supply-raw">18.500.000 kg terdata</div>
             </div>
-            <div class="text-lg font-black text-slate-900" id="panel-supply-formatted">18.500,0 ton</div>
+            <div class="text-lg font-black text-slate-900 tabular-nums" id="panel-supply-formatted">18.500,0 ton</div>
           </div>
 
           <!-- Total Demand Card -->
@@ -316,30 +316,30 @@
               </div>
               <div class="text-[11px] text-slate-400 mt-0.5" id="panel-demand-raw">17.600.000 kg konsumsi</div>
             </div>
-            <div class="text-lg font-black text-slate-900" id="panel-demand-formatted">17.600,0 ton</div>
+            <div class="text-lg font-black text-slate-900 tabular-nums" id="panel-demand-formatted">17.600,0 ton</div>
           </div>
 
           <!-- Selisih Surplus Bersih Highlight -->
           <div class="flex items-center justify-between text-xs px-2 pt-1 font-bold">
             <span class="text-slate-600">Selisih Surplus Bersih</span>
-            <span id="panel-selisih" class="text-rose-700 font-mono">+900,0 ton</span>
+            <span id="panel-selisih" class="text-rose-700 font-bold tabular-nums">+900,0 ton</span>
           </div>
 
           <!-- 3 Rincian Mini Card -->
           <div class="grid grid-cols-3 gap-2 pt-1">
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
               <div class="text-[10px] font-semibold text-slate-400">Stok Awal</div>
-              <div id="panel-stok-awal" class="text-xs font-black text-slate-800 mt-0.5">3.100,0 t</div>
+              <div id="panel-stok-awal" class="text-xs font-black text-slate-800 mt-0.5 tabular-nums">3.100,0 t</div>
               <div class="text-[9px] text-slate-400">Laporan Jan</div>
             </div>
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
               <div class="text-[10px] font-semibold text-slate-400">Panen Aktual</div>
-              <div id="panel-panen" class="text-xs font-black text-slate-800 mt-0.5">15.200,0 t</div>
+              <div id="panel-panen" class="text-xs font-black text-slate-800 mt-0.5 tabular-nums">15.200,0 t</div>
               <div class="text-[9px] text-slate-400">Hasil Sawah</div>
             </div>
             <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-center">
               <div class="text-[10px] font-semibold text-slate-400">Pasokan Masuk</div>
-              <div id="panel-pasokan-masuk" class="text-xs font-black text-slate-800 mt-0.5">200,0 t</div>
+              <div id="panel-pasokan-masuk" class="text-xs font-black text-slate-800 mt-0.5 tabular-nums">200,0 t</div>
               <div class="text-[9px] text-slate-400">Distribusi Luar</div>
             </div>
           </div>
@@ -356,7 +356,7 @@
           </p>
           <div class="text-[10px] font-semibold text-amber-700 flex items-center gap-1 pt-0.5">
             <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-            Estimasi Deflasi Produsen: -14.2% dalam 14 hari kerja
+            Estimasi Deflasi Produsen: -14,2% dalam 14 hari kerja
           </div>
         </div>
 
@@ -393,22 +393,22 @@
         <!-- KPI 1 -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <div class="text-xs font-bold text-slate-500">Total Pasokan Beras Nasional</div>
+            <div class="text-xs font-bold text-slate-500" id="kpi-komoditas-title">Total Pasokan Beras Nasional</div>
             <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">3.482.150,0 <span class="text-base font-bold text-slate-500">ton</span></div>
+            <div class="text-2xl font-black text-slate-900 tracking-tight tabular-nums">3.482.150,0 <span class="text-base font-bold text-slate-500">ton</span></div>
             <div class="text-xs font-bold text-emerald-600 mt-0.5 flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-              +3.8% di atas demand konsumsi
+              +3,8% di atas kebutuhan konsumsi
             </div>
           </div>
           <div>
             <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
               <span>Kapasitas Gudang Terisi</span>
-              <span class="text-slate-800 font-bold">82.4%</span>
+              <span class="text-slate-800 font-bold tabular-nums">82,4%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-emerald-600 h-full rounded-full" style="width: 82.4%"></div>
@@ -425,7 +425,7 @@
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">28 <span class="text-base font-bold text-slate-500">Kabupaten (5.4%)</span></div>
+            <div class="text-2xl font-black text-slate-900 tracking-tight tabular-nums">28 <span class="text-base font-bold text-slate-500">Kabupaten (5,4%)</span></div>
             <div class="text-xs font-bold text-rose-600 mt-0.5">
               ! 18 Kabupaten tanpa Cold Storage
             </div>
@@ -433,7 +433,7 @@
           <div>
             <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
               <span>Rerata Rasio Wilayah Surplus</span>
-              <span class="text-rose-800 font-bold">104.8%</span>
+              <span class="text-rose-800 font-bold tabular-nums">104,8%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-rose-600 h-full rounded-full" style="width: 100%"></div>
@@ -450,7 +450,7 @@
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">42 <span class="text-base font-bold text-slate-500">Kab/Kota (&lt;70%)</span></div>
+            <div class="text-2xl font-black text-slate-900 tracking-tight tabular-nums">42 <span class="text-base font-bold text-slate-500">Kab/Kota (&lt;70%)</span></div>
             <div class="text-xs font-bold text-amber-700 mt-0.5">
               Kebutuhan: 84.200,0 ton relokasi
             </div>
@@ -458,7 +458,7 @@
           <div>
             <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
               <span>Target Pemenuhan Relokasi</span>
-              <span class="text-slate-800 font-bold">61.2%</span>
+              <span class="text-slate-800 font-bold tabular-nums">61,2%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-amber-500 h-full rounded-full" style="width: 61.2%"></div>
@@ -475,7 +475,7 @@
             </div>
           </div>
           <div>
-            <div class="text-2xl font-black text-slate-900 tracking-tight">5.820.400,0 <span class="text-base font-bold text-slate-500">ton</span></div>
+            <div class="text-2xl font-black text-slate-900 tracking-tight tabular-nums">5.820.400,0 <span class="text-base font-bold text-slate-500">ton</span></div>
             <div class="text-xs font-bold text-emerald-600 mt-0.5 flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               100% Terintegrasi BUMDes & Bulog
@@ -484,7 +484,7 @@
           <div>
             <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
               <span>Akurasi Model Machine Learning</span>
-              <span class="text-slate-800 font-bold">96.2%</span>
+              <span class="text-slate-800 font-bold tabular-nums">96,2%</span>
             </div>
             <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div class="bg-blue-600 h-full rounded-full" style="width: 96.2%"></div>
@@ -625,6 +625,49 @@
 const API_BASE = '/api';
 const GEO_BASE = '/geojson';
 
+// ── Helper Pemformat Angka & Persentase Standar Indonesia (id-ID) ─────────
+const IndoFormat = {
+  number: (num, decimals = 1) => {
+    if (num === null || num === undefined || num === '' || isNaN(num)) return '—';
+    return Number(num).toLocaleString('id-ID', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  },
+  percent: (val, decimals = 1, showSign = false) => {
+    if (val === null || val === undefined || val === '' || val === '—') return '—';
+    if (typeof val === 'string' && val.includes('%')) {
+      return val.replace('.', ',');
+    }
+    const num = Number(val);
+    if (isNaN(num)) return '—';
+    const formatted = Math.abs(num).toLocaleString('id-ID', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }) + '%';
+    if (showSign) {
+      return num > 0 ? `+${formatted}` : (num < 0 ? `-${formatted}` : formatted);
+    }
+    return formatted;
+  },
+  ton: (kg, decimals = 1, showSign = false) => {
+    if (kg === null || kg === undefined || isNaN(kg)) return '—';
+    const tonVal = Number(kg) / 1000;
+    const str = Math.abs(tonVal).toLocaleString('id-ID', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }) + ' ton';
+    if (showSign) {
+      return tonVal > 0 ? `+${str}` : (tonVal < 0 ? `-${str}` : str);
+    }
+    return str;
+  },
+  kg: (kg) => {
+    if (kg === null || kg === undefined || isNaN(kg)) return '—';
+    return Math.round(Number(kg)).toLocaleString('id-ID') + ' kg';
+  }
+};
+
 const STATUS_COLOR = {
   defisit:    { fill: '#ef4444', border: '#b91c1c', label: 'Defisit',          badge: 'bg-rose-100 text-rose-800 border-rose-200' },
   seimbang:   { fill: '#22c55e', border: '#15803d', label: 'Seimbang',         badge: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
@@ -763,7 +806,7 @@ function buildTooltip(props, d) {
   const nama = props.nama ?? '—';
   const status = d?.status ?? 'tanpa_data';
   const col = getStatusColor(status);
-  const rasio = d?.rasio_persen ?? '—';
+  const rasio = IndoFormat.percent(d?.rasio_persen ?? '—');
   const supply = d?.supply_formatted ?? d?.total_supply_formatted ?? '—';
 
   return `<div style="background:#0f172a;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;min-width:170px;color:#fff;font-family:inherit">
@@ -829,25 +872,25 @@ async function updatePanelWilayah(kode) {
         : (point.status === 'defisit' ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between' : 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between');
 
       document.getElementById('panel-status-label').textContent = point.label.toUpperCase();
-      document.getElementById('panel-rasio-label').textContent = `Rasio Pasokan: ${point.rasio_persen} (Batas Aman: 100%)`;
+      const rasioText = IndoFormat.percent(point.rasio_persen);
+      document.getElementById('panel-rasio-label').textContent = `Rasio Pasokan: ${rasioText} (Batas Aman: 100%)`;
 
       // Neraca Supply & Demand
       document.getElementById('panel-neraca-periode').textContent = point.periode;
-      document.getElementById('panel-supply-formatted').textContent = point.supply_formatted || '—';
-      document.getElementById('panel-demand-formatted').textContent = point.demand_formatted || '—';
-      document.getElementById('panel-supply-raw').textContent = `${(point.supply_kg || 0).toLocaleString('id-ID')} kg terdata`;
-      document.getElementById('panel-demand-raw').textContent = `${(point.demand_kg || 0).toLocaleString('id-ID')} kg konsumsi`;
+      document.getElementById('panel-supply-formatted').textContent = (point.supply_formatted || '—').replace('.', ',');
+      document.getElementById('panel-demand-formatted').textContent = (point.demand_formatted || '—').replace('.', ',');
+      document.getElementById('panel-supply-raw').textContent = `${IndoFormat.kg(point.supply_kg)} terdata`;
+      document.getElementById('panel-demand-raw').textContent = `${IndoFormat.kg(point.demand_kg)} konsumsi`;
 
       const selisihKg = (point.supply_kg || 0) - (point.demand_kg || 0);
-      const selisihTon = (selisihKg / 1000).toLocaleString('id-ID', { maximumFractionDigits: 1 });
-      document.getElementById('panel-selisih').textContent = (selisihKg >= 0 ? `+${selisihTon} ton` : `${selisihTon} ton`);
-      document.getElementById('panel-selisih').className = selisihKg >= 0 ? 'text-rose-700 font-mono' : 'text-blue-700 font-mono';
+      document.getElementById('panel-selisih').textContent = IndoFormat.ton(selisihKg, 1, true);
+      document.getElementById('panel-selisih').className = selisihKg >= 0 ? 'text-rose-700 font-bold tabular-nums' : 'text-blue-700 font-bold tabular-nums';
 
       // Breakdown mini boxes (estimasi proporsional representatif)
       const supplyKg = point.supply_kg || 0;
-      document.getElementById('panel-stok-awal').textContent = `${((supplyKg * 0.17)/1000).toLocaleString('id-ID', {maximumFractionDigits:1})} t`;
-      document.getElementById('panel-panen').textContent = `${((supplyKg * 0.81)/1000).toLocaleString('id-ID', {maximumFractionDigits:1})} t`;
-      document.getElementById('panel-pasokan-masuk').textContent = `${((supplyKg * 0.02)/1000).toLocaleString('id-ID', {maximumFractionDigits:1})} t`;
+      document.getElementById('panel-stok-awal').textContent = `${IndoFormat.number((supplyKg * 0.17)/1000, 1)} t`;
+      document.getElementById('panel-panen').textContent = `${IndoFormat.number((supplyKg * 0.81)/1000, 1)} t`;
+      document.getElementById('panel-pasokan-masuk').textContent = `${IndoFormat.number((supplyKg * 0.02)/1000, 1)} t`;
 
       if (point.stok_estimasi) {
         document.getElementById('panel-stok-badge').innerHTML = '⚠ Stok Estimasi';
@@ -964,6 +1007,7 @@ function filterTabel(q) {
 
   tbody.innerHTML = filtered.map(d => {
     const col = getStatusColor(d.status);
+    const rasioStr = IndoFormat.percent(d.rasio_persen);
     return `<tr class="hover:bg-slate-50 transition cursor-pointer" onclick="updatePanelWilayah('${d.kode}')">
       <td class="px-4 py-3">
         <div class="font-bold text-slate-900">${d.nama}</div>
@@ -972,9 +1016,9 @@ function filterTabel(q) {
       <td class="px-4 py-3">
         <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${col.badge}">${col.label}</span>
       </td>
-      <td class="px-4 py-3 text-right font-semibold text-slate-900">${d.rasio_persen ?? '—'}</td>
-      <td class="px-4 py-3 text-right text-slate-600">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>
-      <td class="px-4 py-3 text-right text-slate-600">${d.demand_formatted ?? d.total_demand_formatted ?? '—'}</td>
+      <td class="px-4 py-3 text-right font-semibold text-slate-900 tabular-nums">${rasioStr}</td>
+      <td class="px-4 py-3 text-right text-slate-600 tabular-nums">${d.supply_formatted ?? d.total_supply_formatted ?? '—'}</td>
+      <td class="px-4 py-3 text-right text-slate-600 tabular-nums">${d.demand_formatted ?? d.total_demand_formatted ?? '—'}</td>
       <td class="px-4 py-3 text-center">
         <a href="/wilayah/${d.kode}?komoditas=${state.komoditas}" class="text-emerald-700 hover:underline font-bold text-xs">Detail &rarr;</a>
       </td>
