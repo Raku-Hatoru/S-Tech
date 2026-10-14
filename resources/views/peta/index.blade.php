@@ -158,42 +158,6 @@
       </div>
     </div>
 
-    <!-- Kategori Indikator Status (Bar Legenda Sesuai Mockup) -->
-    <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs">
-      <div class="flex items-center justify-between flex-wrap gap-3">
-        <span class="text-[11px] font-black uppercase tracking-wider text-slate-500">
-          Legenda Status Wilayah:
-        </span>
-        <div class="flex items-center gap-3 sm:gap-4 flex-wrap text-xs">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#ef4444] text-[9px] text-white font-black">▼</span>
-            <span class="font-bold text-slate-800">Defisit (&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
-            <span class="text-xs text-slate-500">Kekurangan Pasokan</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#16a34a] text-[9px] text-white font-black">✔</span>
-            <span class="font-bold text-slate-800">Seimbang ({{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
-            <span class="text-xs text-slate-500">Pasokan Aman</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#d97706] text-[9px] text-white font-black">▲</span>
-            <span class="font-bold text-slate-800">Waspada ({{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
-            <span class="text-xs text-slate-500">Mendekati Jenuh</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#7c3aed] text-[9px] text-white font-black">◆</span>
-            <span class="font-bold text-slate-800">Penuh / Surplus (≥{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
-            <span class="text-xs text-slate-500">Kelebihan Pasokan</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#64748b] text-[9px] text-white font-black">—</span>
-            <span class="font-bold text-slate-600">Tanpa Data</span>
-            <span class="text-xs text-slate-400">Di Luar Pilot</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Banner Peringatan Dini Nasional (Sesuai Mockup) -->
     <div class="p-4 sm:p-5 rounded-2xl bg-rose-50/80 border border-rose-200/90 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-start gap-3.5">
@@ -223,46 +187,79 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- Kolom Kiri: Peta Leaflet (lg:col-span-7 atau 8) -->
-      <div class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md relative">
-        <!-- Floating Header Map Controls -->
-        <div class="absolute top-7 left-7 right-7 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
-            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-            <span>Peta: rasio pasokan terhadap kebutuhan</span>
-            <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-400 hover:text-white transition" title="Informasi tentang data dan metodologi">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
-            </button>
+      <div class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md">
+        <!-- Canvas Peta Wrapper -->
+        <div class="relative rounded-xl overflow-hidden">
+          <!-- Floating Header Map Controls -->
+          <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
+            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              <span>Peta: rasio pasokan terhadap kebutuhan</span>
+              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-slate-400 hover:text-white transition" title="Informasi tentang data dan metodologi">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+              </button>
+            </div>
+            <div class="pointer-events-auto flex items-center gap-2">
+              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                Reset Nasional
+              </button>
+            </div>
           </div>
-          <div class="pointer-events-auto flex items-center gap-2">
-            <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-              Reset Nasional
-            </button>
+
+          <!-- Canvas Peta -->
+          <div id="peta-map" class="w-full"></div>
+
+          <!-- Floating Footer Map Stats -->
+          <div class="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
+            <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs font-medium text-slate-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Proyeksi: model prakiraan (selisih rata-rata ±3,8%)</span>
+              <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-400 hover:text-emerald-300 transition underline font-bold" title="Detail model & sumber data">
+                Tentang data
+              </button>
+            </div>
+            <div class="pointer-events-auto flex items-center gap-1.5">
+              <button type="button" onclick="map.zoomIn()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
+              <button type="button" onclick="map.zoomOut()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div id="peta-loading" class="absolute inset-0 bg-[#0b1329]/90 backdrop-blur-xs flex flex-col items-center justify-center z-30 transition-opacity duration-300">
+            <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+            <div class="text-xs font-bold text-slate-300 mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
           </div>
         </div>
 
-        <!-- Canvas Peta -->
-        <div id="peta-map" class="w-full"></div>
-
-        <!-- Floating Footer Map Stats -->
-        <div class="absolute bottom-7 left-7 right-7 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
-          <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs font-medium text-slate-200">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Proyeksi: model prakiraan (selisih rata-rata ±3,8%)</span>
-            <button type="button" onclick="bukaModalTentangData()" class="ml-1 text-emerald-400 hover:text-emerald-300 transition underline font-bold" title="Detail model & sumber data">
-              Tentang data
-            </button>
+        <!-- Docked Legenda Peta (5 Status Lengkap & Dinamis) -->
+        <div class="mt-3.5 pt-3 border-t border-slate-800/80 flex items-center justify-between flex-wrap gap-2 text-xs text-slate-300">
+          <div class="flex items-center gap-1.5 font-bold text-slate-400 uppercase text-xs tracking-wider">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+            Legenda Status:
           </div>
-          <div class="pointer-events-auto flex items-center gap-1.5">
-            <button type="button" onclick="map.zoomIn()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">+</button>
-            <button type="button" onclick="map.zoomOut()" class="w-8 h-8 rounded-lg bg-slate-900/90 text-white font-bold border border-slate-700 hover:bg-slate-800 flex items-center justify-center text-base">-</button>
+          <div class="flex items-center gap-2.5 sm:gap-4 flex-wrap">
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm bg-[#ef4444] text-[9px] text-white font-black">▼</span>
+              <span class="font-bold text-slate-200">Defisit (&lt;{{ round(($ambangDefisit ?? 0.70) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm bg-[#16a34a] text-[9px] text-white font-black">✔</span>
+              <span class="font-bold text-slate-200">Seimbang ({{ round(($ambangDefisit ?? 0.70) * 100) }}% - &lt;{{ round(($ambangWaspada ?? 0.90) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm bg-[#d97706] text-[9px] text-white font-black">▲</span>
+              <span class="font-bold text-slate-200">Waspada ({{ round(($ambangWaspada ?? 0.90) * 100) }}% - &lt;{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm bg-[#7c3aed] text-[9px] text-white font-black">◆</span>
+              <span class="font-bold text-slate-200">Penuh (≥{{ round(($ambangPenuh ?? 1.00) * 100) }}%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm bg-[#64748b] text-[9px] text-white font-black">—</span>
+              <span class="font-medium text-slate-400">Tanpa Data</span>
+            </div>
           </div>
-        </div>
-
-        <!-- Loading Overlay -->
-        <div id="peta-loading" class="absolute inset-0 bg-[#0b1329]/90 backdrop-blur-xs flex flex-col items-center justify-center z-30 transition-opacity duration-300">
-          <div class="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-          <div class="text-xs font-bold text-slate-300 mt-3 tracking-wide">Memuat Data Spasial & Status...</div>
         </div>
       </div>
 
