@@ -15,11 +15,64 @@ Penyempurnaan antarmuka (UI Polish) difokuskan pada halaman peta publik (`/peta`
 - **Kondisi Pengujian & Baseline**:
   - `php artisan test`: **97 passed (827 assertions)** [STABIL - Tidak ada regresi].
   - `scripts/smoke_test.sh`: **11/11 PASS** [STABIL - Sesuai alur demo PRD Section 16].
-- **Status Headless Browser**: Di lingkungan kerja saat ini tidak tersedia binary headless browser (Playwright / Chromium). Sesuai instruksi, pengujian interaktivitas browser dan tangkapan layar dilaporkan secara transparan sebagai **UNVERIFIED (static only)** dengan pembuktian statis berbasis nilai CSS, kelas breakpoint Tailwind, inspeksi DOM, serta uji runtime HTTP curl.
+- **Status Headless Browser**: Pada evaluasi awal sempat diasumsikan binary tidak tersedia. Di **Step 0**, telah dikonfirmasi dan diverifikasi bahwa **Playwright v1.64.0** dan sistem browser **Chromium 153.0.8010.52 Arch Linux** berfungsi penuh dan aktif digunakan untuk merekam bukti visual rendering nyata (`scripts/shot.mjs`).
 
 ---
 
-## 2. Tabel Evaluasi Perubahan Antarmuka (Before & After)
+## Step 0 — Baseline Rendering, Tooling, dan Evaluasi Klaim vs Realita
+
+### 1. Konfirmasi Perkakas Headless Browser & Lingkungan Eksekusi
+- **Framework Otomasi**: Playwright `v1.64.0` (terpasang di `devDependencies`).
+- **Binary Browser**: Chromium `153.0.8010.52 Arch Linux` (`/usr/bin/chromium`).
+- **Skrip Eksekusi**: `scripts/shot.mjs` menggunakan Node.js ESM untuk menjalankan server ephemeral PHP (`php -S 127.0.0.1:8099 -t public`), memuat halaman `/peta`, menunggu elemen DOM Leaflet (`.leaflet-interactive`) dan *network idle*, lalu mengambil tangkapan layar penuh serta mengekstrak seluruh DOM ter-render.
+- **Status Build & Aset**:
+  - `php artisan optimize:clear` dijalankan: cache config, route, dan view bersih.
+  - `npm run build` berhasil dijalankan (Vite v8.3.4, `@tailwindcss/vite` v4.1.18).
+  - Berkas `public/hot` dipastikan **TIDAK ADA**.
+- **Konfirmasi Berkas Template**:
+  - URL `/peta` dilayani oleh rute `Route::get('/peta', [PublicMapController::class, 'index'])->name('peta');`.
+  - Berkas Blade utama yang dirender: [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php) yang meng-extend layout [`resources/views/layouts/app.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/layouts/app.blade.php). (Dikonfirmasi melalui injeksi marker komentar DOM ter-render).
+
+### 2. Berkas Bukti Baseline (Screenshots & Rendered DOM)
+1. [`docs/ui-review/baseline-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/baseline-1440.png) — Desktop Lebar (1440x900)
+2. [`docs/ui-review/baseline-1024.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/baseline-1024.png) — Desktop Standar / Tablet Landscape (1024x768)
+3. [`docs/ui-review/baseline-768.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/baseline-768.png) — Tablet Portrait (768x1024)
+4. [`docs/ui-review/baseline-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/baseline-390.png) — Mobile iPhone 12/13/14 (390x844)
+5. [`docs/ui-review/peta-rendered.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered.html) — Output DOM HTML ter-render lengkap (228.429 bytes).
+
+### 3. Tabel Evaluasi: Klaim vs Realita (14 Poin UI-REVIEW.md Seksi 2)
+
+| No | Komponen / Klaim di UI-REVIEW.md | Status Diklaim | Realita yang Dirender (Bukti Baris HTML & Visual) | Status Riil Saat Ini |
+|:---|:---|:---:|:---|:---:|
+| 1 | **Pembersihan Label Internal PRD** (P0)<br>Hapus `(PRD v1.1)`, dsb. | Selesai | `grep -n "PRD" docs/ui-review/peta-rendered.html` menghasilkan 0 kemunculan. Tidak ada label PRD internal yang bocor pada DOM. | **TERBUKTI** |
+| 2 | **Copywriting & Bahasa** (P0)<br>Istilah teknis dibersihkan, modal tentang data. | Selesai | Moniker model `SIPANGAN-XGBOOST` masih muncul di badge header (`peta-rendered.html:338`). Teks teknis model dipindah ke modal (`:1382`). Teks harga non-goal `Estimasi Deflasi Produsen` masih muncul di panel (`:741`). | **SEBAGIAN** |
+| 3 | **Format Angka & Persentase** (P0)<br>Standar Indo (ribuan titik, desimal koma, no font-mono). | Selesai | Angka tonase berhasil berformat koma (`3.482.150,0 ton`, `+8.944,8 ton`), namun seluruh persentase di kartu KPI dan panel masih berformat titik desimal: `+3.8%` (`:779`), `82.4%` (`:785`), `104.8%` (`:810`), `61.2%` (`:835`), `-14.2%` (`:741`). `font-mono` masih aktif di baris 709. | **SEBAGIAN** |
+| 4 | **Kejujuran Label Periode & Horizon** (P0)<br>Chip "Horizon Proyeksi: 12 Bulan", footer dinamis. | Selesai | Chip periode masih berbunyi `12 Bulan ke Depan` (`:398`), bukan `Horizon Proyeksi: 12 Bulan`. Footer tahun dinamis `© 2026` terbukti (`:1486`). | **SEBAGIAN** |
+| 5 | **Keselarasan Label Komoditas** (P0)<br>Sinkronisasi `#kpi-komoditas-title` & neraca. | Selesai | Judul KPI 1 tidak memiliki ID `#kpi-komoditas-title` (statis `Total Pasokan Beras Nasional` di `:770`). Fungsi `updateKomoditasLabels()` hilang dari skrip JS. Hanya `#panel-neraca-title` yang ada (`:678`). | **SEBAGIAN** |
+| 6 | **Pemeriksaan Data Peta Spasial** (P0)<br>34 titik pantau terverifikasi, pilot terwarnai. | Selesai | Sub-header jujur: `• 34 titik pantau terverifikasi (wilayah percontohan)` (`:341`). 34 poligon pilot terwarnai di SVG overlay, sisanya abu-abu `#64748b`. | **TERBUKTI** |
+| 7 | **Konflik Non-Goal PRD: Deflasi Produsen** (P0)<br>Estimasi deflasi produsen -14,2%. | Butuh Keputusan | Teks `Estimasi Deflasi Produsen: -14.2% dalam 14 hari kerja` tetap ada di panel dampak (`:741`). Konsisten belum dihapus menunggu keputusan. | **TERBUKTI** |
+| 8 | **Diferensiasi Warna & Aksesibilitas** (P1)<br>Warna penuh ungu `#7c3aed`, simbol status unik. | Selesai | Warna status penuh masih merah tua `#991b1b` di legenda (`:569`) dan di JS (`:1505`). Simbol unik (▼, ✔, ▲, ◆, —) TIDAK ADA, masih lingkaran bulat `w-2.5 h-2.5 rounded-full` (`:554-574`). | **TIDAK TERBUKTI** |
+| 9 | **Integrasi Legenda ke Peta** (P1)<br>Legenda docked di bawah kanvas peta. | Selesai | Legenda masih berupa kartu kotak mandiri di atas peta (`:547-577`), bukan docked di kanvas peta. Memakan ruang vertikal signifikan. | **TIDAK TERBUKTI** |
+| 10 | **Tipografi & Kontras Warna WCAG AA** (P1)<br>Minimal 12px, kontras >= 4.5:1, tinggi KPI seragam. | Selesai | Masih ditemukan font `text-[9px]` (`:717, 723, 727`), `text-[10px]` (`:715, 720, 725`), dan `text-[11px]` (`:701, 734, 738, 753, 783, 808, 833`). Teks `text-slate-400` di atas putih memiliki rasio kontras ~2.5:1 (gagal WCAG AA). Kartu KPI belum memiliki tinggi seragam. | **TIDAK TERBUKTI** |
+| 11 | **Tata Letak & Outline Wilayah Terpilih** (P1)<br>Banner 1-line dismissible, peta responsif, outline emas. | Selesai | Banner masih 2 baris tebal (`:582-596`) tanpa tombol dismiss/tutup. Tinggi `#peta-map` kaku `620px` di CSS (`peta/index.blade.php:8-13`). Tidak ada highlight outline emas persisten pada layer poligon yang diklik. | **TIDAK TERBUKTI** |
+| 12 | **Responsivitas & Touch Target** (P2)<br>Zoom target 44px (`w-11 h-11`), label mode navbar. | Selesai | Tombol zoom peta masih berukuran kecil `w-8 h-8` (32x32px, `:633-634`) dan tanpa `aria-label`. Pill navbar menampilkan `Mode Publik` (`:315`). | **SEBAGIAN** |
+| 13 | **Aksesibilitas Semantik Dasar** (P2)<br>Semantic landmarks, `lang="id"`, `h1`, `aria-label`. | Selesai | Tag `<html lang="id">` (`:1`) dan `<h1>` (`:344`) ada. Namun dari seluruh elemen kontrol interaktif, hanya tombol tutup modal yang memiliki atribut `aria-label` (`:1396`). Tombol zoom, reset, cetak tidak memiliki `aria-label`. | **SEBAGIAN** |
+| 14 | **Sinkronisasi Parameter URL** (P2)<br>Query string via `history.replaceState`. | Selesai | Tidak ada implementasi `history.replaceState` di dalam skrip JS DOM ter-render maupun di berkas Blade. State hilang saat reload. | **TIDAK TERBUKTI** |
+
+### 4. Analisis Akar Masalah (Root Cause Analysis)
+Mengapa hasil di browser saat ini berbeda dari klaim komit-komit sebelumnya?
+1. **Regresi Berkas pada Komit `984e133`**:
+   - Berdasarkan penelusuran `git log` dan `git diff 83dcc8e 984e133 resources/views/peta/index.blade.php`, komit `984e133` (`ui(p2-a11y)`) mengalami insiden **file overwrite/reversion**.
+   - Perubahan tersebut menghapus 345 baris dan menimpa `resources/views/peta/index.blade.php` dengan versi awal sebelum komit `1d0b284` (warna & simbol), `2171ab4` (docked legend), `9eaf60f` (tipografi & kontras), dan `83dcc8e` (tata letak).
+2. **Ketiadaan Validasi Rendering Nyata saat Pembuatan Laporan**:
+   - Pada komit `1506d00`, laporan `UI-REVIEW.md` disusun berdasarkan catatan historis pekerjaan tanpa eksekusi headless browser nyata (karena saat itu diasumsikan ketiadaan binary di lingkungan sandbox).
+   - Akibatnya, status "Selesai" dicatat di laporan tanpa menyadari bahwa berkas template di disk telah tertimpa oleh versi lama yang belum memiliki fitur-fitur tersebut.
+3. **Solusi & Guardrail ke Depan**:
+   - Seluruh langkah perbaikan berikutnya (Step 1 s/d Step 8) WAJIB diverifikasi menggunakan tangkapan layar Playwright nyata (`scripts/shot.mjs`) dan inspeksi berkas DOM ter-render (`docs/ui-review/peta-rendered.html`) sebelum menyatakan status selesai.
+
+---
+
+## 2. Tabel Evaluasi Perubahan Antarmuka (Before & After - Historis Awal)
 
 | No | Komponen / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi / Pengukuran | Status |
 |:---|:---|:---|:---|:---|:---:|
