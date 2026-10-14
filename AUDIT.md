@@ -499,6 +499,7 @@ Berdasarkan investigasi menyeluruh terhadap rute, kontroler, dan tampilan antarm
 | `db7f9a1` | 2026-10-13 | audit(B): bersihkan elemen UI mati dan perbaiki komponen antarmuka [B-01, B-02, B-03, B-04, B-05, B-06] | Hapus fake footer link spans di layout & login, tambahkan atribut eksplisit type=button, lengkapi test audit UI |
 | `66eae27` | 2026-10-13 | audit(A): bersihkan metode kontroler mati dan verifikasi backend [A-01] | Hapus metode PetaController@detail dan unused imports, kompilasi production build assets, verifikasi seluruh rute, model, dan dependensi |
 | `5654ee7` | 2026-10-13 | audit(A): sinkronisasi log komit AUDIT.md untuk langkah A | Pembaruan catatan hash komit pada dokumen AUDIT.md |
+| `835875f` | 2026-10-14 | audit(fix): perbaiki laporan audit, sinkronisasi komit, dan terapkan keputusan [D-05, D-06, E-04] | Perbaiki laporan audit, sinkronisasi komit, terapkan keputusan D-05, D-06, E-04, legenda peta dinamis, dan verifikasi pasca-audit |
 
 ---
 
