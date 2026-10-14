@@ -14,20 +14,23 @@
 
   /* ── Map Canvas Styling ───────────────────────────── */
   #peta-map {
-    height: 560px;
+    width: 100%;
+    height: 100%;
+    min-height: 520px;
     background: #080f1d;
     border-radius: 14px;
     overflow: hidden;
     outline: none;
+    flex: 1 1 auto;
   }
   @media (max-width: 1024px) {
     #peta-map {
-      height: 480px;
+      min-height: 480px;
     }
   }
   @media (max-width: 640px) {
     #peta-map {
-      height: 380px;
+      min-height: 380px;
     }
   }
 
@@ -47,68 +50,59 @@
 @endpush
 
 @section('content')
-<div class="min-h-screen bg-[#f8fafc] py-6 sm:py-8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+<div class="min-h-screen bg-[#f8fafc] py-3 sm:py-4">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 sm:space-y-3.5">
 
-    <!-- Sub-header & Judul Halaman Sesuai Mockup -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-extrabold uppercase tracking-wider bg-slate-900 text-white">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            SIPANGAN-XGBOOST
-          </span>
-          <span class="text-xs font-semibold text-slate-500">
-            • 34 titik pantau terverifikasi (wilayah percontohan)
-          </span>
-        </div>
-        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-          Peta Heatmap & Early-Warning Surplus Pangan Nasional
+    <!-- Header Ringkas (Title + Subtitle 1 Baris + Tombol Aksi dalam 1 Baris di Desktop) -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <div class="min-w-0">
+        <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+          Peta Heatmap &amp; Early-Warning Surplus Pangan Nasional
         </h1>
-        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+        <p class="text-xs text-slate-500 mt-0.5 truncate">
           Diagnostik rasio pasokan vs konsumsi wilayah untuk mitigasi pembusukan gabah dan anjloknya harga produsen.
         </p>
       </div>
 
-      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-        <div class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200/90 text-xs font-bold text-slate-700 shadow-2xs select-none">
-          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Data Resmi: BAPANAS & BPS
-        </div>
-        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi dan sumber data">
-          <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+      <div class="flex items-center gap-2 shrink-0 flex-wrap">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[11px] font-bold text-slate-700 shadow-2xs select-none">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Data Resmi: BAPANAS &amp; BPS
+        </span>
+        <button type="button" onclick="bukaModalTentangData()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs border border-slate-200" title="Informasi metodologi, engine XGBoost, dan cakupan data">
+          <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
           Tentang Data
         </button>
-        <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           Unduh Buletin (.PDF)
         </button>
       </div>
     </div>
 
     <!-- Filter Control Bar (4 Kolom Sesuai Mockup) -->
-    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+    <div class="bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
       <!-- 1. Komoditas Pangan -->
       <div>
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
           Komoditas Pangan
         </label>
         <div class="relative">
-          <select id="select-komoditas" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
+          <select id="select-komoditas" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 appearance-none outline-none cursor-pointer pr-9 transition">
             @foreach($komoditasList as $k)
               <option value="{{ $k->kode }}" {{ $loop->first ? 'selected' : '' }}>
                 {{ $k->kode === 'beras' ? 'Beras Premium & Medium' : ucfirst($k->nama) }}
               </option>
             @endforeach
           </select>
-          <svg class="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          <svg class="w-4 h-4 text-slate-400 absolute right-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
       </div>
 
       <!-- 2. Periode Proyeksi (12 Bulan ke Depan) -->
       <div>
-        <div class="flex items-center justify-between mb-1.5">
+        <div class="flex items-center justify-between mb-1">
           <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
             Periode Waktu
           </label>
@@ -130,14 +124,14 @@
 
       <!-- 3. Level Agregasi Geografis -->
       <div>
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
           Level Agregasi Geografis
         </label>
         <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-          <button type="button" id="btn-toggle-prov" onclick="switchLayerLevel('provinsi')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+          <button type="button" id="btn-toggle-prov" onclick="switchLayerLevel('provinsi')" class="flex-1 py-1 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
             Level Provinsi
           </button>
-          <button type="button" id="btn-toggle-kab" onclick="switchLayerLevel('kabupaten')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs">
+          <button type="button" id="btn-toggle-kab" onclick="switchLayerLevel('kabupaten')" class="flex-1 py-1 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-2xs">
             Level Kabupaten/Kota
           </button>
         </div>
@@ -145,50 +139,54 @@
 
       <!-- 4. Pencarian Teritorial Cepat -->
       <div class="relative">
-        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           Pencarian Teritorial Cepat
         </label>
         <div class="relative">
           <input type="text" id="input-search-wilayah" placeholder="Ketik Banyumas, Brebes, dll..." autocomplete="off"
-                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:bg-white transition">
-          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-600 focus:bg-white transition">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <div id="search-dropdown" class="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto hidden"></div>
         </div>
       </div>
     </div>
 
-    <!-- Banner Peringatan Dini Nasional (Sesuai Mockup) -->
-    <div class="p-4 sm:p-5 rounded-2xl bg-rose-50/80 border border-rose-200/90 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-start gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-rose-700 shrink-0">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    <!-- Banner Peringatan Dini Nasional (Ringkas 1 Baris dengan Tombol Tutup) -->
+    <div id="banner-nasional" class="px-3.5 py-2 sm:py-2.5 rounded-xl bg-rose-50/90 border border-rose-200/90 flex items-center justify-between gap-3 text-xs shadow-2xs">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-6 h-6 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
-        <div>
-          <h4 class="text-sm font-bold text-rose-950">
+        <div class="min-w-0 flex items-center gap-1.5 flex-wrap">
+          <span class="font-bold text-rose-950">
+            <span class="font-black text-rose-700 uppercase tracking-wide text-[10px] mr-1 px-1.5 py-0.5 rounded bg-rose-200/70">Peringatan</span>
             Status Nasional: 28 Kabupaten Berstatus PENUH (Risiko Surplus), 42 Kabupaten DEFISIT.
-          </h4>
-          <p class="text-xs text-rose-800/90 mt-0.5">
-            Distribusi pasokan darurat direkomendasikan segera dialihkan ke lumbung wilayah defisit pangan untuk stabilisasi harga.
-          </p>
+          </span>
+          <span class="hidden md:inline text-rose-800/80 text-[11px] truncate">
+            &mdash; Distribusi pasokan darurat direkomendasikan segera dialihkan ke lumbung wilayah defisit pangan.
+          </span>
         </div>
       </div>
-      @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
-        <div class="shrink-0">
-          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#831843] hover:bg-[#701a36] text-white text-xs font-bold shadow-xs transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+      <div class="flex items-center gap-2 shrink-0">
+        @if(auth()->check() && (auth()->user()->isDistributor() || auth()->user()->isAdmin()))
+          <a href="{{ route('pengiriman.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#831843] hover:bg-[#701a36] text-white text-[11px] font-bold shadow-xs transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
             Disposisi Logistik
           </a>
-        </div>
-      @endif
+        @endif
+        <button type="button" onclick="tutupBannerNasional()" aria-label="Tutup" class="p-1 rounded-lg text-rose-600 hover:text-rose-900 hover:bg-rose-100 transition" title="Tutup peringatan">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
     <!-- Main Content: Peta Heatmap (Kiri 65%) + Panel Wilayah Terpilih (Kanan 35%) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <div id="peta-content-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:items-stretch">
 
       <!-- Kolom Kiri: Peta Leaflet (lg:col-span-7 atau 8) -->
-      <div class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md flex flex-col justify-between">
-        <div class="relative rounded-xl overflow-hidden">
+      <div id="map-card" class="lg:col-span-7 xl:col-span-8 bg-[#0b1329] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md flex flex-col h-full">
+        <div class="relative rounded-xl overflow-hidden flex-1 flex flex-col min-h-[520px]">
           <!-- Floating Header Map Controls -->
           <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
             <div class="pointer-events-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200">
@@ -199,7 +197,7 @@
               </button>
             </div>
             <div class="pointer-events-auto flex items-center gap-2">
-              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5">
+              <button type="button" onclick="resetViewNasional()" class="px-3 py-1.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-xs font-bold text-slate-200 hover:text-white transition flex items-center gap-1.5" title="Kembalikan tampilan peta ke seluruh wilayah Indonesia">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                 Reset Nasional
               </button>
@@ -207,7 +205,7 @@
           </div>
 
           <!-- Canvas Peta -->
-          <div id="peta-map" class="w-full"></div>
+          <div id="peta-map" class="w-full flex-1 min-h-[520px]"></div>
 
           <!-- Floating Footer Map Stats -->
           <div class="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none gap-2 flex-wrap">
@@ -267,7 +265,7 @@
       </div>
 
       <!-- Kolom Kanan: Panel Wilayah Terpilih (lg:col-span-5 atau 4) -->
-      <div class="lg:col-span-5 xl:col-span-4 bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm space-y-4">
+      <div id="side-panel-card" class="lg:col-span-5 xl:col-span-4 bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between h-full space-y-4 overflow-y-auto">
         <!-- Header Wilayah Terpilih -->
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div class="flex items-center gap-2">
@@ -572,7 +570,15 @@
           </div>
 
           <div class="px-6 py-5 space-y-4 text-xs text-slate-600">
-            <!-- Sumber Data -->
+            <!-- Spesifikasi Model & Titik Pantau (Dipindahkan dari Header Halaman) -->
+            <div class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between text-xs flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-extrabold uppercase tracking-wider text-emerald-400">SIPANGAN-XGBOOST v1</span>
+                <span class="text-slate-300">• 34 Titik Pantau Terverifikasi (Wilayah Percontohan)</span>
+              </div>
+              <span class="text-[11px] text-slate-300 font-semibold bg-slate-800 px-2.5 py-1 rounded-md">Data Resmi: BAPANAS &amp; BPS</span>
+            </div>
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
               <div class="font-bold text-slate-900 flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
@@ -720,8 +726,8 @@ let state = {
 
 // ── Inisialisasi Peta Leaflet (Tanpa Tile Eksternal) ──────────────────────
 const map = L.map('peta-map', {
-  center: [-7.45, 109.2], // Berpusat di Jawa Tengah / Banyumas
-  zoom: 7,
+  center: [-2.5, 118.0], // Full Indonesia center default
+  zoom: 5,
   minZoom: 4,
   maxZoom: 11,
   zoomControl: false,
@@ -730,16 +736,73 @@ const map = L.map('peta-map', {
 
 let geoLayerProv = null;
 let geoLayerKab  = null;
+let selectedLayer = null;
+let isInitialMapFramed = false;
 
-function styleFeat(status, hover = false) {
+function getFeatureStyle(kode, isHover = false) {
+  const status = state.statusData[kode]?.status ?? 'tanpa_data';
   const conf = getStatusConfig(status);
+  const isSelected = String(kode) === String(state.selectedKode);
+
+  if (isSelected) {
+    return {
+      fillColor:   conf.color,
+      fillOpacity: 0.95,
+      color:       '#fbbf24', // Garis batas kontras tinggi (amber emas >= 3px)
+      weight:      3.5,
+      opacity:     1,
+    };
+  }
+
   return {
     fillColor:   conf.color,
-    fillOpacity: hover ? 0.95 : 0.78,
+    fillOpacity: isHover ? 0.95 : 0.78,
     color:       conf.border,
-    weight:      hover ? 2.5 : 1,
+    weight:      isHover ? 2.5 : 1,
     opacity:     1,
   };
+}
+
+function bringSelectedToFront() {
+  if (selectedLayer && typeof selectedLayer.bringToFront === 'function') {
+    selectedLayer.bringToFront();
+  }
+}
+
+function updateAllLayerStyles() {
+  const activeLayer = state.level === 'provinsi' ? geoLayerProv : geoLayerKab;
+  if (!activeLayer) return;
+
+  selectedLayer = null;
+  activeLayer.eachLayer(layer => {
+    const kode = String(layer.feature?.properties?.kode ?? '');
+    const isSelected = kode === String(state.selectedKode);
+    layer.setStyle(getFeatureStyle(kode, false));
+    if (isSelected) {
+      selectedLayer = layer;
+    }
+  });
+
+  bringSelectedToFront();
+}
+
+function fitToPilotBounds() {
+  const activeLayer = state.level === 'provinsi' ? geoLayerProv : geoLayerKab;
+  if (!activeLayer) return;
+
+  const pilotBounds = L.latLngBounds();
+  let count = 0;
+  activeLayer.eachLayer(layer => {
+    const kode = String(layer.feature?.properties?.kode ?? '');
+    if (state.statusData[kode]) {
+      pilotBounds.extend(layer.getBounds());
+      count++;
+    }
+  });
+
+  if (count > 0 && pilotBounds.isValid()) {
+    map.fitBounds(pilotBounds, { padding: [24, 24] });
+  }
 }
 
 // ── Muat Data Status dari API ─────────────────────────────────────────────
@@ -784,23 +847,30 @@ async function renderMapLayer() {
     if (!geoLayerProv) {
       const geo = await fetchGeoJSON(`${GEO_BASE}/provinsi.json`);
       geoLayerProv = L.geoJSON(geo, {
-        style: feat => styleFeat(state.statusData[feat.properties.kode]?.status ?? 'tanpa_data'),
+        style: feat => getFeatureStyle(feat.properties.kode),
         onEachFeature: (feat, layer) => {
           const kode = feat.properties.kode;
           layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), { sticky: true, className: 'leaflet-dark-tooltip' });
-          layer.on('mouseover', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', true)); this.bringToFront(); });
-          layer.on('mouseout', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', false)); });
+          layer.on('mouseover', function() {
+            if (String(kode) !== String(state.selectedKode)) {
+              this.setStyle(getFeatureStyle(kode, true));
+              this.bringToFront();
+              bringSelectedToFront();
+            }
+          });
+          layer.on('mouseout', function() {
+            if (String(kode) !== String(state.selectedKode)) {
+              this.setStyle(getFeatureStyle(kode, false));
+              bringSelectedToFront();
+            }
+          });
           layer.on('click', function() {
+            state.selectedKode = kode;
+            updateAllLayerStyles();
             map.fitBounds(layer.getBounds(), { padding: [30, 30] });
             updatePanelWilayah(kode);
           });
         }
-      });
-    } else {
-      geoLayerProv.eachLayer(l => {
-        const k = l.feature.properties.kode;
-        l.setStyle(styleFeat(state.statusData[k]?.status ?? 'tanpa_data'));
-        l.setTooltipContent(buildTooltip(l.feature.properties, state.statusData[k]));
       });
     }
     if (!map.hasLayer(geoLayerProv)) geoLayerProv.addTo(map);
@@ -809,25 +879,41 @@ async function renderMapLayer() {
     if (!geoLayerKab) {
       const geo = await fetchGeoJSON(`${GEO_BASE}/kabupaten.json`);
       geoLayerKab = L.geoJSON(geo, {
-        style: feat => styleFeat(state.statusData[feat.properties.kode]?.status ?? 'tanpa_data'),
+        style: feat => getFeatureStyle(feat.properties.kode),
         onEachFeature: (feat, layer) => {
           const kode = feat.properties.kode;
           layer.bindTooltip(buildTooltip(feat.properties, state.statusData[kode]), { sticky: true, className: 'leaflet-dark-tooltip' });
-          layer.on('mouseover', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', true)); this.bringToFront(); });
-          layer.on('mouseout', function() { this.setStyle(styleFeat(state.statusData[kode]?.status ?? 'tanpa_data', false)); });
+          layer.on('mouseover', function() {
+            if (String(kode) !== String(state.selectedKode)) {
+              this.setStyle(getFeatureStyle(kode, true));
+              this.bringToFront();
+              bringSelectedToFront();
+            }
+          });
+          layer.on('mouseout', function() {
+            if (String(kode) !== String(state.selectedKode)) {
+              this.setStyle(getFeatureStyle(kode, false));
+              bringSelectedToFront();
+            }
+          });
           layer.on('click', function() {
+            state.selectedKode = kode;
+            updateAllLayerStyles();
             updatePanelWilayah(kode);
           });
         }
       });
-    } else {
-      geoLayerKab.eachLayer(l => {
-        const k = l.feature.properties.kode;
-        l.setStyle(styleFeat(state.statusData[k]?.status ?? 'tanpa_data'));
-        l.setTooltipContent(buildTooltip(l.feature.properties, state.statusData[k]));
-      });
     }
     if (!map.hasLayer(geoLayerKab)) geoLayerKab.addTo(map);
+  }
+
+  // Update styles (high-contrast outline on selectedKode)
+  updateAllLayerStyles();
+
+  // On first load, fit map to 34 pilot regions
+  if (!isInitialMapFramed) {
+    fitToPilotBounds();
+    isInitialMapFramed = true;
   }
 }
 
@@ -875,6 +961,7 @@ function pilihBulanIni() {
 // ── Update Panel Wilayah Terpilih (Kanan) ────────────────────────────────
 async function updatePanelWilayah(kode) {
   state.selectedKode = kode;
+  updateAllLayerStyles();
 
   try {
     const res = await fetch(`${API_BASE}/wilayah/${kode}/seri?komoditas=${state.komoditas}`);
@@ -1097,6 +1184,29 @@ function tutupModalTentangData() {
     document.body.classList.remove('overflow-hidden');
   }
 }
+
+// ── Banner Peringatan Nasional ───────────────────────────────────────────
+function tutupBannerNasional() {
+  const banner = document.getElementById('banner-nasional');
+  if (banner) {
+    banner.style.display = 'none';
+    if (typeof map !== 'undefined' && map.invalidateSize) {
+      setTimeout(() => map.invalidateSize(), 50);
+    }
+  }
+}
+
+// Invalidate size on resize and after initial layout
+window.addEventListener('resize', () => {
+  if (typeof map !== 'undefined' && map.invalidateSize) {
+    map.invalidateSize();
+  }
+});
+setTimeout(() => {
+  if (typeof map !== 'undefined' && map.invalidateSize) {
+    map.invalidateSize();
+  }
+}, 300);
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {

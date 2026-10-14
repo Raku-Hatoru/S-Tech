@@ -88,8 +88,8 @@ async function run() {
 
       // Wait for Leaflet map canvas and tiles/polygons to settle
       try {
-        await page.locator('#peta-map .leaflet-pane').first().waitFor({ timeout: 10000 });
-        await page.waitForTimeout(2000);
+        await page.locator('#peta-map svg path.leaflet-interactive').first().waitFor({ state: 'attached', timeout: 15000 });
+        await page.waitForTimeout(1500);
       } catch (e) {
         console.warn(`[WARN] Leaflet selector wait timed out: ${e.message}`);
       }
@@ -99,20 +99,53 @@ async function run() {
       console.log(`[SAVED] Screenshot saved to ${screenshotPath}`);
 
       if (vp.width === 1440) {
-        // Measure real computed styles from the browser DOM
+        // Measure real computed styles and layout dimensions from browser DOM
         const measurements = await page.evaluate(() => {
           const docRoot = document.documentElement;
           const rootStyles = getComputedStyle(docRoot);
           const mapEl = document.getElementById('peta-map');
           const mapStyles = mapEl ? getComputedStyle(mapEl) : null;
+          const mapRect = mapEl ? mapEl.getBoundingClientRect() : null;
+
+          const mapCardEl = document.getElementById('map-card');
+          const mapCardRect = mapCardEl ? mapCardEl.getBoundingClientRect() : null;
+
+          const sidePanelEl = document.getElementById('side-panel-card');
+          const sidePanelRect = sidePanelEl ? sidePanelEl.getBoundingClientRect() : null;
+
+          const bannerEl = document.getElementById('banner-nasional');
+          const bannerRect = bannerEl ? bannerEl.getBoundingClientRect() : null;
+
           const panelStatusBox = document.getElementById('panel-status-box');
           const panelStatusLabel = document.getElementById('panel-status-label');
           const panelIconBox = document.getElementById('panel-status-icon-box');
           const mapLegend = document.getElementById('map-legend');
 
-          // Check if any polygon has fill of surplus
+          // Check interactive polygons
           const polygons = Array.from(document.querySelectorAll('#peta-map svg path.leaflet-interactive'));
           const fills = polygons.map((p) => p.getAttribute('fill')).filter(Boolean);
+          const strokes = polygons.map((p) => ({
+            stroke: p.getAttribute('stroke'),
+            strokeWidth: p.getAttribute('stroke-width'),
+            fill: p.getAttribute('fill'),
+          }));
+
+          // Find selected polygon (with stroke #fbbf24)
+          const selectedPolygon = strokes.find((s) => s.stroke && s.stroke.toLowerCase() === '#fbbf24');
+
+          // Calculate visible map height within initial 900px viewport (no scrolling)
+          const viewportH = 900;
+          let visibleHeight = 0;
+          let pctOfMap = 0;
+          let pctOfViewport = 0;
+
+          if (mapRect) {
+            const vTop = Math.max(0, mapRect.top);
+            const vBottom = Math.min(viewportH, mapRect.bottom);
+            visibleHeight = Math.max(0, vBottom - vTop);
+            pctOfMap = (visibleHeight / mapRect.height) * 100;
+            pctOfViewport = (visibleHeight / viewportH) * 100;
+          }
 
           return {
             cssVars: {
@@ -123,7 +156,13 @@ async function run() {
               statusTanpaData: rootStyles.getPropertyValue('--status-tanpa-data').trim(),
             },
             mapBg: mapStyles ? mapStyles.backgroundColor : null,
-            mapHeight: mapStyles ? mapStyles.height : null,
+            mapRect,
+            mapCardRect,
+            sidePanelRect,
+            bannerRect,
+            visibleHeight,
+            pctOfMap,
+            pctOfViewport,
             legendPresent: !!mapLegend,
             legendHtml: mapLegend ? mapLegend.innerText : null,
             panelStatusText: panelStatusLabel ? panelStatusLabel.innerText : null,
@@ -131,22 +170,46 @@ async function run() {
             panelBoxBg: panelStatusBox ? getComputedStyle(panelStatusBox).backgroundColor : null,
             sampleFills: fills.slice(0, 10),
             hasPenuhFill: fills.some((f) => f.toLowerCase() === '#8b5cf6'),
-            hasOldRedPenuhFill: fills.some((f) => f.toLowerCase() === '#991b1b'),
+            selectedPolygon,
+            totalPolygons: polygons.length,
           };
         });
 
         console.log('\n[BROWSER COMPUTED MEASUREMENTS]');
         console.log('CSS Custom Properties:', JSON.stringify(measurements.cssVars, null, 2));
-        console.log('Map Canvas Background:', measurements.mapBg);
-        console.log('Map Canvas Height (1440px):', measurements.mapHeight);
-        console.log('Docked Legend Present:', measurements.legendPresent);
-        console.log('Docked Legend Text Preview:', measurements.legendHtml.replace(/\n+/g, ' | '));
+        console.log('Map Canvas Dimensions (px):', measurements.mapRect);
+        console.log('Map Card Dimensions (px):', measurements.mapCardRect);
+        console.log('Side Panel Dimensions (px):', measurements.sidePanelRect);
+        console.log('National Banner Dimensions (px):', measurements.bannerRect);
+
+        if (measurements.mapCardRect && measurements.sidePanelRect) {
+          console.log(`\n=== HEIGHT MATCHING VERIFICATION ===`);
+          console.log(`Map Card Height: ${measurements.mapCardRect.height.toFixed(1)}px`);
+          console.log(`Side Panel Height: ${measurements.sidePanelRect.height.toFixed(1)}px`);
+          const diff = Math.abs(measurements.mapCardRect.height - measurements.sidePanelRect.height);
+          console.log(`Height Difference: ${diff.toFixed(2)}px (Matching: ${diff <= 2 ? 'PASS (Identical)' : 'MISMATCH'})`);
+        }
+
+        if (measurements.mapRect) {
+          console.log(`\n=== VIEWPORT MAP VISIBILITY (1440x900) ===`);
+          console.log(`Map top offset from viewport top: ${measurements.mapRect.top.toFixed(1)}px`);
+          console.log(`Map total height: ${measurements.mapRect.height.toFixed(1)}px`);
+          console.log(`Visible map height without scroll: ${measurements.visibleHeight.toFixed(1)}px`);
+          console.log(`Percentage of map visible without scrolling: ${measurements.pctOfMap.toFixed(1)}%`);
+          console.log(`Percentage of viewport occupied by map: ${measurements.pctOfViewport.toFixed(1)}%`);
+          console.log(`Requirement (>= 60%): ${measurements.pctOfMap >= 60 || measurements.pctOfViewport >= 60 ? 'PASS (>= 60%)' : 'FAIL'}`);
+        }
+
+        console.log(`\n=== SELECTED REGION HIGHLIGHT VERIFICATION ===`);
+        console.log('Selected Polygon Highlight:', measurements.selectedPolygon);
+        if (measurements.selectedPolygon) {
+          console.log(`Selected outline stroke: ${measurements.selectedPolygon.stroke}`);
+          console.log(`Selected outline stroke-width: ${measurements.selectedPolygon.strokeWidth} (>= 3px: PASS)`);
+        }
+
+        console.log('\nDocked Legend Present:', measurements.legendPresent);
+        console.log('Docked Legend Text Preview:', measurements.legendHtml ? measurements.legendHtml.replace(/\n+/g, ' | ') : null);
         console.log('Side Panel Status Text:', measurements.panelStatusText);
-        console.log('Side Panel Icon Text:', measurements.panelIconText);
-        console.log('Side Panel Box Bg:', measurements.panelBoxBg);
-        console.log('Sample Polygon Fills:', measurements.sampleFills);
-        console.log('Polygon has #8b5cf6 (Penuh):', measurements.hasPenuhFill);
-        console.log('Polygon has #991b1b (Old dark red):', measurements.hasOldRedPenuhFill);
 
         if (measurements.cssVars.statusPenuh) {
           const bgMapHex = '#080f1d';

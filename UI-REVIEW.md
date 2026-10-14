@@ -99,6 +99,33 @@ Sesuai rujukan wajib:
 
 ---
 
+## Step 2 — Tata Letak Kompak, Dimensi Kartu Peta Seimbang, Framing 34 Wilayah Pilot & Highlight Terpilih
+
+### 1. Dasar Spesifikasi Produk (docs/PRD.md)
+Sesuai rujukan wajib:
+- **docs/PRD.md Bab 2.2 Butir 2**:
+  > *"Menentukan status wilayah (Defisit / Seimbang / Waspada / Penuh) dan menampilkannya di peta heatmap Indonesia dengan level kabupaten/provinsi menyesuaikan zoom."*
+- **docs/PRD.md Bab 8.3 & Bab 12 (Halaman Publik Peta)**:
+  > *"Heatmap interaktif seluruh Indonesia dengan layer percontohan (34 kabupaten/kota sentra pangan)."*
+- **Persyaratan Khusus Step 2**:
+  1. *Pengurangan tumpukan vertikal di atas peta*: Banner nasional 1 baris ringkas dengan tombol tutup (`aria-label="Tutup"`). Blok heading menyatukan judul, subtitle 1 baris, dan tombol aksi pada 1 baris desktop. Rincian teknis dipindahkan ke modal *"Tentang Data"*.
+  2. *Tinggi kartu peta dan panel samping serasi*: Menggunakan CSS grid `items-stretch`, kanvas peta mengisi kartu (`h-full`, min-height 520px), panel samping dapat di-scroll internal bila diperlukan. Pemanggilan `map.invalidateSize()` saat layout awal dan saat banner ditutup. Tidak ada strip kosong di bawah peta.
+  3. *Framing peta spasial*: Pada initial load, peta memfokuskan pandangan (*fitBounds*) ke batas 34 kabupaten pilot dengan padding sehingga seluruh wilayah percontohan tampak utuh tanpa terpotong di tepi kanvas. Tombol *"Reset Nasional"* mengembalikan pandangan ke seluruh kepulauan Indonesia. Tombol zoom (+ dan -) berfungsi normal dengan `aria-label`.
+  4. *Highlight poligon wilayah terpilih (default Banyumas 3302)*: Memiliki outline kontras tinggi (garis batas kuning/emas `#fbbf24`, ketebalan 3,5px) dan diangkat ke lapisan terdepan (`bringToFront()`).
+  5. *Visibilitas peta pada viewport 1440x900*: Minimal 60% kanvas peta tampak langsung di layar tanpa scrolling.
+
+### 2. Tabel Evaluasi & Bukti Rendered Step 2
+
+| Item / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi Ter-render (File Path / Printed Lines / Browser) | Status |
+|:---|:---|:---|:---|:---:|
+| **1. Kerapian & Kompaksi Area Atas Peta** | Header bertumpuk 3 baris terpisah (badge XGBoost, judul besar, subtitle 2 baris, tombol aksi). Banner peringatan nasional berupa kartu vertikal setinggi >100px tanpa tombol tutup. | Header diringkas menjadi 1 baris horizontal pada desktop (Judul + Subtitle 1 baris di kiri, chip BAPANAS + tombol Tentang Data + Unduh Buletin di kanan). Detail teknis model dipindahkan ke modal `#modal-tentang-data`. Banner nasional diringkas menjadi 1 baris ramping (tinggi 46px) dilengkapi tombol tutup (`aria-label="Tutup"`). | Bukti tangkapan layar `docs/ui-review/step2-1440.png` & `docs/ui-review/step2-1024.png`.<br>Pengukuran DOM browser:<br>`bannerRect.height`: 46,0px<br>Tutup banner memicu `map.invalidateSize()`. | **Selesai** |
+| **2. Keserasian Tinggi Kartu Peta & Panel Samping** | Kontainer menggunakan `items-start`. Kartu peta Leaflet dan panel samping memiliki tinggi berbeda. Kanvas peta menyisakan celah kosong bila konten samping lebih panjang. | Kontainer menggunakan CSS grid `lg:items-stretch`. Kartu peta (`#map-card`) dan panel wilayah (`#side-panel-card`) meregang serentak hingga ketinggian identik. Kanvas Leaflet (`#peta-map`) mengisi kartu secara penuh (`flex-1 h-full min-h-[520px]`) tanpa ada strip kosong di bawahnya. Panel samping dilengkapi `overflow-y-auto` halus. | Pengukuran Playwright 1440x900:<br>`Map Card Height: 784.6px`<br>`Side Panel Height: 784.6px`<br>`Height Difference: 0.00px (PASS - Identical)`.<br>Lihat `docs/ui-review/step2-1440.png`. | **Selesai** |
+| **3. Framing Peta Spasial (34 Kabupaten Pilot & Reset)** | Pada saat dimuat, peta hardcoded center `[-7.45, 109.2] zoom 7` (hanya Jawa Tengah). Pulau terpotong di tepi kiri-kanan dan bagian bawah kanvas didominasi laut kosong. | Saat awal dimuat, peta otomatis menjalankan `fitToPilotBounds()` menghitung batas geografis seluruh 34 kabupaten/kota pilot yang memiliki data status (dari Sumut hingga Papua & NTT) dengan padding 24px, sehingga semua wilayah percontohan tampak terbingkai proporsional. Tombol *"Reset Nasional"* mengembalikan pandangan utuh kepulauan nusantara (`[-2.5, 118.0], zoom 5`). Tombol zoom berfungsi dengan `aria-label="Perbesar peta"` dan `aria-label="Perkecil peta"`. | Tangkapan layar `docs/ui-review/step2-1440.png` membuktikan seluruh 34 kabupaten terdata terbingkai penuh tanpa terpotong di tepi kanvas. Klik Reset Nasional memuat koordinat center nasional. | **Selesai** |
+| **4. Highlight Poligon Terpilih (Banyumas 3302)** | Wilayah terpilih tidak memiliki outline pembeda; ketebalan batas sama dengan poligon lainnya (1px garis gelap) dan sering tertutup poligon tetangga. | Wilayah terpilih (default Banyumas `3302`) diberikan highlight outline kontras tinggi berwarna emas amber `#fbbf24` dengan ketebalan **3,5px** (`weight: 3.5`), opasitas 1, dan otomatis diangkat ke lapisan terdepan via `layer.bringToFront()`. Mouseover/mouseout dan klik wilayah lain memperbarui highlight secara reaktif. | Tangkapan layar `docs/ui-review/step2-1440.png` & inspeksi SVG Path di Playwright:<br>`Selected Polygon: { stroke: '#fbbf24', strokeWidth: '3.5', fill: '#8b5cf6' }`<br>Stroke width 3,5px memenuhi syarat (>= 3px). | **Selesai** |
+| **5. Pengukuran Persentase Visibilitas Peta (1440x900)** | Kanvas peta terdorong ke bawah layar karena tumpukan header, filter, dan banner yang terlalu tebal, memerlukan scrolling untuk melihat peta utuh. | Berkat pemadatan area atas dan optimalisasi padding, peta langsung terlihat di viewport 1440x900 tanpa scroll.<br>- Tinggi kanvas peta: **679,0px**<br>- Bagian peta terlihat langsung: **558,5px**<br>- **Persentase peta terlihat (tanpa scroll): 82,3%** (syarat: $\ge 60\%$ $\rightarrow$ **PASS**)<br>- **Persentase viewport terisi peta: 62,1%** (syarat: $\ge 60\%$ $\rightarrow$ **PASS**). | Pengukuran Playwright DOM (`scripts/shot.mjs`):<br>`Map top offset: 341.5px`<br>`Map total height: 679.0px`<br>`Visible height: 558.5px`<br>`pctOfMap: 82.3%`<br>`pctOfViewport: 62.1%`. | **Selesai** |
+
+---
+
 ## 2. Tabel Evaluasi Perubahan Antarmuka (Before & After - Historis Awal)
 
 | No | Komponen / Butir Pekerjaan | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi / Pengukuran | Status |
