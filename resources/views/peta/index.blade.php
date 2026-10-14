@@ -88,24 +88,34 @@
         </div>
       </div>
 
-      <!-- 2. Periode Proyeksi (12 Bulan ke Depan) -->
+      <!-- 2. Periode Waktu & Horizon Proyeksi -->
       <div>
         <div class="flex items-center justify-between mb-1.5">
           <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
             Periode Waktu
           </label>
-          <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">12 Bulan ke Depan</span>
+          <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80" title="Horizon proyeksi model prakiraan hingga 12 bulan ke depan">
+            Horizon Proyeksi: 12 Bulan
+          </span>
         </div>
         <div class="flex items-center gap-1.5">
           <select id="select-periode" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none cursor-pointer">
             @foreach($periodes->reverse() as $p)
+              @php
+                $isForecast = $p > $periodeDefault;
+              @endphp
               <option value="{{ $p }}" {{ $p === $periodeDefault ? 'selected' : '' }}>
-                {{ \Carbon\Carbon::parse($p)->isoFormat('MMMM YYYY') }}
+                {{ \Carbon\Carbon::parse($p)->isoFormat('MMMM YYYY') }} {{ $isForecast ? '• Proyeksi' : '• Aktual' }}
               </option>
             @endforeach
           </select>
-          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-[11px] font-bold hover:bg-emerald-200 transition shrink-0">
-            Bulan Ini
+          @php
+            $isRealCurrentMonth = ($periodeDefault === now()->format('Y-m'));
+            $btnText = $isRealCurrentMonth ? 'Bulan Ini' : 'Data Terakhir';
+            $btnTitle = $isRealCurrentMonth ? 'Pilih bulan berjalan saat ini' : 'Pilih periode data aktual terakhir (' . \Carbon\Carbon::parse($periodeDefault)->isoFormat('MMMM YYYY') . ')';
+          @endphp
+          <button type="button" id="btn-bulan-ini" onclick="pilihBulanIni()" class="px-2.5 py-2 rounded-xl bg-emerald-100 text-emerald-800 text-[11px] font-bold hover:bg-emerald-200 transition shrink-0" title="{{ $btnTitle }}">
+            {{ $btnText }}
           </button>
         </div>
       </div>
