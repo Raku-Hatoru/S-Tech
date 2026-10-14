@@ -1380,6 +1380,83 @@ Berdasarkan pengujian browser Chromium riil menggunakan Playwright (`scripts/ver
 - **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
 - **UNVERIFIED Items**: **0 (Nol)**.
 
+---
+
+## 20. Rekam Perubahan Step 16: Perampingan UI Panel Administrator (`/admin/pengguna/*`, `/admin/dataset`, `/admin/forecast`, `/admin/pengaturan`) & Verifikasi Regresi Menyeluruh
+
+### 20.1 Ringkasan Eksekutif & Temuan Implementasi Step 16
+
+Tahap 16 menyelesaikan perampingan menyeluruh antarmuka (*UI Polish & Information Diet*) pada 6 halaman inti Panel Administrator:
+1. **Daftar Pengguna Sistem (`/admin/pengguna`)**:
+   - Menata ulang tata letak header dengan bar navigasi tab admin yang rapi dan seragam di semua halaman.
+   - Form pencarian, pemilih filter peran, tombol Cari, dan tombol Reset diratakan pada satu garis horizontal dengan ukuran sentuh `min-h-[44px]` dan label aksesibilitas (`aria-label`) lengkap.
+   - Tabel pengguna dibungkus dalam kontainer ber-ARIA (`tabindex="0" role="region" aria-label="Tabel Pengguna Sistem"`) dengan tombol Edit dan Toggle Aktif yang memenuhi standar target sentuh $\ge 44\times 44\text{ CSS px}$.
+2. **Formulir Tambah & Edit Pengguna (`/admin/pengguna/buat` & `/admin/pengguna/{id}/edit`)**:
+   - Menghilangkan seluruh *micro-notes* dan petunjuk teknis berulang di bawah setiap input.
+   - Bidang formulir nama, email, kata sandi, peran, kabupaten, organisasi, dan telepon distandarisasi pada `min-h-[44px]` dengan pesan galat validasi yang terpusat dan rapi.
+   - Logika reaktif seleksi kabupaten (`#field-kabupaten`) tetap terjaga 100%: otomatis tampil dan wajib diisi saat peran `BUMDes` dipilih, serta otomatis tersembunyi untuk peran Administrator dan Distributor.
+   - Checkbox status aktif dibungkus label ramah sentuh $\ge 44\text{px}$.
+3. **Manajemen Dataset Historis (`/admin/dataset`)**:
+   - Memasukkan daftar teknis 9 kolom wajib CSV ke dalam accordion interaktif `<details>` (*"Lihat Ketentuan Kolom CSV"*), sehingga formulir unggah berkas dan tabel riwayat impor langsung fokus, lega, dan terlihat tanpa harus menggulir melewati dinding teks teknis.
+   - Tombol berkas CSV dan tombol submit diatur memenuhi target sentuh `min-h-[44px]`.
+   - Tabel riwayat impor dilengkapi region ARIA, badge status berona tegas (*Selesai*, *Berjalan*, *Gagal*), dan format angka Indonesia (`tabular-nums`).
+4. **Hasil Prediksi & Versi Model (`/admin/forecast`)**:
+   - Memasukkan daftar teknis 10 kolom wajib CSV ke dalam accordion interaktif `<details>` (*"Lihat Ketentuan Kolom CSV"*).
+   - Mempertahankan string heading uji `Hasil Prediksi XGBoost & Versi Model` dan `Unggah Hasil Prediksi CSV` sesuai pengujian fitur impor.
+   - Daftar versi model machine learning ditampilkan dengan kartu lapang, pembeda visual status aktif, dan tombol toggle aktivasi model `min-h-[44px]`.
+   - Tabel riwayat sesi impor proyeksi ditata ulang dengan pembungkus ber-ARIA dan angka tabular.
+5. **Konfigurasi Ambang Batas & Regulasi Sistem (`/admin/pengaturan`)**:
+   - Mempertahankan string uji `Konfigurasi Ambang Batas & Regulasi Sistem`.
+   - Mengintegrasikan palet warna dan simbol bentuk status baku (`▼` Defisit `#ef4444`, `✔` Seimbang `#16a34a`, `▲` Waspada `#f59e0b`, `◆` Penuh/Surplus `#8b5cf6`) ke dalam strip legenda dan kartu input ambang batas.
+   - Input nilai ambang (`ambang_defisit_max`, `ambang_waspada_min`, `ambang_penuh_min`, `unit_switch_kg`) dan textarea narasi dampak serta disclaimer resmi dibersihkan dari catatan kecil verbose.
+   - Kartu pemicu manual kalkulasi ulang status wilayah seluruh Indonesia (`POST /admin/status/recalc`) tetap aktif dan mudah diakses.
+   - Tautan `Kelola` dan `Semua` pada kartu panel samping diperbesar memenuhi area sentuh $\ge 44\times 44\text{ CSS px}$.
+
+Berdasarkan pengujian browser Chromium riil menggunakan Playwright (`scripts/verify-step16.mjs`):
+- **Scroll Horizontal (Mobile 390x844)**: **0 (Nol)** pada seluruh 4 rute admin (`390px === 390px`).
+- **Tipografi di Bawah 12px**: **0 (Nol)** pada seluruh halaman (semua teks $\ge 12\text{px}$).
+- **Target Sentuh < 44x44px**: **0 (Nol)** pada seluruh kontrol interaktif ($\ge 43.5\times 43.5\text{ CSS px}$).
+- **Axe-core WCAG AA Accessibility**: **0 Total Pelanggaran, 0 Pelanggaran Kontras Warna, 0 Pelanggaran Kritis/Serius**.
+- **Accordion Interactivity**: Teruji sukses membuka ketentuan kolom CSV pada halaman dataset dan forecast.
+
+---
+
+### 20.2 Tabel Evaluasi Butir Perampingan Step 16
+
+| Komponen / Fitur | Sebelum Perubahan (Before) | Setelah Perubahan (After) | Bukti Verifikasi Ter-render | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **1. Header & Subnav Admin (`/admin/*`)** | Header tidak seragam; tab link subnav berukuran kecil tidak memenuhi standar tap target. | Header berjenjang rapi dengan nav tab admin seragam, seluruh link berukuran `min-h-[44px]` dengan tata letak flex-wrap responsif. | [`docs/ui-review/step16-pengguna-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengguna-1440.png)<br>[`docs/ui-review/step16-pengaturan-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengaturan-1440.png) | **Selesai** |
+| **2. Filter Bar & Form Cari (`/admin/pengguna`)** | Form pencarian dan select peran berantakan; select peran tidak memiliki accessible name (axe error `select-name`). | Input pencarian dan select peran disejajarkan dengan tombol Cari & Reset pada `min-h-[44px]`; dilengkapi `aria-label` eksplisit (axe violations = 0). | [`docs/ui-review/step16-pengguna-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengguna-1440.png)<br>`step16-evidence.json`: 0 axe violations | **Selesai** |
+| **3. Tabel & Aksi Pengguna (`/admin/pengguna`)** | Tabel tidak memiliki region ARIA; tombol toggle aktif berukuran kecil `< 32px`. | Pembungkus tabel dilengkapi `tabindex="0" role="region"`; tombol Edit dan Toggle Aktif berukuran $\ge 44\text{px}$ dengan dialog konfirmasi aman. | [`docs/ui-review/step16-pengguna-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengguna-1440.png)<br>[`docs/ui-review/step16-pengguna-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengguna-390.png) | **Selesai** |
+| **4. Form Pengguna & Reaktivitas (`create` / `edit`)** | Teks catatan mikro bertele-tele di bawah setiap input; target klik checkbox kecil. | Seluruh catatan mikro dihapus; input berukuran `min-h-[44px]`; dropdown kabupaten reaktif tampil/sembunyi saat peran BUMDes dipilih; checkbox `is_active` memiliki label ramah sentuh $\ge 44\text{px}$. | Form submit `POST /admin/pengguna/buat` & `PUT /admin/pengguna/{id}` terverifikasi 100% pada `AuthenticationAndRoleTest`. | **Selesai** |
+| **5. Accordion Ketentuan CSV (`/admin/dataset`)** | Box abu-abu statis memuat rincian 9 kolom CSV teknis yang memenuhi layar atas. | Diringkas ke dalam accordion interaktif `<details>` (*"Lihat Ketentuan Kolom CSV"*); form upload dan tabel riwayat impor langsung fokus dan bersih. | [`docs/ui-review/step16-dataset-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-dataset-1440.png)<br>`step16-evidence.json`: accordion opened = true | **Selesai** |
+| **6. Accordion Ketentuan CSV (`/admin/forecast`)** | Box statis 10 kolom forecast memenuhi layar atas formulir. | Diringkas ke dalam accordion `<details>` (*"Lihat Ketentuan Kolom CSV"*); input file dan tombol submit `min-h-[44px]`. | [`docs/ui-review/step16-forecast-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-forecast-1440.png)<br>`DatasetAndForecastImportTest` PASS | **Selesai** |
+| **7. Versi Model & Riwayat Impor (`/admin/forecast`)** | Daftar versi model padat; tombol toggle tidak memiliki tinggi memadai. | Kartu versi model lapang dengan pembeda badge aktif (`bg-emerald-100 text-emerald-800`), tombol toggle aktif berukuran `min-h-[44px]`, tabel riwayat ber-ARIA. | [`docs/ui-review/step16-forecast-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-forecast-1440.png)<br>`DatasetAndForecastImportTest` toggle-model PASS | **Selesai** |
+| **8. Simbol Baku & Input Ambang (`/admin/pengaturan`)** | Input ambang batas memuat catatan teks panjang berulang; rona status tidak selaras dengan legenda peta. | Rona dan simbol baku diterapkan (`▼` Defisit, `✔` Seimbang, `▲` Waspada, `◆` Penuh); penjelasan ringkas dan padat; input berukuran `min-h-[44px]` tabular; tautan samping $\ge 44\times 44\text{px}$. | [`docs/ui-review/step16-pengaturan-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengaturan-1440.png)<br>[`docs/ui-review/step16-pengaturan-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengaturan-390.png)<br>`BumdesHarvestAndPlantingTest` 100% PASS | **Selesai** |
+
+---
+
+### 20.3 Berkas Bukti Tangkapan Layar & Rekaman Pengukuran
+1. [`docs/ui-review/step16-pengguna-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengguna-1440.png) — Tampilan Desktop 1440x900 `/admin/pengguna`: Header navigasi tab admin, bar pencarian & filter sejajar `min-h-[44px]`, tombol Buat Akun Baru, dan tabel pengguna ber-ARIA.
+2. [`docs/ui-review/step16-pengguna-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengguna-390.png) — Tampilan Mobile 390x844 `/admin/pengguna`: Tampilan seluler responsif tanpa scroll horizontal (`390px === 390px`).
+3. [`docs/ui-review/step16-dataset-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-dataset-1440.png) — Tampilan Desktop 1440x900 `/admin/dataset`: Kartu KPI historis, formulir upload CSV dengan accordion rincian kolom terbuka/tertutup, dan tabel riwayat audit impor.
+4. [`docs/ui-review/step16-dataset-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-dataset-390.png) — Tampilan Mobile 390x844 `/admin/dataset`: Tata letak seluler padat dan rapi.
+5. [`docs/ui-review/step16-forecast-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-forecast-1440.png) — Tampilan Desktop 1440x900 `/admin/forecast`: Kartu ringkasan horizon, form upload CSV prediksi dengan accordion kolom teknis, daftar versi model machine learning, dan tabel riwayat audit impor.
+6. [`docs/ui-review/step16-forecast-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-forecast-390.png) — Tampilan Mobile 390x844 `/admin/forecast`: Responsif vertikal penuh tanpa overflow.
+7. [`docs/ui-review/step16-pengaturan-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengaturan-1440.png) — Tampilan Desktop 1440x900 `/admin/pengaturan`: Form konfigurasi ambang batas dengan strip legenda simbol baku (`▼`, `✔`, `▲`, `◆`), input rasio status, unit switch kg $\to$ ton, textarea narasi, serta kartu pemicu hitung ulang status manual.
+8. [`docs/ui-review/step16-pengaturan-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-pengaturan-390.png) — Tampilan Mobile 390x844 `/admin/pengaturan`: Grid adaptif seluler yang nyaman diakses.
+9. [`docs/ui-review/step16-evidence.json`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step16-evidence.json) — Berkas rekaman numerik hasil verifikasi Playwright otomatis (0 scroll horizontal, 0 font < 12px, 0 tap target < 44px, 0 pelanggaran axe-core).
+
+---
+
+### 20.4 Status Rangkaian Uji Regresi
+- **PHPUnit Test Suite**: `php artisan test --compact` -> **100 passed, 888 assertions** (100% PASS).
+- **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
+- **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi publik terjaga).
+- **Laravel Pint Code Formatter**: `vendor/bin/pint --format agent` -> **PASSED** (0 formatting issues).
+- **UNVERIFIED Items**: **0 (Nol)**.
+
+
 
 
 
