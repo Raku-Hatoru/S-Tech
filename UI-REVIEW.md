@@ -947,7 +947,26 @@ Prinsip perampingan:
 
 ---
 
-### 14.2 Tabel Pengukuran Kepadatan Teks (Before vs After)
+### 14.2 Tabel Evaluasi Butir Perampingan (Evaluation Table Step 10)
+
+| Item | Before (Step 9) | After (Step 10) | Evidence | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **First-screen visibility (1440x900)** | Peta terpotong pada viewport 900px akibat header tinggi dan banner 2 baris | Header, filter row, 1-line banner, peta (top: 373px, visible: 527px), & side panel tampak serentak tanpa scroll | [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png), `scripts/verify-step10.mjs` | **Selesai** |
+| **Judul & Subjudul Halaman** | Judul panjang, subjudul multi-baris | Judul "Peta Pemantauan Surplus & Defisit Pangan" (40 char), subjudul 1 baris (79 char $\le$ 100 char, bebas harga) | `docs/ui-review/step10-evidence.json` (title: 40 kar, subtitle: 79 kar) | **Selesai** |
+| **Badge Data Contoh & Tombol Header** | Chip besar BAPANAS/BPS di body, tombol aksi ramai | Badge "Data contoh" di samping judul, tombol info "Tentang data", tombol secondary "Unduh Buletin (.PDF)" | [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php#L20-L40), [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png) | **Selesai** |
+| **Label Navigasi Mode Publik** | Badge "Mode Publik" pada navbar untuk pengguna tamu | Dihapus untuk tamu; untuk user login hanya nama peran tanpa prefix `Peran: ` | [`resources/views/layouts/app.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/layouts/app.blade.php#L65-L75), `scripts/verify_audit_integrity.sh` | **Selesai** |
+| **Filter Row & Label Tingkat** | Label "LEVEL AGREGASI GEOGRAFIS", chip "Proyeksi 12 bulan", tombol besar "Ke bulan berjalan" | Label diperpendek menjadi "Tingkat", chip proyeksi dipindah ke modal, link teks `← Ke bulan berjalan` hanya tampil saat periode $\ne$ berjalan | [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php#L50-L75), `tests/Feature/PetaHeatmapAndDetailWilayahTest.php` | **Selesai** |
+| **Banner Nasional Ringkas & Netral** | Banner kuning 2 baris dengan tag "PERINGATAN" dan klausa selisih bersih | Banner netral 1 baris (`bg-slate-100`): "27 dari 34 wilayah pantau berstatus Penuh/Surplus · 3 Waspada · 0 Defisit" dengan tombol tutup | [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png), `tests/Feature/PetaKpiDatabaseTest.php` | **Selesai** |
+| **Pembersihan Overlay Kanvas Peta** | Dua floating overlay bars di dalam peta ("Peta: rasio pasokan..." dan "Proyeksi: model...") | Kedua floating overlay dihapus; kanvas bersih menyisakan Reset Nasional, tombol zoom (+/-), dan legenda tunggal di bawah peta | [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png), `docs/ui-review/step10-evidence.json` | **Selesai** |
+| **Map Containment (Hard Rule 2)** | 507 poligon terkurung di dalam container peta | 507 poligon terkurung di dalam container, 34 poligon wilayah pilot terwarnai, 0 poligon di luar | `scripts/verify-step10.mjs` (507 polygons, 34 pilots, 0 outside) | **Selesai** |
+| **Panel Samping Wilayah Terpilih** | Header "WILAYAH TERPILIH", chip simulasi, baris kode terpisah, 3 mini boxes, boks dampak tebal | Nama + provinsi 1 baris (`Kabupaten Banyumas, Jawa Tengah 33.02`), status + rasio, 1 kalimat dampak (hanya penuh/defisit), 3 angka (Pasokan, Kebutuhan, Selisih), tombol detail | [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png), [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php#L125-L165) | **Selesai** |
+| **KPI Strip Horizontal** | 4 kartu KPI besar multibaris dengan progress bar dan sub-line teknis | 1 strip horizontal ringkas 4 angka kunci (Total pasokan, Total kebutuhan, Wilayah surplus/penuh, Wilayah defisit/waspada) | [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png), `tests/Feature/PetaKpiDatabaseTest.php` | **Selesai** |
+| **Footer & Klausul Regulasi** | Banner regulasi kuning besar multibaris di footer | 1 baris ringkas: "&copy; 2026 SIPANGAN WASPADA • Sistem pemantauan dini pasokan pangan; bukan platform jual-beli. Diperbarui otomatis tiap 15 menit." | [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png), `tests/Feature/UiAndInteractiveElementsAuditTest.php` | **Selesai** |
+| **Tombol Aksesibilitas Rekapitulasi** | Kontrol tombol rekapitulasi | Tetap dipertahankan sebagai tombol plain link-style "Tampilkan Tabel Rekapitulasi" | [`resources/views/peta/index.blade.php`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/resources/views/peta/index.blade.php#L170-L175) | **Selesai** |
+
+---
+
+### 14.3 Tabel Pengukuran Kepadatan Teks (Before vs After)
 Pengukuran dihitung secara objektif menggunakan Playwright DOM TreeWalker pada node teks terlihat (*visible text nodes*, `display !== 'none'` dan `visibility !== 'hidden'`):
 
 | Area / Komponen | Text Blocks Sebelum (Step 9) | Text Blocks Sesudah (Step 10) | Reduksi | Status Kepatuhan |
@@ -963,7 +982,7 @@ Pengukuran dihitung secara objektif menggunakan Playwright DOM TreeWalker pada n
 
 ---
 
-### 14.3 Tabel Perpindahan Elemen Informasi (Moved-Items Table)
+### 14.4 Tabel Perpindahan Elemen Informasi (Moved-Items Table)
 Menjamin bahwa tidak ada data yang hilang; seluruh elemen yang dirampingkan dari tampilan utama telah dipindahkan ke lokasi yang tepat:
 
 | Elemen Asli yang Disederhanakan | Lokasi Sebelumnya | Lokasi Baru yang Sah & Dapat Diakses | Keterangan Rationale |
@@ -983,7 +1002,7 @@ Menjamin bahwa tidak ada data yang hilang; seluruh elemen yang dirampingkan dari
 
 ---
 
-### 14.4 Bukti Pengukuran Browser Nyata (Playwright Verification at 1440x900)
+### 14.5 Bukti Pengukuran Browser Nyata (Playwright Verification at 1440x900)
 Hasil pengukuran otomasi Playwright (`scripts/verify-step10.mjs`):
 ```
 ======================================================
@@ -1007,7 +1026,7 @@ Polygons outside map card: 0 (expect 0: PASS)
 
 ---
 
-### 14.5 Berkas Bukti Screenshot & Rendered HTML
+### 14.6 Berkas Bukti Screenshot & Rendered HTML
 1. [`docs/ui-review/step10-1440.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-1440.png) — Tampilan Desktop 1440x900 (Hirarki visual bersih, judul ringkas, strip KPI horizontal, peta Leaflet 507 poligon dengan kontrol terkurung rapi).
 2. [`docs/ui-review/step10-390.png`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/step10-390.png) — Tampilan Mobile 390x844 (Nol scroll horizontal, target sentuh $\ge 44\text{ px}$, akordeon filter ringkas).
 3. [`docs/ui-review/peta-rendered-step10.html`](file:///home/rakuhatoru/lomba/S-Tech/projek/S-tech/docs/ui-review/peta-rendered-step10.html) — DOM HTML lengkap yang dirender oleh browser (78.291 bytes).
@@ -1015,7 +1034,7 @@ Polygons outside map card: 0 (expect 0: PASS)
 
 ---
 
-### 14.6 Status Rangkaian Pengujian Lengkap
+### 14.7 Status Rangkaian Pengujian Lengkap
 - **PHPUnit Test Suite**: `php artisan test --compact` -> **101 passed, 896 assertions** (100% PASS).
 - **Smoke Test Demo Flow PRD Bab 16**: `./scripts/smoke_test.sh` -> **11/11 PASS** (100% PASS).
 - **Audit Integrity Verification**: `./scripts/verify_audit_integrity.sh` -> **100% PASS** (Seluruh batasan akses 4 peran dan kerahasiaan resi terjaga).
