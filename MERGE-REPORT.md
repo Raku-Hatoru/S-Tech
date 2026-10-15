@@ -1,6 +1,6 @@
 # LAPORAN PENGGABUNGAN KE CABANG UTAMA (MAINLINE MERGE REPORT)
 **Proyek:** SIPANGAN WASPADA  
-**Target Mainline:** `master`  
+**Target Mainline:** `main` (dialihkan dari `master` melalui Step 6)  
 **Sumber:** `ui/polish-20261014`  
 **Tanggal:** 15 Oktober 2026  
 **Penanda Rilis:** `mvp-20261015`  
@@ -25,6 +25,13 @@ git merge --ff-only ui/polish-20261014
 ```
 Hasil: Tidak ada potensi konflik (*0 merge conflicts*). Riwayat komit tetap rapi, runtut, dan mempertahankan seluruh catatan audit serta pengoptimalan UI.
 
+### Pengalihan Nama Cabang Utama (Step 6)
+Sesuai arahan pemilik repositori (`MAINLINE_NAME = main`), cabang `master` dialihkan menjadi `main` menggunakan perintah:
+```bash
+git branch -M master main
+```
+Cabang `main` kini menunjuk langsung pada komit terverifikasi penuh (`mvp-20261015`), dan tidak ada lagi cabang lokal bernama `master`.
+
 ---
 
 ## 2. Jaring Pengaman (*Safety Nets*) yang Diterapkan
@@ -32,17 +39,17 @@ Hasil: Tidak ada potensi konflik (*0 merge conflicts*). Riwayat komit tetap rapi
 Sebelum dan selama proses penggabungan, jaring pengaman berikut dibuat untuk menjamin integritas kode:
 
 1. **Tag Cadangan Git (Lokal):**
-   - `backup/master-before-mainline` (diletakkan di `e420bec`, kondisi awal master).
+   - `backup/master-before-mainline` (diletakkan di `e420bec`, mengabadikan kondisi awal master).
    - `backup/audit-end` (diletakkan di `164566a`, akhir fase audit backend).
    - `backup/ui-polish-end` (diletakkan di `e500ada`, akhir fase pemolesan UI).
 2. **Bundel Arsip Penuh di Luar Repositori:**
    - Berkas: `/home/rakuhatoru/lomba/S-Tech/projek/S-tech-backup-20261015.bundle`
    - Dibuat dengan: `git bundle create ../S-tech-backup-20261015.bundle --all`
-   - Verifikasi: `git bundle verify` menyatakan berkas valid (*OK, 13 references, sha1*).
+   - Verifikasi: `git bundle verify` menyatakan berkas valid (*OK, 14 references, sha1*).
 3. **Preservasi Cabang:**
    - Tidak ada cabang yang dihapus. Cabang `audit/cleanup-20261013` dan `ui/polish-20261014` tetap utuh di repositori.
 4. **Tag Rilis Akhir:**
-   - `mvp-20261015` disematkan pada ujung *mainline* `master` (komit `c590451`).
+   - `mvp-20261015` disematkan pada ujung *mainline* `main`.
 
 ---
 
@@ -58,14 +65,14 @@ Seluruh keputusan arsitektur dan kepatuhan yang dihasilkan dari `AUDIT.md` dan p
 
 ---
 
-## 4. Hasil Verifikasi Menyeluruh pada Cabang Utama (`master`)
+## 4. Hasil Verifikasi Menyeluruh pada Cabang Utama (`main`)
 
-Semua pengujian dijalankan langsung pada cabang `master` pasca-penggabungan dan komit build:
+Semua pengujian dijalankan langsung pada cabang utama `main`:
 
 ### A. Rangkaian Pengujian Otomatis (PHPUnit & Baseline Scripts)
 | Uji / Skrip | Perintah | Status | Keterangan |
 |---|---|---|---|
-| **PHPUnit Suite** | `php artisan test --compact` | **PASS** | 100 test lolos, 887 asersi (durasi ~9.3 detik) |
+| **PHPUnit Suite** | `php artisan test --compact` | **PASS** | 100 test lolos, 887 asersi (durasi ~9.3–10.8 detik) |
 | **Smoke Test Demo Flow** | `./scripts/smoke_test.sh` | **PASS (11/11)** | Alur demo PRD Section 16 (Peta, Login, DO, Panen, Admin) |
 | **Integritas Aturan Audit** | `./scripts/verify_audit_integrity.sh` | **PASS (100%)** | Otentikasi, visibilitas tombol peran, kerahasiaan resi |
 | **Pint Linter** | `vendor/bin/pint --test` | **PASS** | Format kode PHP standar Laravel Pint |
@@ -83,7 +90,7 @@ Semua pengujian dijalankan langsung pada cabang `master` pasca-penggabungan dan 
 
 ### C. Pengujian Database Scratch (Migrate & Seed dari Nol)
 Pengujian dilakukan pada database SQLite sementara di luar database kerja:
-- **Nama Berkas Scratch**: `database/scratch_verification_mainline.sqlite`
+- **Nama Berkas Scratch**: `database/scratch_verify_step5.sqlite`
 - **Eksekusi Migrasi & Seeder**:
   `DB_CONNECTION=sqlite DB_DATABASE=... php artisan migrate:fresh --seed`
   - 16 migrasi berjalan sukses.
@@ -131,18 +138,33 @@ Hasil pemindaian sebelum (*before*) vs sesudah (*after*) pemolesan UI pada viewp
 ## 6. Panduan Tindakan Lanjutan untuk Pengguna (CloudPanel Deployment Checklist)
 
 > [!IMPORTANT]
-> Asisten **TIDAK** menjalankan perintah di lingkungan server CloudPanel Anda. Silakan salin dan jalankan langkah-langkah berikut di terminal server CloudPanel Anda untuk menerapkan pembaruan ini ke produksi.
+> Asisten **TIDAK** menjalankan perintah di lingkungan remote GitHub maupun server CloudPanel Anda. Silakan salin dan jalankan langkah-langkah berikut secara mandiri.
 
-### Langkah-langkah di Server CloudPanel:
+### A. Pengaturan Remote GitHub (Dijalankan di Mesin Lokal):
+1. Dorong cabang `main` dan tag terbaru ke repositori remote:
+   ```bash
+   git push -u origin main
+   git push origin --tags
+   ```
+2. Buka pengaturan GitHub di browser: **Settings > General > Default branch**, lalu ubah default branch dari `master` ke `main`.
+3. Setelah default branch di GitHub berubah menjadi `main`, Anda dapat menghapus cabang `master` remote jika diinginkan:
+   ```bash
+   git push origin --delete master
+   ```
 
+### B. Langkah-langkah di Server CloudPanel:
 1. **Masuk ke direktori aplikasi di server:**
    ```bash
    cd /path/ke/aplikasi/S-tech
    ```
 
-2. **Tarik perubahan terbaru dari Git:**
+2. **Perbarui remote dan beralih ke cabang `main`:**
    ```bash
-   git pull origin master
+   git fetch origin
+   git branch -m master main
+   git branch -u origin/main main
+   git remote set-head origin -a
+   git pull origin main
    ```
 
 3. **Pasang dependensi PHP untuk lingkungan produksi:**
@@ -189,4 +211,4 @@ Hasil pemindaian sebelum (*before*) vs sesudah (*after*) pemolesan UI pada viewp
 
 ## 7. Kesimpulan Akhir
 
-Cabang `master` saat ini telah resmi menjadi cabang utama (*mainline*) proyek SIPANGAN WASPADA. Seluruh perbaikan audit teknis, keamanan, perampingan visual (*decluttering*), standarisasi tipografi, aksesibilitas WCAG AA, dan integritas data telah teruji 100% lulus tanpa regresi fungsional.
+Cabang `main` saat ini telah resmi menjadi cabang utama (*mainline*) proyek SIPANGAN WASPADA. Seluruh perbaikan audit teknis, keamanan, perampingan visual (*decluttering*), standarisasi tipografi, aksesibilitas WCAG AA, dan integritas data telah teruji 100% lulus tanpa regresi fungsional.
