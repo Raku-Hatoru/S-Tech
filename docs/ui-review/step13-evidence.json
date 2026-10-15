@@ -1,6 +1,6 @@
 {
   "step": 13,
-  "timestamp": "2026-10-14T17:28:40.783Z",
+  "timestamp": "2026-10-14T23:59:24.075Z",
   "petaTooltip": {
     "maxTooltipsDuringHover": 1,
     "isSingleton": true,
@@ -13,8 +13,21 @@
       "hasHorizontalScroll": false,
       "scrollWidth": 390,
       "innerWidth": 390,
-      "smallFontCount": 0,
-      "smallFontElements": [],
+      "smallFontCount": 2,
+      "smallFontElements": [
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (68%)"
+        },
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (65%)"
+        }
+      ],
       "smallTargetCount": 0,
       "smallTargets": []
     },
@@ -22,8 +35,21 @@
       "hasHorizontalScroll": false,
       "scrollWidth": 768,
       "innerWidth": 768,
-      "smallFontCount": 0,
-      "smallFontElements": [],
+      "smallFontCount": 2,
+      "smallFontElements": [
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (68%)"
+        },
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (65%)"
+        }
+      ],
       "smallTargetCount": 0,
       "smallTargets": []
     },
@@ -31,8 +57,21 @@
       "hasHorizontalScroll": false,
       "scrollWidth": 1024,
       "innerWidth": 1024,
-      "smallFontCount": 0,
-      "smallFontElements": [],
+      "smallFontCount": 2,
+      "smallFontElements": [
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (68%)"
+        },
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (65%)"
+        }
+      ],
       "smallTargetCount": 0,
       "smallTargets": []
     },
@@ -40,8 +79,21 @@
       "hasHorizontalScroll": false,
       "scrollWidth": 1440,
       "innerWidth": 1440,
-      "smallFontCount": 0,
-      "smallFontElements": [],
+      "smallFontCount": 2,
+      "smallFontElements": [
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (68%)"
+        },
+        {
+          "tag": "span",
+          "id": "",
+          "fontSize": "11px",
+          "text": "DEFISIT (65%)"
+        }
+      ],
       "smallTargetCount": 0,
       "smallTargets": []
     }

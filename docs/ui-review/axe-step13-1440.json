@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-14T17:29:02.497Z",
+  "timestamp": "2026-10-14T23:59:46.145Z",
   "url": "http://127.0.0.1:8099/wilayah/3302?komoditas=beras",
   "toolOptions": {
     "runOnly": {
@@ -316,22 +316,6 @@
       "description": "Ensure the autocomplete attribute is correct and suitable for the form field",
       "help": "autocomplete attribute must be used correctly",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/autocomplete-valid?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "avoid-inline-spacing",
-      "impact": null,
-      "tags": [
-        "cat.structure",
-        "wcag21aa",
-        "wcag1412",
-        "EN-301-549",
-        "EN-9.1.4.12",
-        "ACT"
-      ],
-      "description": "Ensure that text spacing set through style attributes can be adjusted with custom stylesheets",
-      "help": "Inline text spacing must be adjustable with custom stylesheets",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/avoid-inline-spacing?application=playwright",
       "nodes": []
     },
     {
@@ -729,25 +713,6 @@
       "description": "Ensure that server-side image maps are not used",
       "help": "Server-side image maps must not be used",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/server-side-image-map?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "summary-name",
-      "impact": null,
-      "tags": [
-        "cat.name-role-value",
-        "wcag2a",
-        "wcag412",
-        "section508",
-        "section508.22.a",
-        "TTv5",
-        "TT6.a",
-        "EN-301-549",
-        "EN-9.4.1.2"
-      ],
-      "description": "Ensure summary elements have discernible text",
-      "help": "Summary elements must have discernible text",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/summary-name?application=playwright",
       "nodes": []
     },
     {
@@ -1384,6 +1349,55 @@
       ]
     },
     {
+      "id": "avoid-inline-spacing",
+      "impact": null,
+      "tags": [
+        "cat.structure",
+        "wcag21aa",
+        "wcag1412",
+        "EN-301-549",
+        "EN-9.1.4.12",
+        "ACT"
+      ],
+      "description": "Ensure that text spacing set through style attributes can be adjusted with custom stylesheets",
+      "help": "Inline text spacing must be adjustable with custom stylesheets",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/avoid-inline-spacing?application=playwright",
+      "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<canvas id=\"chart12Bulan\" width=\"1166\" height=\"400\" style=\"display: block; box-sizing: border-box; height: 400px; width: 1166px;\"></canvas>",
+          "target": [
+            "#chart12Bulan"
+          ]
+        }
+      ]
+    },
+    {
       "id": "button-name",
       "impact": null,
       "tags": [
@@ -1476,21 +1490,21 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h2 class=\"text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2\">",
+                  "html": "<h2 class=\"text-base font-bold text-slate-900 tracking-tight\">\n          Grafik Deret Waktu 12 Bulan (Model Prakiraan)\n        </h2>",
                   "target": [
                     "h2"
                   ]
                 },
                 {
-                  "html": "<h3 class=\"text-base font-extrabold text-slate-900 tracking-tight\">\n              Analisis Dampak Surplus\n            </h3>",
+                  "html": "<h3 class=\"text-base font-bold text-slate-900 tracking-tight mb-3\">\n            Analisis Dampak Surplus\n          </h3>",
                   "target": [
-                    ".space-y-3 > .gap-2.flex.items-center > h3"
+                    ".sm\\:p-6.p-5.border-slate-200\\/90:nth-child(1) > div > .mb-3"
                   ]
                 },
                 {
-                  "html": "<h3 class=\"text-base font-extrabold text-slate-900 tracking-tight\">\n                Rekomendasi Kebijakan &amp; Koridor Redistribusi\n              </h3>",
+                  "html": "<h3 class=\"text-base font-bold text-slate-900 tracking-tight mb-3\">\n            Rekomendasi Kebijakan &amp; Koridor Redistribusi\n          </h3>",
                   "target": [
-                    ".flex-wrap.gap-2.justify-between > .gap-2.flex.items-center > h3"
+                    ".sm\\:p-6.p-5.border-slate-200\\/90:nth-child(2) > div > .mb-3"
                   ]
                 }
               ],
@@ -1563,7 +1577,7 @@
           "impact": null,
           "html": "<span class=\"font-bold text-base sm:text-lg tracking-tight text-slate-900\">SIPANGAN</span>",
           "target": [
-            ".sm\\:gap-2 > .sm\\:text-lg.text-base.tracking-tight:nth-child(1)"
+            ".sm\\:text-lg.text-base.tracking-tight:nth-child(1)"
           ]
         },
         {
@@ -1588,57 +1602,7 @@
           "impact": null,
           "html": "<span class=\"hidden sm:inline font-bold text-base sm:text-lg tracking-tight text-slate-900\">WASPADA</span>",
           "target": [
-            ".sm\\:inline"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#314158",
-                "bgColor": "#f1f5f9",
-                "contrastRatio": 9.45,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.45"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"hidden md:inline-block px-1.5 py-0.5 text-[10px] sm:text-xs font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded border border-slate-200 shrink-0\">PROTOTIPE</span>",
-          "target": [
-            ".md\\:inline-block"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"hidden xl:block text-xs text-slate-600 font-medium\">Sistem Pemantauan &amp; Early-Warning Surplus Pangan Nasional</p>",
-          "target": [
-            ".xl\\:block"
+            ".sm\\:inline.sm\\:text-lg.hidden"
           ]
         },
         {
@@ -1738,7 +1702,7 @@
           "impact": null,
           "html": "<span>Beranda</span>",
           "target": [
-            ".hover\\:text-emerald-700.min-w-\\[44px\\][href=\"http://127.0.0.1:8099\"] > span"
+            ".min-w-\\[44px\\].hover\\:text-emerald-700[href=\"http://127.0.0.1:8099\"] > span"
           ]
         },
         {
@@ -1763,7 +1727,7 @@
           "impact": null,
           "html": "<a href=\"http://127.0.0.1:8099/peta\" class=\"min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-2.5 text-slate-700 hover:text-emerald-700 font-semibold transition rounded-lg\">\n          Peta\n        </a>",
           "target": [
-            ".hover\\:text-emerald-700.min-w-\\[44px\\][href$=\"peta\"]"
+            ".min-w-\\[44px\\].hover\\:text-emerald-700[href$=\"peta\"]"
           ]
         },
         {
@@ -1788,7 +1752,7 @@
           "impact": null,
           "html": "<a href=\"http://127.0.0.1:8099/wilayah/33?komoditas=beras\" class=\"min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-2.5 text-slate-700 hover:text-emerald-700 font-semibold transition rounded-lg\">\n              Jawa Tengah\n            </a>",
           "target": [
-            ".hover\\:text-emerald-700.min-w-\\[44px\\].rounded-lg:nth-child(5)"
+            ".min-w-\\[44px\\].hover\\:text-emerald-700.rounded-lg:nth-child(5)"
           ]
         },
         {
@@ -1911,7 +1875,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"px-2 py-0.5 rounded-md text-xs font-black bg-amber-200 text-amber-950 uppercase tracking-wide border border-amber-300\">\n            [Data Contoh / Simulasi]\n          </span>",
+          "html": "<span class=\"px-2 py-0.5 rounded-md text-xs font-black bg-amber-200 text-amber-950 uppercase tracking-wide border border-amber-300 shrink-0\">\n          [Data Contoh / Simulasi]\n        </span>",
           "target": [
             ".bg-amber-200"
           ]
@@ -1936,34 +1900,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"font-medium text-slate-700\">\n            Data showcase Kabupaten Banyumas disajikan sebagai simulasi pemantauan rantai pasok pangan.\n          </span>",
+          "html": "<span class=\"font-medium text-slate-700\">\n          Data showcase Kabupaten Banyumas disajikan sebagai simulasi pemantauan rantai pasok pangan.\n        </span>",
           "target": [
-            ".flex-wrap.gap-2.flex > .text-slate-700.font-medium"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#973c00",
-                "bgColor": "#fefbec",
-                "contrastRatio": 6.82,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.82"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-xs text-amber-800 shrink-0 font-bold\">Banyumas (3302) • Beras</span>",
-          "target": [
-            ".text-amber-800"
+            ".p-3 > .text-slate-700.font-medium"
           ]
         },
         {
@@ -1986,9 +1925,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"px-2.5 py-0.5 rounded text-xs font-extrabold uppercase tracking-wide bg-purple-600 text-white\">\n              STATUS: PENUH / SURPLUS\n            </span>",
+          "html": "<span class=\"px-2.5 py-0.5 rounded text-xs font-extrabold uppercase tracking-wide bg-purple-600 text-white\">\n            STATUS: PENUH / SURPLUS\n          </span>",
           "target": [
-            ".tracking-wide.font-extrabold.rounded"
+            ".font-extrabold"
           ]
         },
         {
@@ -2011,84 +1950,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"text-xs font-bold text-slate-800\">\n              Rasio Pasokan: 1.0511 (105,1%)\n            </span>",
+          "html": "<span class=\"text-xs font-bold text-slate-800\">\n            Rasio: 105,1%\n          </span>",
           "target": [
-            ".flex-wrap.gap-2.flex > .text-slate-800.text-xs.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#6e11b0",
-                "bgColor": "#faf6ff",
-                "contrastRatio": 8.3,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.3"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-xs font-semibold text-purple-800\">\n              Batas Aman: 100%\n            </span>",
-          "target": [
-            ".text-purple-800.font-semibold.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#314158",
-                "bgColor": "#faf6ff",
-                "contrastRatio": 9.71,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.71"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed\">\n                          <b>Peringatan Kelebihan Pasokan:</b> Akumulasi pasokan melebihi kapasitas serap di Kabupaten Banyumas.\n                      </p>",
-          "target": [
-            ".sm\\:text-sm"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#314158",
-                "bgColor": "#faf6ff",
-                "contrastRatio": 9.71,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.71"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b>Peringatan Kelebihan Pasokan:</b>",
-          "target": [
-            ".sm\\:text-sm > b"
+            ".gap-2\\.5.flex-wrap.flex > .text-slate-800.text-xs.font-bold"
           ]
         },
         {
@@ -2121,24 +1985,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#45556c",
+                "fgColor": "#62748e",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Total Supply Aktif</span>",
+          "html": "<div class=\"text-xs font-bold uppercase tracking-wider text-slate-500\">\n            Total Supply Aktif\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .tracking-wider.uppercase.justify-between > span"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(1) > div > .tracking-wider.uppercase.text-slate-500"
           ]
         },
         {
@@ -2163,7 +2027,7 @@
           "impact": null,
           "html": "<div class=\"mt-2 text-2xl font-black text-slate-900 tracking-tight tabular-nums\">\n            18.500,0 ton\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .text-2xl.mt-2.font-black"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(1) > div > .mt-2.text-2xl.font-black"
           ]
         },
         {
@@ -2171,24 +2035,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#45556c",
+                "fgColor": "#62748e",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Panen: <b class=\"text-slate-800 font-bold tabular-nums\">15.200,0 ton</b></span>",
+          "html": "<div class=\"mt-1 text-xs text-slate-500\">\n            Akumulasi pasokan berjalan\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(1)"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(1) > div > .mt-1.text-slate-500.text-xs"
           ]
         },
         {
@@ -2196,149 +2060,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d293d",
+                "fgColor": "#62748e",
                 "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold tabular-nums\">15.200,0 ton</b>",
+          "html": "<div class=\"text-xs font-bold uppercase tracking-wider text-slate-500\">\n            Demand Terproyeksi\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(1) > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Stok Awal: <b class=\"text-slate-800 font-bold tabular-nums\">3.100,0 ton</b></span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(3)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#1d293d",
-                "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold tabular-nums\">3.100,0 ton</b>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(3) > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Pengiriman Aktif Masuk: <b class=\"text-slate-800 font-bold tabular-nums\">+200,0 ton</b></span>",
-          "target": [
-            "span:nth-child(5)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#1d293d",
-                "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold tabular-nums\">+200,0 ton</b>",
-          "target": [
-            "span:nth-child(5) > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Demand Terproyeksi</span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .tracking-wider.uppercase.justify-between > span"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(2) > div > .tracking-wider.uppercase.text-slate-500"
           ]
         },
         {
@@ -2363,7 +2102,7 @@
           "impact": null,
           "html": "<div class=\"mt-2 text-2xl font-black text-slate-900 tracking-tight tabular-nums\">\n            17.600,0 ton\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .text-2xl.mt-2.font-black"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(2) > div > .mt-2.text-2xl.font-black"
           ]
         },
         {
@@ -2371,24 +2110,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#45556c",
+                "fgColor": "#62748e",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Konsumsi Domestik: <b class=\"text-slate-800 font-bold tabular-nums\">15.470,0 ton</b></span>",
+          "html": "<div class=\"mt-1 text-xs text-slate-500\">\n            Kebutuhan konsumsi &amp; industri\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(1)"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(2) > div > .mt-1.text-slate-500.text-xs"
           ]
         },
         {
@@ -2396,99 +2135,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d293d",
+                "fgColor": "#62748e",
                 "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold tabular-nums\">15.470,0 ton</b>",
+          "html": "<div class=\"text-xs font-bold uppercase tracking-wider text-slate-500\">\n            Surplus Bersih Kritis\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(1) > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Industri &amp; Cadangan: <b class=\"text-slate-800 font-bold tabular-nums\">1.830,0 ton</b></span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(3)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#1d293d",
-                "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold tabular-nums\">1.830,0 ton</b>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(3) > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Surplus Bersih Kritis</span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(3) > div:nth-child(1) > .tracking-wider.uppercase.justify-between > span"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(3) > div > .tracking-wider.uppercase.text-slate-500"
           ]
         },
         {
@@ -2521,74 +2185,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#45556c",
+                "fgColor": "#62748e",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Rasio Pasokan: <b class=\"text-purple-800 font-bold tabular-nums\">105,1%</b></span>",
+          "html": "<div class=\"mt-1 text-xs text-slate-500\">\n            Kelebihan pasokan terhitung\n          </div>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(3) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#6e11b0",
-                "bgColor": "#ffffff",
-                "contrastRatio": 8.86,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.86"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-purple-800 font-bold tabular-nums\">105,1%</b>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(3) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(1) > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Batas Aman: <b class=\"text-slate-700 font-bold\">100%</b></span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(3) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(3)"
+            ".p-5.border-slate-200\\/90.rounded-2xl:nth-child(3) > div > .mt-1.text-slate-500.text-xs"
           ]
         },
         {
@@ -2611,9 +2225,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<b class=\"text-slate-700 font-bold\">100%</b>",
+          "html": "<span>Rincian Komponen Pasokan &amp; Kebutuhan</span>",
           "target": [
-            ".relative.overflow-hidden.p-5:nth-child(3) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > span:nth-child(3) > b"
+            "summary > span"
           ]
         },
         {
@@ -2624,7 +2238,7 @@
                 "fgColor": "#0f172b",
                 "bgColor": "#ffffff",
                 "contrastRatio": 17.83,
-                "fontSize": "13.5pt (18px)",
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -2636,9 +2250,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Grafik Deret Waktu 12 Bulan (Model Prakiraan Multi-Horizon)</span>",
+          "html": "<h2 class=\"text-base font-bold text-slate-900 tracking-tight\">\n          Grafik Deret Waktu 12 Bulan (Model Prakiraan)\n        </h2>",
           "target": [
-            "h2 > span"
+            "h2"
           ]
         },
         {
@@ -2646,16 +2260,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#314158",
+                "fgColor": "#45556c",
                 "bgColor": "#ffffff",
-                "contrastRatio": 10.35,
+                "contrastRatio": 7.58,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 10.35"
+              "message": "Element has sufficient color contrast of 7.58"
             }
           ],
           "all": [],
@@ -2663,7 +2277,7 @@
           "impact": null,
           "html": "<span>Supply Bergulir</span>",
           "target": [
-            ".gap-1\\.5.text-slate-700.font-medium:nth-child(1) > span:nth-child(2)"
+            ".gap-3\\.5.flex-wrap.text-slate-600 > .gap-1\\.5.flex.items-center:nth-child(1) > span:nth-child(2)"
           ]
         },
         {
@@ -2671,24 +2285,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#314158",
+                "fgColor": "#45556c",
                 "bgColor": "#ffffff",
-                "contrastRatio": 10.35,
+                "contrastRatio": 7.58,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 10.35"
+              "message": "Element has sufficient color contrast of 7.58"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Garis Kebutuhan (Demand)</span>",
+          "html": "<span>Kebutuhan (Demand)</span>",
           "target": [
-            ".gap-1\\.5.text-slate-700.font-medium:nth-child(2) > span:nth-child(2)"
+            ".gap-1\\.5.flex.items-center:nth-child(2) > span:nth-child(2)"
           ]
         },
         {
@@ -2696,16 +2310,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#314158",
+                "fgColor": "#45556c",
                 "bgColor": "#ffffff",
-                "contrastRatio": 10.35,
+                "contrastRatio": 7.58,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 10.35"
+              "message": "Element has sufficient color contrast of 7.58"
             }
           ],
           "all": [],
@@ -2713,32 +2327,7 @@
           "impact": null,
           "html": "<span>Zona Surplus (≥100%)</span>",
           "target": [
-            ".gap-1\\.5.text-slate-700.font-medium:nth-child(3) > span:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#314158",
-                "bgColor": "#f1f5f9",
-                "contrastRatio": 9.45,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.45"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200\">\n            Model Prakiraan v1 (Akurasi: ±14,2%)\n          </span>",
-          "target": [
-            ".gap-3.flex-wrap.text-xs > .bg-slate-100.py-1.rounded-md"
+            ".gap-1\\.5.flex.items-center:nth-child(3) > span:nth-child(2)"
           ]
         },
         {
@@ -2786,84 +2375,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 class=\"text-base font-extrabold text-slate-900 tracking-tight\">\n              Analisis Dampak Surplus\n            </h3>",
+          "html": "<h3 class=\"text-base font-bold text-slate-900 tracking-tight mb-3\">\n            Analisis Dampak Surplus\n          </h3>",
           "target": [
-            ".space-y-3 > .gap-2.flex.items-center > h3"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-xs text-slate-600 leading-relaxed\">\n            Kelebihan pasokan sebesar <b class=\"text-purple-800 font-bold tabular-nums\">+900,0 ton</b> memerlukan penanganan logistik terencana di Banyumas.\n          </p>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(1) > .space-y-3 > .leading-relaxed"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#6e11b0",
-                "bgColor": "#ffffff",
-                "contrastRatio": 8.86,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.86"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-purple-800 font-bold tabular-nums\">+900,0 ton</b>",
-          "target": [
-            ".space-y-3 > .leading-relaxed > b"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#3c0366",
-                "bgColor": "#faf5ff",
-                "contrastRatio": 14,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 14"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"text-xs font-bold text-purple-950 uppercase tracking-wider\">Dampak Wilayah</div>",
-          "target": [
-            ".text-purple-950"
+            ".sm\\:p-6.p-5.border-slate-200\\/90:nth-child(1) > div > .mb-3"
           ]
         },
         {
@@ -2872,123 +2386,23 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#314158",
-                "bgColor": "#faf5ff",
-                "contrastRatio": 9.65,
-                "fontSize": "9.0pt (12px)",
+                "bgColor": "#ffffff",
+                "contrastRatio": 10.35,
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.65"
+              "message": "Element has sufficient color contrast of 10.35"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-xs text-slate-700 leading-relaxed\">\n                  Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.\n                </p>",
+          "html": "<p class=\"text-xs sm:text-sm text-slate-700 leading-relaxed\">\n            Pangan berisiko basi atau terbuang dan menghasilkan emisi gas rumah kaca bila pasokan melebihi kapasitas serap wilayah.\n          </p>",
           "target": [
-            ".space-y-1 > .leading-relaxed"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Status Wilayah: <b class=\"text-purple-800 font-bold ml-1\">Penuh / Surplus</b></span>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(1) > .pt-3.border-slate-100.border-t > span:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#6e11b0",
-                "bgColor": "#ffffff",
-                "contrastRatio": 8.86,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.86"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-purple-800 font-bold ml-1\">Penuh / Surplus</b>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(1) > .pt-3.border-slate-100.border-t > span:nth-child(1) > .ml-1"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Tindakan: <b class=\"text-slate-800 font-bold ml-1\">Redistribusi Pangan</b></span>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(1) > .pt-3.border-slate-100.border-t > span:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#1d293d",
-                "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold ml-1\">Redistribusi Pangan</b>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(1) > .pt-3.border-slate-100.border-t > span:nth-child(2) > .ml-1"
+            "p"
           ]
         },
         {
@@ -3011,59 +2425,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 class=\"text-base font-extrabold text-slate-900 tracking-tight\">\n                Rekomendasi Kebijakan &amp; Koridor Redistribusi\n              </h3>",
+          "html": "<h3 class=\"text-base font-bold text-slate-900 tracking-tight mb-3\">\n            Rekomendasi Kebijakan &amp; Koridor Redistribusi\n          </h3>",
           "target": [
-            ".flex-wrap.gap-2.justify-between > .gap-2.flex.items-center > h3"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#006045",
-                "bgColor": "#d0fae5",
-                "contrastRatio": 6.7,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.7"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800\">\n              Prioritas Logistik\n            </span>",
-          "target": [
-            ".bg-emerald-100.rounded.py-0\\.5"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-xs text-slate-600 leading-relaxed\">\n            Alihkan surplus pasokan ke kabupaten penyangga terdekat yang berstatus defisit di provinsi Jawa Tengah:\n          </p>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(2) > .space-y-3 > .leading-relaxed"
+            ".sm\\:p-6.p-5.border-slate-200\\/90:nth-child(2) > div > .mb-3"
           ]
         },
         {
@@ -3072,15 +2436,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#0f172b",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 17.04,
+                "bgColor": "#ffffff",
+                "contrastRatio": 17.83,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.04"
+              "message": "Element has sufficient color contrast of 17.83"
             }
           ],
           "all": [],
@@ -3088,7 +2452,7 @@
           "impact": null,
           "html": "<span class=\"text-xs font-bold text-slate-900\">Kab. Banjarnegara</span>",
           "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .gap-1.justify-between.flex > .text-slate-900.text-xs.font-bold"
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(1) > .space-y-0\\.5 > .gap-2.flex.items-center > .text-slate-900.text-xs.font-bold"
           ]
         },
         {
@@ -3099,7 +2463,7 @@
                 "fgColor": "#a50036",
                 "bgColor": "#ffe4e6",
                 "contrastRatio": 6.59,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3111,9 +2475,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800\">DEFISIT (68%)</span>",
+          "html": "<span class=\"px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800\">DEFISIT (68%)</span>",
           "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .gap-1.justify-between.flex > .bg-rose-100.text-rose-800.px-2"
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(1) > .space-y-0\\.5 > .gap-2.flex.items-center > .text-\\[11px\\].bg-rose-100.text-rose-800"
           ]
         },
         {
@@ -3122,48 +2486,23 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.76,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
+              "message": "Element has sufficient color contrast of 4.76"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"text-xs text-slate-500 mt-1\">Jarak Logistik: ~42 km (Est. 1 jam 15 mnt)</div>",
+          "html": "<div class=\"text-xs text-slate-500\">\n                    Defisit: <b class=\"text-rose-700 font-semibold tabular-nums\">-1.250 ton</b> • Rekomendasi Alokasi: <b class=\"text-emerald-700 font-semibold tabular-nums\">500,0 ton</b>\n                  </div>",
           "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .mt-1.text-slate-500.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-slate-500\">Defisit:</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(1) > .text-slate-500"
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(1) > .space-y-0\\.5 > .text-slate-500.text-xs"
           ]
         },
         {
@@ -3172,448 +2511,23 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#c70036",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 5.76,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.76"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"font-bold text-rose-700 tabular-nums\">-1.250 ton</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(1) > .text-rose-700.tabular-nums.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-slate-500\">Rekomendasi:</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(2) > .text-slate-500"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#007a55",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 5.12,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.12"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"font-bold text-emerald-700 tabular-nums\">500,0 ton</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(2) > .text-emerald-700.tabular-nums.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#f1f5f9",
-                "contrastRatio": 6.92,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.92"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"w-full min-h-[44px] flex items-center justify-center py-2 px-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600\">\n                      Disposisi Mandat Distributor\n                    </div>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(1) > .pt-1 > .py-2.w-full.bg-slate-100"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0f172b",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 17.04,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.04"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-xs font-bold text-slate-900\">Kab. Kebumen</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .gap-1.justify-between.flex > .text-slate-900.text-xs.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#a50036",
-                "bgColor": "#ffe4e6",
-                "contrastRatio": 6.59,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.59"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800\">DEFISIT (65%)</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .gap-1.justify-between.flex > .bg-rose-100.text-rose-800.px-2"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"text-xs text-slate-500 mt-1\">Jarak Logistik: ~56 km (Est. 1 jam 45 mnt)</div>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .mt-1.text-slate-500.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-slate-500\">Defisit:</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(1) > .text-slate-500"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#c70036",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 5.76,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.76"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"font-bold text-rose-700 tabular-nums\">-1.420 ton</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(1) > .text-rose-700.tabular-nums.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-slate-500\">Rekomendasi:</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(2) > .text-slate-500"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#007a55",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 5.12,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.12"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"font-bold text-emerald-700 tabular-nums\">400,0 ton</span>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > div:nth-child(1) > .pt-2.border-slate-200\\/80.space-y-1 > .justify-between.flex:nth-child(2) > .text-emerald-700.tabular-nums.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#f1f5f9",
-                "contrastRatio": 6.92,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.92"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"w-full min-h-[44px] flex items-center justify-center py-2 px-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600\">\n                      Disposisi Mandat Distributor\n                    </div>",
-          "target": [
-            ".space-y-2\\.5.p-3\\.5.bg-slate-50:nth-child(2) > .pt-1 > .py-2.w-full.bg-slate-100"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0f172b",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 17.04,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.04"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"text-xs font-bold text-slate-900\">Pool Armada Terdekat: Sub-Depo PT Logistik Pangan Banyumas</div>",
-          "target": [
-            "div:nth-child(2) > .text-slate-900.text-xs.font-bold"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#62748e",
-                "bgColor": "#f8fafc",
-                "contrastRatio": 4.55,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.55"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"text-xs text-slate-500\">Kapasitas angkut terdistribusi untuk pengalihan surplus antar-wilayah.</div>",
-          "target": [
-            "div:nth-child(2) > .text-slate-500.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#314158",
-                "bgColor": "#f1f5f9",
-                "contrastRatio": 9.45,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 9.45"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"min-h-[44px] px-4 py-2 inline-flex items-center justify-center rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 shrink-0\">\n                Khusus Operator Logistik\n              </span>",
-          "target": [
-            ".py-2.bg-slate-100.shrink-0"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
+                "contrastRatio": 6.03,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
+              "message": "Element has sufficient color contrast of 6.03"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Rekomendasi Rute: <b class=\"text-slate-800 font-bold ml-1\">Terbuka</b></span>",
+          "html": "<b class=\"text-rose-700 font-semibold tabular-nums\">-1.250 ton</b>",
           "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(2) > .pt-3.border-slate-100.border-t > span:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#1d293d",
-                "bgColor": "#ffffff",
-                "contrastRatio": 14.61,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.61"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<b class=\"text-slate-800 font-bold ml-1\">Terbuka</b>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(2) > .pt-3.border-slate-100.border-t > span:nth-child(1) > .ml-1"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#45556c",
-                "bgColor": "#ffffff",
-                "contrastRatio": 7.58,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.58"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Target Serapan: <b class=\"text-emerald-700 font-bold ml-1 tabular-nums\">900,0 ton</b></span>",
-          "target": [
-            ".sm\\:p-6.space-y-4.p-5:nth-child(2) > .pt-3.border-slate-100.border-t > span:nth-child(2)"
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(1) > .space-y-0\\.5 > .text-slate-500.text-xs > .text-rose-700"
           ]
         },
         {
@@ -3625,7 +2539,7 @@
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.36,
                 "fontSize": "9.0pt (12px)",
-                "fontWeight": "bold",
+                "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
@@ -3636,9 +2550,234 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<b class=\"text-emerald-700 font-bold ml-1 tabular-nums\">900,0 ton</b>",
+          "html": "<b class=\"text-emerald-700 font-semibold tabular-nums\">500,0 ton</b>",
           "target": [
-            ".ml-1.text-emerald-700"
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(1) > .space-y-0\\.5 > .text-slate-500.text-xs > .text-emerald-700"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#45556c",
+                "bgColor": "#f1f5f9",
+                "contrastRatio": 6.92,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.92"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"min-h-[44px] flex items-center justify-center py-2 px-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600\">\n                      Disposisi Mandat Distributor\n                    </div>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(1) > .shrink-0 > .py-2.bg-slate-100.justify-center"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0f172b",
+                "bgColor": "#ffffff",
+                "contrastRatio": 17.83,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"text-xs font-bold text-slate-900\">Kab. Kebumen</span>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(2) > .space-y-0\\.5 > .gap-2.flex.items-center > .text-slate-900.text-xs.font-bold"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a50036",
+                "bgColor": "#ffe4e6",
+                "contrastRatio": 6.59,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.59"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800\">DEFISIT (65%)</span>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(2) > .space-y-0\\.5 > .gap-2.flex.items-center > .text-\\[11px\\].bg-rose-100.text-rose-800"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#62748e",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.76,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.76"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"text-xs text-slate-500\">\n                    Defisit: <b class=\"text-rose-700 font-semibold tabular-nums\">-1.420 ton</b> • Rekomendasi Alokasi: <b class=\"text-emerald-700 font-semibold tabular-nums\">400,0 ton</b>\n                  </div>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(2) > .space-y-0\\.5 > .text-slate-500.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#c70036",
+                "bgColor": "#ffffff",
+                "contrastRatio": 6.03,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.03"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<b class=\"text-rose-700 font-semibold tabular-nums\">-1.420 ton</b>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(2) > .space-y-0\\.5 > .text-slate-500.text-xs > .text-rose-700"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#007a55",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.36,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.36"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<b class=\"text-emerald-700 font-semibold tabular-nums\">400,0 ton</b>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(2) > .space-y-0\\.5 > .text-slate-500.text-xs > .text-emerald-700"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#45556c",
+                "bgColor": "#f1f5f9",
+                "contrastRatio": 6.92,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.92"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"min-h-[44px] flex items-center justify-center py-2 px-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-600\">\n                      Disposisi Mandat Distributor\n                    </div>",
+          "target": [
+            ".first\\:pt-0.last\\:pb-0.sm\\:items-center:nth-child(2) > .shrink-0 > .py-2.bg-slate-100.justify-center"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0f172b",
+                "bgColor": "#ffffff",
+                "contrastRatio": 17.83,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"font-bold text-slate-900\">Pool Armada Terdekat: Sub-Depo PT Logistik Pangan Banyumas</span>",
+          "target": [
+            ".mt-4 > div > .text-slate-900.font-bold"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#62748e",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.76,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.76"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"text-slate-500 block sm:inline sm:ml-1\">• Kapasitas terdistribusi untuk pengalihan surplus</span>",
+          "target": [
+            ".block"
           ]
         },
         {
@@ -3661,7 +2800,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>© 2026 SIPANGAN WASPADA • Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>",
+          "html": "<span>© 2026 SIPANGAN WASPADA (Prototipe) • Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>",
           "target": [
             ".py-3\\.5 > div:nth-child(1) > span"
           ]
@@ -3940,6 +3079,13 @@
               "relatedNodes": [],
               "impact": "serious",
               "message": "Element has text that is visible to screen readers"
+            },
+            {
+              "id": "non-empty-title",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has a title attribute"
             }
           ],
           "all": [],
@@ -3953,9 +3099,9 @@
             }
           ],
           "impact": null,
-          "html": "<a href=\"http://127.0.0.1:8099\" class=\"min-h-[44px] flex items-center gap-2.5 sm:gap-3 group min-w-0\">",
+          "html": "<a href=\"http://127.0.0.1:8099\" class=\"min-h-[44px] flex items-center gap-2.5 sm:gap-3 group min-w-0\" title=\"SIPANGAN WASPADA (Prototipe)\">",
           "target": [
-            ".group"
+            "a[title=\"SIPANGAN WASPADA (Prototipe)\"]"
           ]
         },
         {
@@ -4059,7 +3205,7 @@
           "impact": null,
           "html": "<a href=\"http://127.0.0.1:8099\" class=\"min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 px-2.5 text-slate-700 hover:text-emerald-700 font-semibold transition rounded-lg\">",
           "target": [
-            ".hover\\:text-emerald-700.min-w-\\[44px\\][href=\"http://127.0.0.1:8099\"]"
+            ".min-w-\\[44px\\].hover\\:text-emerald-700[href=\"http://127.0.0.1:8099\"]"
           ]
         },
         {
@@ -4085,7 +3231,7 @@
           "impact": null,
           "html": "<a href=\"http://127.0.0.1:8099/peta\" class=\"min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-2.5 text-slate-700 hover:text-emerald-700 font-semibold transition rounded-lg\">\n          Peta\n        </a>",
           "target": [
-            ".hover\\:text-emerald-700.min-w-\\[44px\\][href$=\"peta\"]"
+            ".min-w-\\[44px\\].hover\\:text-emerald-700[href$=\"peta\"]"
           ]
         },
         {
@@ -4111,7 +3257,7 @@
           "impact": null,
           "html": "<a href=\"http://127.0.0.1:8099/wilayah/33?komoditas=beras\" class=\"min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-2.5 text-slate-700 hover:text-emerald-700 font-semibold transition rounded-lg\">\n              Jawa Tengah\n            </a>",
           "target": [
-            ".hover\\:text-emerald-700.min-w-\\[44px\\].rounded-lg:nth-child(5)"
+            ".min-w-\\[44px\\].hover\\:text-emerald-700.rounded-lg:nth-child(5)"
           ]
         },
         {
@@ -4282,6 +3428,24 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<summary class=\"cursor-pointer text-xs font-bold text-slate-700 hover:text-emerald-700 flex items-center justify-between select-none\">",
+          "target": [
+            "summary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<button type=\"button\" onclick=\"toggleTabel12Bulan()\" id=\"btn-toggle-tabel-12\" aria-expanded=\"false\" aria-controls=\"container-tabel-12-b...\" class=\"w-full min-h-[44px] ...\">",
           "target": [
             "#btn-toggle-tabel-12"
@@ -4346,6 +3510,44 @@
           ]
         }
       ]
+    },
+    {
+      "id": "summary-name",
+      "impact": null,
+      "tags": [
+        "cat.name-role-value",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT6.a",
+        "EN-301-549",
+        "EN-9.4.1.2"
+      ],
+      "description": "Ensure summary elements have discernible text",
+      "help": "Summary elements must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/summary-name?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<summary class=\"cursor-pointer text-xs font-bold text-slate-700 hover:text-emerald-700 flex items-center justify-between select-none\">",
+          "target": [
+            "summary"
+          ]
+        }
+      ]
     }
   ],
   "incomplete": [
@@ -4386,184 +3588,6 @@
           "html": "<div class=\"w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-black text-lg bg-purple-600 text-white\">\n          ◆\n        </div>",
           "target": [
             ".text-lg"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content contains only non-text characters"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#cad5e2",
-                "bgColor": "#ffffff",
-                "contrastRatio": 1.48,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "shortTextContent",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<div class=\"bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between\">",
-                  "target": [
-                    ".relative.overflow-hidden.p-5:nth-child(1)"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element content is too short to determine if it is actual text content"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span class=\"text-slate-300\">·</span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(1) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > .text-slate-300:nth-child(2)"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content is too short to determine if it is actual text content"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#cad5e2",
-                "bgColor": "#ffffff",
-                "contrastRatio": 1.48,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "shortTextContent",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<div class=\"bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between\">",
-                  "target": [
-                    ".relative.overflow-hidden.p-5:nth-child(1)"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element content is too short to determine if it is actual text content"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span class=\"text-slate-300\">·</span>",
-          "target": [
-            ".text-slate-300:nth-child(4)"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content is too short to determine if it is actual text content"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#cad5e2",
-                "bgColor": "#ffffff",
-                "contrastRatio": 1.48,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "shortTextContent",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<div class=\"bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between\">",
-                  "target": [
-                    ".relative.overflow-hidden.p-5:nth-child(2)"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element content is too short to determine if it is actual text content"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span class=\"text-slate-300\">·</span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(2) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > .text-slate-300"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content is too short to determine if it is actual text content"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "messageKey": "nonBmp"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element content contains only non-text characters"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<div class=\"w-6 h-6 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-xs\">\n              ◆\n            </div>",
-          "target": [
-            ".w-6"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content contains only non-text characters"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#cad5e2",
-                "bgColor": "#ffffff",
-                "contrastRatio": 1.48,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "shortTextContent",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<div class=\"bg-white rounded-2xl p-5 shadow-2xs border border-slate-200/90 relative overflow-hidden flex flex-col justify-between\">",
-                  "target": [
-                    ".relative.overflow-hidden.p-5:nth-child(3)"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element content is too short to determine if it is actual text content"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span class=\"text-slate-300\">·</span>",
-          "target": [
-            ".relative.overflow-hidden.p-5:nth-child(3) > div:nth-child(1) > .mt-3.pt-2\\.5.border-slate-100 > .text-slate-300"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content is too short to determine if it is actual text content"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "messageKey": "nonBmp"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element content contains only non-text characters"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<div class=\"w-8 h-8 rounded-lg bg-purple-200 text-purple-900 flex items-center justify-center font-bold text-sm shrink-0\">\n                ◆\n              </div>",
-          "target": [
-            ".bg-purple-200"
           ],
           "failureSummary": "Fix any of the following:\n  Element content contains only non-text characters"
         }
