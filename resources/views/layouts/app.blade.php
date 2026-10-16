@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? config('app.name', 'SIPANGAN WASPADA') }}</title>
+    <title>{{ $title ?? config('app.name', 'PRANALA PANGAN') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,7 +22,7 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Brand / Logo -->
                 <div class="flex items-center gap-3 min-w-0">
-                    <a href="{{ url('/') }}" class="min-h-[44px] flex items-center gap-2.5 sm:gap-3 group min-w-0" title="SIPANGAN WASPADA (Prototipe)">
+                    <a href="{{ url('/') }}" class="min-h-[44px] flex items-center gap-2.5 sm:gap-3 group min-w-0" title="PRANALA PANGAN (Prototipe)">
                         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-700 flex items-center justify-center text-white shadow-sm ring-1 ring-emerald-800/10 shrink-0 transition-transform group-hover:scale-105">
                             <!-- Emblem Logo Pangan -->
                             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -33,8 +33,8 @@
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-1.5 sm:gap-2">
-                                <span class="font-bold text-base sm:text-lg tracking-tight text-slate-900">SIPANGAN</span>
-                                <span class="hidden sm:inline font-bold text-base sm:text-lg tracking-tight text-slate-900">WASPADA</span>
+                                <span class="font-bold text-base sm:text-lg tracking-tight text-slate-900">PRANALA</span>
+                                <span class="hidden sm:inline font-bold text-base sm:text-lg tracking-tight text-slate-900">PANGAN</span>
                             </div>
                         </div>
                     </a>
@@ -186,7 +186,7 @@
     <footer class="mt-auto bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600">
             <div>
-                <span>&copy; {{ date('Y') }} SIPANGAN WASPADA (Prototipe) &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
+                <span>&copy; {{ date('Y') }} PRANALA PANGAN (Prototipe) &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
             </div>
             <div class="text-xs text-slate-500 font-medium">
                 <span>Diperbarui otomatis tiap 15 menit</span>

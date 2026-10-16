@@ -878,7 +878,7 @@ async function muatStatusData() {
   try {
     await renderMapLayer();
   } catch (geoErr) {
-    console.warn('[SIPANGAN] Base map frame loading:', geoErr);
+    console.warn('[PRANALA PANGAN] Base map frame loading:', geoErr);
   }
 
   try {
@@ -907,7 +907,7 @@ async function muatStatusData() {
       updatePanelWilayah(state.selectedKode);
     }
   } catch (err) {
-    console.error('[SIPANGAN] Gagal memuat status data:', err);
+    console.error('[PRANALA PANGAN] Gagal memuat status data:', err);
     if (errorEl) {
       errorEl.classList.remove('hidden');
       const msgEl = document.getElementById('peta-error-msg');
