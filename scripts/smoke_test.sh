@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # Repeatable Smoke Test Script for PRD Demo Flow (Section 16)
-# SIPANGAN WASPADA - Verified Cleanup Audit Baseline
+# PRANALA PANGAN - Verified Cleanup Audit Baseline
 # ==============================================================================
 set -euo pipefail
 
 PORT=${SMOKE_PORT:-8099}
 BASE_URL="http://127.0.0.1:${PORT}"
-COOKIE_JAR=$(mktemp /tmp/sipangan_cookies_XXXXXX.txt)
-RESPONSE_BODY=$(mktemp /tmp/sipangan_resp_XXXXXX.html)
-RESPONSE_HEADERS=$(mktemp /tmp/sipangan_headers_XXXXXX.txt)
+COOKIE_JAR=$(mktemp /tmp/pranala_cookies_XXXXXX.txt)
+RESPONSE_BODY=$(mktemp /tmp/pranala_resp_XXXXXX.html)
+RESPONSE_HEADERS=$(mktemp /tmp/pranala_headers_XXXXXX.txt)
 CREDENTIALS_FILE=".audit-credentials"
 
 cleanup() {
@@ -21,7 +21,7 @@ cleanup() {
 trap cleanup EXIT
 
 echo "======================================================================"
-echo "SIPANGAN WASPADA - SMOKE TEST (PRD Demo Flow Section 16)"
+echo "PRANALA PANGAN - SMOKE TEST (PRD Demo Flow Section 16)"
 echo "Base URL: ${BASE_URL}"
 echo "======================================================================"
 
