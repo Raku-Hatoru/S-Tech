@@ -1,8 +1,8 @@
-# PRD: PRANALA PANGAN — Sistem Pemantauan & Early-Warning Surplus Pangan (Web)
+# PRD: Sistem Pemantauan & Early-Warning Surplus Pangan (Web)
 
 | Item | Detail |
 |---|---|
-| **Nama produk** | PRANALA PANGAN (sebelumnya SIPANGAN WASPADA) |
+| **Nama produk** | [TBD] – ditentukan sendiri oleh tim |
 | **Jenis produk** | Aplikasi web **pemantauan dan pelacakan** (bukan aplikasi jual-beli) |
 | **Versi / status** | v1.1 – Siap dikerjakan (masih ada 2 pertanyaan kecil di bagian 19) |
 | **Tanggal** | 10 Oktober 2026 |

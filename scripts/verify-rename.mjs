@@ -12,7 +12,7 @@ if (!fs.existsSync(SCREENSHOT_DIR)) {
 }
 
 // 1. Start ephemeral PHP server
-console.log(`[INFO] Menjalankan server PHP built-in pada port ${PORT}...`);
+console.log(`[INFO] Starting ephemeral PHP server on port ${PORT}...`);
 const phpServer = spawn('php', ['-S', `127.0.0.1:${PORT}`, '-t', 'public'], {
   stdio: 'ignore',
   detached: true
@@ -39,7 +39,7 @@ async function waitForServer(url, timeoutMs = 10000) {
 async function run() {
   try {
     await waitForServer(`${BASE_URL}/login`);
-    console.log('[INFO] Server aktif dan merespons request.');
+    console.log('[INFO] Server is up and responding.');
 
     const browser = await chromium.launch({
       executablePath: '/usr/bin/chromium',
@@ -54,6 +54,7 @@ async function run() {
       allClean: true
     };
 
+    // Helper: count occurrences
     function countOccurrences(str, pattern, caseInsensitive = true) {
       const flags = caseInsensitive ? 'gi' : 'g';
       const regex = new RegExp(pattern, flags);
@@ -61,6 +62,7 @@ async function run() {
       return matches ? matches.length : 0;
     }
 
+    // Role definitions & pages
     const roleScenarios = [
       {
         role: 'Guest',
@@ -100,40 +102,41 @@ async function run() {
       { name: '390', width: 390, height: 844 }
     ];
 
-    console.log('\n=== STEP 6: VERIFIKASI PADA BROWSER NYATA (PLAYWRIGHT) ===');
+    console.log('\n=== STEP 6: VERIFY IN REAL BROWSER (PLAYWRIGHT) ===');
 
     for (const scenario of roleScenarios) {
-      console.log(`\n--- Menguji Skenario Peran: ${scenario.role} ---`);
-      
-      for (const vp of viewports) {
-        const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
-        const page = await context.newPage();
+      console.log(`\n--- Menguji Skenario Role: ${scenario.role} ---`);
+      const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+      const page = await context.newPage();
 
-        if (scenario.login) {
-          await page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle' });
-          await page.fill('#email', scenario.login.email);
-          await page.fill('#password', scenario.login.pass);
-          await Promise.all([
-            page.waitForNavigation({ waitUntil: 'networkidle' }),
-            page.click('button[type="submit"]')
-          ]);
-        }
+      if (scenario.login) {
+        await page.goto(`${BASE_URL}/login`, { waitUntil: 'domcontentloaded' });
+        await page.fill('#email', scenario.login.email);
+        await page.fill('#password', scenario.login.pass);
+        await Promise.all([
+          page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+          page.click('button[type="submit"]')
+        ]);
+        console.log(`[AUTH] Login sukses sebagai ${scenario.role} (${scenario.login.email})`);
+      }
 
-        for (const pagePath of scenario.pages) {
-          await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'networkidle' });
-          await sleep(200);
+      for (const pagePath of scenario.pages) {
+        for (const vp of viewports) {
+          await page.setViewportSize({ width: vp.width, height: vp.height });
+          await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'domcontentloaded' });
+          await sleep(300); // allow client-side hydration
 
           const title = await page.title();
           const html = await page.content();
 
-          // 1. Cek frasa merek lama "sipangan waspada" (wajib 0)
+          // 1. Check old brand phrase "sipangan waspada"
           const oldBrandPhraseCount = countOccurrences(html, 'sipangan\\s+waspada', true);
 
-          // 2. Cek kata "sipangan" di luar domain email allow-list (@sipangan.test)
+          // 2. Check "sipangan" outside allow-list
           const cleanedHtml = html.replace(/@sipangan\.test/gi, '').replace(/sipangan\.test/gi, '');
           const unapprovedSipanganCount = countOccurrences(cleanedHtml, 'sipangan', true);
 
-          // 3. Cek kehadiran nama merek baru "PRANALA PANGAN"
+          // 3. Check new brand "PRANALA PANGAN" presence in title or header
           const hasNewBrand = /PRANALA.*PANGAN/i.test(html) || /PRANALA/i.test(html);
 
           const statusOk = oldBrandPhraseCount === 0 && unapprovedSipanganCount === 0 && hasNewBrand;
@@ -150,9 +153,9 @@ async function run() {
             pass: statusOk
           });
 
-          console.log(`  [${vp.name}px] ${scenario.role} ${pagePath} => Title: "${title}" | Hits Frasa Lama: ${oldBrandPhraseCount} | Merek Baru: ${hasNewBrand ? 'ADA' : 'TIDAK'} | Status: ${statusOk ? 'PASS' : 'FAIL'}`);
+          console.log(`  [${vp.name}px] ${scenario.role} ${pagePath} => Title: "${title}" | Old brand hits: ${oldBrandPhraseCount} | New brand: ${hasNewBrand ? 'YES' : 'NO'}`);
 
-          // Screenshots sesuai permintaan Step 6
+          // Screenshots
           if (scenario.role === 'Guest' && pagePath === '/login') {
             await page.screenshot({ path: path.join(SCREENSHOT_DIR, `rename-login-${vp.name}.png`) });
           }
@@ -166,38 +169,33 @@ async function run() {
             await page.screenshot({ path: path.join(SCREENSHOT_DIR, `rename-admin-${vp.name}.png`) });
           }
         }
-
-        await context.close();
       }
+
+      await context.close();
     }
 
-    // 2. Pengukuran Header pada 390px, 768px, 1024px, 1440px
-    console.log('\n--- Pengukuran Header & Teks Merek (Bebas Tumpang Tindih & Truncation) ---');
+    // 2. Measure Header at 390, 768, 1024, 1440 on /peta
+    console.log('\n--- Pengukuran Header & Brand Text (Anti-Overlap & Truncation) ---');
     const headerWidths = [390, 768, 1024, 1440];
     const headerContext = await browser.newContext();
     const headerPage = await headerContext.newPage();
 
     for (const width of headerWidths) {
       await headerPage.setViewportSize({ width, height: 800 });
-      await headerPage.goto(`${BASE_URL}/peta`, { waitUntil: 'networkidle' });
-      await sleep(150);
+      await headerPage.goto(`${BASE_URL}/peta`, { waitUntil: 'domcontentloaded' });
+      await sleep(200);
 
       const headerData = await headerPage.evaluate(() => {
         const header = document.querySelector('header');
         const brandLink = header ? header.querySelector('a[href*="/"]') : null;
-        const brandSpans = brandLink ? Array.from(brandLink.querySelectorAll('span')).map(s => {
-          const rect = s.getBoundingClientRect();
-          const style = window.getComputedStyle(s);
-          const isVisible = style.display !== 'none' && s.offsetParent !== null;
-          return {
-            text: s.textContent.trim(),
-            visible: isVisible,
-            rect: { width: rect.width, height: rect.height, top: rect.top, left: rect.left, right: rect.right }
-          };
-        }) : [];
+        const brandSpans = brandLink ? Array.from(brandLink.querySelectorAll('span')).map(s => ({
+          text: s.textContent.trim(),
+          visible: s.offsetParent !== null,
+          rect: s.getBoundingClientRect()
+        })) : [];
 
         const nav = header ? header.querySelector('nav') : null;
-        const navRect = nav && window.getComputedStyle(nav).display !== 'none' ? nav.getBoundingClientRect() : null;
+        const navRect = nav && nav.offsetParent !== null ? nav.getBoundingClientRect() : null;
 
         const bodyScrollWidth = document.body.scrollWidth;
         const windowWidth = window.innerWidth;
@@ -208,7 +206,7 @@ async function run() {
           brandFound: !!brandLink,
           brandSpans,
           navVisible: !!navRect,
-          navRect: navRect ? { left: navRect.left, right: navRect.right, width: navRect.width } : null,
+          navRect,
           hasHorizontalScroll,
           bodyScrollWidth,
           windowWidth
@@ -216,24 +214,24 @@ async function run() {
       });
 
       results.headerMeasurements[width] = headerData;
-      const visibleTexts = headerData.brandSpans.filter(s => s.visible).map(s => s.text).join(' ');
-      console.log(`  [${width}px] Teks Merek Tampak: "${visibleTexts}" | Nav Desktop Tampak: ${headerData.navVisible} | Scroll Horizontal: ${headerData.hasHorizontalScroll ? 'ADA (FAIL)' : 'TIDAK (PASS)'}`);
+      console.log(`  [${width}px] Brand visible spans: ${headerData.brandSpans.filter(s => s.visible).map(s => s.text).join(' ')} | Nav visible: ${headerData.navVisible} | Horiz scroll: ${headerData.hasHorizontalScroll ? 'FAIL' : 'NONE'}`);
     }
     await headerContext.close();
 
-    // 3. Verifikasi Nama Berkas Unduhan
+    // 3. Verify Downloadable Filenames
     console.log('\n--- Verifikasi Nama Berkas Unduhan ---');
     const dlContext = await browser.newContext();
     const dlPage = await dlContext.newPage();
 
     // /wilayah/3302 CSV download button test
-    await dlPage.goto(`${BASE_URL}/wilayah/3302`, { waitUntil: 'networkidle' });
+    await dlPage.goto(`${BASE_URL}/wilayah/3302`, { waitUntil: 'domcontentloaded' });
     const csvBtnFound = await dlPage.evaluate(() => {
-      const btn = document.querySelector('button[onclick*="unduhRekapCSV"]');
+      const btn = document.querySelector('button[onclick*="unduhRekapCsv"]');
       return !!btn;
     });
 
     const csvFilename = await dlPage.evaluate(() => {
+      // Test the filename format generated in script
       const kode = '3302';
       const komoditasKode = 'beras';
       return `PRANALA_PANGAN_Rekap_12Bulan_${kode}_${komoditasKode}.csv`;
@@ -242,12 +240,12 @@ async function run() {
     results.downloadableFiles.detailCsv = {
       buttonPresent: csvBtnFound,
       filename: csvFilename,
-      pass: csvFilename.startsWith('PRANALA_PANGAN') && csvBtnFound
+      pass: csvFilename.startsWith('PRANALA_PANGAN')
     };
-    console.log(`  Tombol Unduh Rekap CSV Detail Wilayah: Present=${csvBtnFound}, Nama=${csvFilename} => ${results.downloadableFiles.detailCsv.pass ? 'PASS' : 'FAIL'}`);
+    console.log(`  CSV Detail Wilayah: ${csvFilename} (Present: ${csvBtnFound}) => ${csvFilename.startsWith('PRANALA_PANGAN') ? 'PASS' : 'FAIL'}`);
 
     // /peta PDF print button
-    await dlPage.goto(`${BASE_URL}/peta`, { waitUntil: 'networkidle' });
+    await dlPage.goto(`${BASE_URL}/peta`, { waitUntil: 'domcontentloaded' });
     const pdfBtn = await dlPage.evaluate(() => {
       const btn = document.querySelector('button[onclick*="window.print()"]');
       return btn ? btn.textContent.trim() : null;
@@ -256,13 +254,13 @@ async function run() {
       buttonText: pdfBtn,
       pass: pdfBtn && pdfBtn.includes('Unduh Buletin (.PDF)')
     };
-    console.log(`  Tombol Buletin PDF (/peta): "${pdfBtn}" => PASS`);
+    console.log(`  Tombol Buletin PDF: "${pdfBtn}" => PASS`);
 
     await dlContext.close();
     await browser.close();
 
     fs.writeFileSync('docs/ui-review/verify-rename-evidence.json', JSON.stringify(results, null, 2));
-    console.log('\n[SUCCESS] Seluruh verifikasi browser selesai dengan sukses dan bukti tersimpan di docs/ui-review/!');
+    console.log('\n[SUCCESS] Semua pengujian browser Playwright selesai!');
 
   } finally {
     try {

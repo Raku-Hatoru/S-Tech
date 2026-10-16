@@ -56,7 +56,7 @@ class DemoShipmentSeeder extends Seeder
             ['shipment_id' => $shipment1->id, 'status' => ShipmentStatus::Dibuat->value],
             [
                 'lokasi' => 'Pusat Dispatch Cilacap',
-                'keterangan' => 'Pengiriman didaftarkan di sistem PRANALA PANGAN.',
+                'keterangan' => 'Pengiriman didaftarkan di sistem SIPANGAN WASPADA.',
                 'waktu_kejadian' => Carbon::now()->subDays(2)->setHour(8)->setMinute(30),
                 'dicatat_oleh' => $distributor->id,
             ]

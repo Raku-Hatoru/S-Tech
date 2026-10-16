@@ -101,7 +101,7 @@ class PlantingController extends Controller
                 ."   • Catatan: {$item->catatan_agronomi}\n\n";
         }
 
-        $waText .= "Sumber: PRANALA PANGAN - BUMDes {$kabupaten->nama}";
+        $waText .= "Sumber: SIPANGAN WASPADA - BUMDes {$kabupaten->nama}";
         $waLink = 'https://api.whatsapp.com/send?text='.urlencode($waText);
 
         return view('jadwal-tanam.index', compact(

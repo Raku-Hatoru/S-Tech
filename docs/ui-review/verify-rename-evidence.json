@@ -1,0 +1,602 @@
+{
+  "pagesChecked": [
+    {
+      "role": "Guest",
+      "path": "/peta",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Guest",
+      "path": "/wilayah/3302",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Guest",
+      "path": "/login",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Guest",
+      "path": "/peta",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Guest",
+      "path": "/wilayah/3302",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Guest",
+      "path": "/login",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/peta",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/wilayah/3302",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/pengiriman",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/pengiriman/buat",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/pengiriman/1",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/peta",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/wilayah/3302",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/pengiriman",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/pengiriman/buat",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Distributor",
+      "path": "/pengiriman/1",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/peta",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/wilayah/3302",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/panen",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/jadwal-tanam",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/peta",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/wilayah/3302",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/panen",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "BUMDes",
+      "path": "/jadwal-tanam",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/peta",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/wilayah/3302",
+      "viewport": "1440",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/pengguna",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/pengguna/buat",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/dataset",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/forecast",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/pengaturan",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/pengiriman",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/panen",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/jadwal-tanam",
+      "viewport": "1440",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/peta",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/wilayah/3302",
+      "viewport": "390",
+      "title": "PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/pengguna",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/pengguna/buat",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/dataset",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/forecast",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/admin/pengaturan",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/pengiriman",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/panen",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    },
+    {
+      "role": "Admin",
+      "path": "/jadwal-tanam",
+      "viewport": "390",
+      "title": "Masuk — PRANALA PANGAN",
+      "oldBrandPhraseCount": 0,
+      "unapprovedSipanganCount": 0,
+      "hasNewBrand": true,
+      "pass": true
+    }
+  ],
+  "headerMeasurements": {
+    "390": {
+      "headerFound": true,
+      "brandFound": true,
+      "brandSpans": [
+        {
+          "text": "PRANALA",
+          "visible": true,
+          "rect": {
+            "width": 74.859375,
+            "height": 24,
+            "top": 28,
+            "left": 66,
+            "right": 140.859375
+          }
+        },
+        {
+          "text": "PANGAN",
+          "visible": false,
+          "rect": {
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "left": 0,
+            "right": 0
+          }
+        }
+      ],
+      "navVisible": false,
+      "navRect": null,
+      "hasHorizontalScroll": false,
+      "bodyScrollWidth": 390,
+      "windowWidth": 390
+    },
+    "768": {
+      "headerFound": true,
+      "brandFound": true,
+      "brandSpans": [
+        {
+          "text": "PRANALA",
+          "visible": true,
+          "rect": {
+            "width": 84.21875,
+            "height": 28,
+            "top": 26,
+            "left": 80,
+            "right": 164.21875
+          }
+        },
+        {
+          "text": "PANGAN",
+          "visible": true,
+          "rect": {
+            "width": 73.65625,
+            "height": 28,
+            "top": 26,
+            "left": 172.21875,
+            "right": 245.875
+          }
+        }
+      ],
+      "navVisible": true,
+      "navRect": {
+        "left": 304.703125,
+        "right": 591.515625,
+        "width": 286.8125
+      },
+      "hasHorizontalScroll": false,
+      "bodyScrollWidth": 768,
+      "windowWidth": 768
+    },
+    "1024": {
+      "headerFound": true,
+      "brandFound": true,
+      "brandSpans": [
+        {
+          "text": "PRANALA",
+          "visible": true,
+          "rect": {
+            "width": 84.21875,
+            "height": 28,
+            "top": 26,
+            "left": 88,
+            "right": 172.21875
+          }
+        },
+        {
+          "text": "PANGAN",
+          "visible": true,
+          "rect": {
+            "width": 73.65625,
+            "height": 28,
+            "top": 26,
+            "left": 180.21875,
+            "right": 253.875
+          }
+        }
+      ],
+      "navVisible": true,
+      "navRect": {
+        "left": 432.703125,
+        "right": 719.515625,
+        "width": 286.8125
+      },
+      "hasHorizontalScroll": false,
+      "bodyScrollWidth": 1024,
+      "windowWidth": 1024
+    },
+    "1440": {
+      "headerFound": true,
+      "brandFound": true,
+      "brandSpans": [
+        {
+          "text": "PRANALA",
+          "visible": true,
+          "rect": {
+            "width": 84.21875,
+            "height": 28,
+            "top": 26,
+            "left": 168,
+            "right": 252.21875
+          }
+        },
+        {
+          "text": "PANGAN",
+          "visible": true,
+          "rect": {
+            "width": 73.65625,
+            "height": 28,
+            "top": 26,
+            "left": 260.21875,
+            "right": 333.875
+          }
+        }
+      ],
+      "navVisible": true,
+      "navRect": {
+        "left": 640.703125,
+        "right": 927.515625,
+        "width": 286.8125
+      },
+      "hasHorizontalScroll": false,
+      "bodyScrollWidth": 1440,
+      "windowWidth": 1440
+    }
+  },
+  "downloadableFiles": {
+    "detailCsv": {
+      "buttonPresent": true,
+      "filename": "PRANALA_PANGAN_Rekap_12Bulan_3302_beras.csv",
+      "pass": true
+    },
+    "pdfButton": {
+      "buttonText": "Unduh Buletin (.PDF)",
+      "pass": true
+    }
+  },
+  "allClean": true
+}

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Masuk — {{ config('app.name', 'PRANALA PANGAN') }}</title>
+    <title>Masuk — {{ config('app.name', 'SIPANGAN WASPADA') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -24,7 +24,7 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="font-bold text-base tracking-tight text-slate-900">PRANALA PANGAN</span>
+                        <span class="font-bold text-base tracking-tight text-slate-900">SIPANGAN WASPADA</span>
                     </div>
                 </a>
                 <div class="flex items-center gap-4 text-xs font-medium text-slate-600">
@@ -145,7 +145,7 @@
         {{-- Footer Resmi --}}
         <footer class="bg-white border-t border-slate-200/90">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600 font-medium">
-                <span>&copy; {{ date('Y') }} PRANALA PANGAN &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
+                <span>&copy; {{ date('Y') }} SIPANGAN WASPADA &bull; Sistem pemantauan dini pasokan pangan; bukan platform jual-beli.</span>
                 <div class="text-slate-500">
                     <span>Sesi Terenkripsi &bull; Akses Terbatas Operator Resmi</span>
                 </div>

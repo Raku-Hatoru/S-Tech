@@ -612,7 +612,7 @@ function unduhRekapCSV() {
   }
 
   const csvString = csv.join('\n');
-  const filename = `PRANALA_PANGAN_Rekap_12Bulan_{{ $kode }}_{{ $komoditas->kode }}.csv`;
+  const filename = `SIPANGAN_Rekap_12Bulan_{{ $kode }}_{{ $komoditas->kode }}.csv`;
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);

@@ -1,6 +1,6 @@
-# Pipeline Machine Learning — PRANALA PANGAN
+# Pipeline Machine Learning — SIPANGAN WASPADA
 
-Dokumentasi pelatihan dan integrasi model Machine Learning untuk prediksi ketersediaan pangan di PRANALA PANGAN.
+Dokumentasi pelatihan dan integrasi model Machine Learning untuk prediksi ketersediaan pangan di SIPANGAN WASPADA.
 
 ---
 

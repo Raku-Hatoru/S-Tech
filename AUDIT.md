@@ -1,5 +1,3 @@
-Catatan: proyek ini kini bernama PRANALA PANGAN (sebelumnya SIPANGAN WASPADA).
-
 # AUDIT CLEANUP VERIFIKASI — SIPANGAN WASPADA
 
 Dokumen audit ini disusun sebagai catatan perbaikan, pembersihan kode, dan verifikasi kepatuhan sistem terhadap spesifikasi produk `docs/PRD.md` (source of truth).

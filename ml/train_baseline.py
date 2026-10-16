@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PRANALA PANGAN — Baseline Seasonal Pipeline (Standard Library Only)
+SIPANGAN WASPADA — Baseline Seasonal Pipeline (Standard Library Only)
 Model baseline berbasis rata-rata musiman historis (Historical Seasonal Average).
 Dapat dijalankan langsung dengan Python 3 murni tanpa dependensi eksternal (pandas/numpy/xgboost).
 

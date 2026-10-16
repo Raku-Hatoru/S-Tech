@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simplify & Export GeoJSON untuk PRANALA PANGAN Map
+Simplify & Export GeoJSON untuk SIPANGAN WASPADA Map
 - Provinsi: Map ke 38 kode BPS/Kemendagri yang cocok 100% dengan database.
 - Kabupaten: KDPKAB 'XX.YY' → kode 4-digit 'XXYY', dissolve per kabupaten.
 - Koordinat dibulatkan ke 5 desimal agar payload ringan (< 5 detik muat).

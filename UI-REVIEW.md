@@ -1,5 +1,3 @@
-Catatan: proyek ini kini bernama PRANALA PANGAN (sebelumnya SIPANGAN WASPADA).
-
 # LAPORAN EVALUASI & PENYEMPURNAAN DESAIN ANTARMUKA PETA (UI REVIEW)
 **SIPANGAN WASPADA — Sistem Pemantauan & Early-Warning Surplus Pangan Nasional**  
 *Tanggal: 14 Oktober 2026 | Cabang Kerja: `ui/polish-20261014` | Acuan: `docs/PRD.md` & `AUDIT.md`*

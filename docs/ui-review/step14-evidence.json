@@ -1,0 +1,141 @@
+{
+  "step": 14,
+  "timestamp": "2026-10-14T17:47:30.016Z",
+  "login": {
+    "viewport_1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "eyeToggleWorks": true,
+    "axe": {
+      "totalViolations": 0,
+      "colorContrastViolations": 0,
+      "criticalViolations": 0
+    },
+    "viewport_390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "pengirimanIndex": {
+    "viewport_1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "axe": {
+      "totalViolations": 0,
+      "colorContrastViolations": 0,
+      "criticalViolations": 0
+    },
+    "viewport_390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "pengirimanCreate": {
+    "viewport_1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "warningBanner": {
+      "symbol": "◆",
+      "heading": "PERINGATAN DINI PASOKAN: Wilayah tujuan (Kab. Banyumas) saat ini berstatus PENUH (Rasio Keterisian: 105,1%).",
+      "hasDisclaimer": true,
+      "hasCheckbox": true,
+      "hasReroute": true
+    },
+    "axe": {
+      "totalViolations": 0,
+      "colorContrastViolations": 0,
+      "criticalViolations": 0
+    },
+    "viewport_390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "pengirimanShow": {
+    "viewport_1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "details": {
+      "copyBtnPresent": true,
+      "copyBtnType": "button",
+      "milestonesCount": 6,
+      "timelineCount": 4
+    },
+    "axe": {
+      "totalViolations": 0,
+      "colorContrastViolations": 0,
+      "criticalViolations": 0
+    },
+    "viewport_390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "bannedWordsSummary": {
+    "/login": {
+      "page": "/login",
+      "clean": true,
+      "found": []
+    },
+    "/pengiriman": {
+      "page": "/pengiriman",
+      "clean": true,
+      "found": []
+    },
+    "/pengiriman/buat": {
+      "page": "/pengiriman/buat",
+      "clean": true,
+      "found": []
+    },
+    "/pengiriman/1": {
+      "page": "/pengiriman/1",
+      "clean": true,
+      "found": []
+    }
+  },
+  "status": "COMPLETED"
+}
