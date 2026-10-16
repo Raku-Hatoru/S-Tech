@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes (SIPANGAN WASPADA)
+| API Routes (PRANALA PANGAN)
 |--------------------------------------------------------------------------
 |
 | Endpoint publik untuk peta heatmap dan panel grafik detail wilayah.

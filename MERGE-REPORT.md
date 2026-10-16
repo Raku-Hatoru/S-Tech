@@ -1,3 +1,5 @@
+Catatan: proyek ini kini bernama PRANALA PANGAN (sebelumnya SIPANGAN WASPADA).
+
 # LAPORAN PENGGABUNGAN KE CABANG UTAMA (MAINLINE MERGE REPORT)
 **Proyek:** SIPANGAN WASPADA  
 **Target Mainline:** `main` (dialihkan dari `master` melalui Step 6)  

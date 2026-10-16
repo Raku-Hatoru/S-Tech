@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SIPANGAN WASPADA — Machine Learning Pipeline
+PRANALA PANGAN — Machine Learning Pipeline
 Pipeline Pelatihan Model XGBoost untuk Prediksi 3 Target Pangan Nasional:
 1. Hasil Panen (panen_kg)
 2. Pasokan Masuk dari Luar Wilayah (pasokan_masuk_kg)
