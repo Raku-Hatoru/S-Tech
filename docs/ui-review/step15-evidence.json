@@ -1,0 +1,77 @@
+{
+  "step": 15,
+  "timestamp": "2026-10-14T17:58:23.259Z",
+  "panen": {
+    "viewport_1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "liveConversion": {
+      "panenBadge": "= 12.000,0 ton",
+      "stokBadge": "= 3.500,0 ton",
+      "works": true
+    },
+    "axe": {
+      "totalViolations": 0,
+      "colorContrastViolations": 0,
+      "criticalViolations": 0
+    },
+    "viewport_390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "jadwalTanam": {
+    "viewport_1440": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    },
+    "checks": {
+      "hasSimulasiBadge": true,
+      "hasBerasMT2": true,
+      "hasWaButton": true
+    },
+    "axe": {
+      "totalViolations": 0,
+      "colorContrastViolations": 0,
+      "criticalViolations": 0
+    },
+    "viewport_390": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "smallFontCount": 0,
+      "smallFontElements": [],
+      "smallTargetCount": 0,
+      "smallTargets": []
+    }
+  },
+  "bannedWordsSummary": {
+    "/panen": {
+      "page": "/panen",
+      "clean": true,
+      "found": []
+    },
+    "/jadwal-tanam": {
+      "page": "/jadwal-tanam",
+      "clean": true,
+      "found": []
+    }
+  },
+  "status": "COMPLETED"
+}
